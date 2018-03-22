@@ -1,0 +1,68 @@
+if (isApplyComponentPlugin == 'true') {
+    apply plugin: 'plugin_component'
+} else {
+    apply plugin: 'com.android.application'
+}
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'com.alibaba.arouter'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    defaultConfig {
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false //经常由于lint错误终止，而这些错误又经常是第三方库中的，我们可以跳过这些错误，继续编译
+        htmlOutput file("$project.buildDir/reports/lint/lint.html")
+        //xmlOutput file("$project.buildDir/reports/lint/lint.xml")
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+    }
+    resourcePrefix "app_"
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+
+    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+
+
+    if (isApplyComponentPlugin == 'true') {
+        //###### 引入基础组件 ######
+        implementation project(':component_base')
+    } else {
+        //###### 引入业务组件 ######
+        implementation project(':component_main')
+        implementation project(':component_share')
+        implementation project(':component_user')
+    }
+
+}

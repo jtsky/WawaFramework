@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+apply plugin: 'project-report'
+android {
+  compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+
+  defaultConfig {
+    minSdkVersion rootProject.ext.android["minSdkVersion"]
+    targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+    versionCode rootProject.ext.android["versionCode"]
+    versionName rootProject.ext.android["versionName"]
+    // dex突破65535的限制
+    multiDexEnabled true
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    debug {}
+
+    release {}
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+  testApi rootProject.ext.dependencies["junit"]
+  testApi rootProject.ext.dependencies["test-runner"]
+  testApi rootProject.ext.dependencies["espresso-core"]
+
+  api rootProject.ext.dependencies["appcompat-v7"]
+  api rootProject.ext.dependencies["support-v4"]
+
+  api rootProject.ext.dependencies["logger"]
+  //    implementation (rootProject.ext.dependencies["rxdownload"]) {
+  //        exclude group: 'com.android.support', module: '*'
+  //    }
+
+  //api rootProject.ext.dependencies["guava"]
+  implementation rootProject.ext.dependencies["android_util"]
+  //    developImplementation  project(':library_network')
+  //    releaseImplementation  project(':library_network')
+}

@@ -1,0 +1,41 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: "config.gradle"
+buildscript {
+    ext.kotlin_version = '1.2.0'
+    repositories {
+        google()
+        jcenter()
+        //引入本地仓库
+        maven { url uri('./repo') }
+        mavenCentral()
+    }
+    dependencies {
+        classpath BUILD_VERSION
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //butterknife 8.8.1还不支持AS3.0
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+        //arouter 插件
+        classpath "com.alibaba:arouter-register:1.0.2"
+        if (isApplyComponentPlugin == 'true') {
+            classpath 'com.duiba:plugin_component:0.0.1'//引入自定义插件
+        }
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url "https://clojars.org/repo/" }
+        maven { url uri('./repo') }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

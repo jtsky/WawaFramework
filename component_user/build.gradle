@@ -1,0 +1,58 @@
+if (isApplyComponentPlugin == 'true') {
+  apply plugin: 'plugin_component'
+} else {
+  apply plugin: 'com.android.library'
+}
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'com.alibaba.arouter'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+  compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+
+  defaultConfig {
+//    if(isApplyComponentPlugin == 'true'){
+//      applicationId project.properties.get("applicationId")
+//    }
+    minSdkVersion rootProject.ext.android["minSdkVersion"]
+    targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+    versionCode rootProject.ext.android["versionCode"]
+    versionName rootProject.ext.android["versionName"]
+    // dex突破65535的限制
+    multiDexEnabled true
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments = [ moduleName : project.getName() ]
+      }
+    }
+  }
+  //如果在 library 的 build.gradle 中添加 resourcePrefix ，则所有资源必须以此 prefix 开头
+  resourcePrefix "user_"
+
+  buildTypes {
+    debug {}
+    release {}
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
+  //######### test start #########
+  testImplementation rootProject.ext.dependencies["junit"]
+  testImplementation rootProject.ext.dependencies["test-runner"]
+  testImplementation rootProject.ext.dependencies["espresso-core"]
+  testImplementation rootProject.ext.dependencies["robolectric"]
+  testImplementation rootProject.ext.dependencies["opengl-api"]
+  testImplementation rootProject.ext.dependencies["mockito-core"]
+  //######### test end #########
+
+  api project(':component_base')
+  annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
+  annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+}
+

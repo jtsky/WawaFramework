@@ -1,0 +1,15 @@
+include ':app'
+//common库
+include ':library_common'
+//网络库
+include ':library_network'
+//基础服务接口 每个功能组件都应该单独引入
+include ':component_base'
+//主模块组件
+include ':component_main'
+//用户组件
+include ':component_user'
+//分享组件
+include ':component_share'
+//引入组件化插件
+//include ':plugin_component'

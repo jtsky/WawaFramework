@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/WawaFramework.iml" filepath="$PROJECT_DIR$/WawaFramework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component_base/component_base.iml" filepath="$PROJECT_DIR$/component_base/component_base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component_main/component_main.iml" filepath="$PROJECT_DIR$/component_main/component_main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component_share/component_share.iml" filepath="$PROJECT_DIR$/component_share/component_share.iml" />
+      <module fileurl="file://$PROJECT_DIR$/component_user/component_user.iml" filepath="$PROJECT_DIR$/component_user/component_user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_common/library_common.iml" filepath="$PROJECT_DIR$/library_common/library_common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_network/library_network.iml" filepath="$PROJECT_DIR$/library_network/library_network.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,82 @@
+apply plugin: 'com.android.library'
+apply plugin: 'project-report'
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        // dex突破65535的限制
+        multiDexEnabled true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    resourcePrefix "base_"
+
+    buildTypes {
+        debug {}
+        release {}
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //######### test start #########
+    testImplementation rootProject.ext.dependencies["junit"]
+    testImplementation rootProject.ext.dependencies["test-runner"]
+    testImplementation rootProject.ext.dependencies["espresso-core"]
+    testImplementation rootProject.ext.dependencies["robolectric"]
+    testImplementation rootProject.ext.dependencies["opengl-api"]
+    testImplementation rootProject.ext.dependencies["mockito-core"]
+    //######### test end #########
+
+    api project(':library_common')
+    api project(':library_network')
+    //#######kotlin 官方提供的库 主要是插件的支持  start######
+    api rootProject.ext.dependencies["kotlin-stdlib"]
+    api rootProject.ext.dependencies["core-ktx"]
+    //#######kotlin 官方提供的库 主要是插件的支持  end######
+
+    implementation rootProject.ext.dependencies["multidex"]
+    api rootProject.ext.dependencies["appcompat-v7"]
+    api rootProject.ext.dependencies["support-v4"]
+    api(rootProject.ext.dependencies["nucleus-support-v4"]) {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+
+    api(rootProject.ext.dependencies["nucleus-support-v7"]) {
+        exclude group: 'com.android.support', module: '*'
+    }
+
+    api(rootProject.ext.dependencies["butterknife"]) {
+        exclude group: 'com.android.support', module: '*'
+    }
+    api rootProject.ext.dependencies["stetho"]
+    implementation rootProject.ext.dependencies["rxpermissions"]
+    implementation rootProject.ext.dependencies["eventbus"]
+    //android component
+    api rootProject.ext.dependencies["lifecycle-extensions"]
+    //ARouter
+    api(rootProject.ext.dependencies["arouter-api"]) {
+        exclude group: 'com.android.support', module: '*'
+    }
+    api(rootProject.ext.dependencies["rxbinding"]) {
+        exclude group: 'io.reactivex.rxjava2', module: '*'
+    }
+
+    api rootProject.ext.dependencies["rxandroid"]
+
+    implementation rootProject.ext.dependencies["umeng-analytics"]
+
+}

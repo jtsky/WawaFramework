@@ -1,0 +1,22 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.duiba.component_user">
+
+  <application
+      android:name=".application.UserApplication"
+      android:label="@string/user_app_name"
+      android:allowBackup="false"
+      android:supportsRtl="true"
+      android:theme="@style/commonAppTheme"
+      tools:replace="android:label">
+
+    <activity android:name=".UserTestActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+  </application>
+
+</manifest>

@@ -1,0 +1,64 @@
+apply plugin: 'com.android.library'
+
+def DEV_HOST = rootProject.ext.host["develop"]
+def TEST_HOST = rootProject.ext.host["test"]
+def RELEASE_HOST = rootProject.ext.host["release"]
+android {
+    //http://stackoverflow.com/questions/28081846/use-different-build-types-of-library-module-in-android-app-module-in-android-stu
+    // publishNonDefault true
+    //defaultPublishConfig "debug"
+
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "release", "false"
+            buildConfigField "String", "HOSTNAME", "\"${DEV_HOST}\""
+        }
+
+        release {
+            buildConfigField "boolean", "release", "true"
+            buildConfigField "String", "HOSTNAME", "\"${RELEASE_HOST}\""
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation rootProject.ext.dependencies["junit"]
+//    testImplementation rootProject.ext.dependencies["json"]
+    testImplementation rootProject.ext.dependencies["robolectric"]
+    //androidTestCompile rootProject.ext.dependencies["espresso-core"]
+
+    api rootProject.ext.dependencies["retrofit2"]
+    implementation rootProject.ext.dependencies["appcompat-v7"]
+    implementation rootProject.ext.dependencies["retrofit2-converter-gson"]
+    implementation rootProject.ext.dependencies["retrofit2-adapter-rxjava"]
+    implementation rootProject.ext.dependencies["okhttp3"]
+    implementation rootProject.ext.dependencies["okio"]
+    implementation rootProject.ext.dependencies["okhttp3-logging-interceptor"]
+    implementation rootProject.ext.dependencies["stetho-okhttp3"]
+    implementation rootProject.ext.dependencies["rxandroid"]
+    implementation rootProject.ext.dependencies["typeBuilder"]
+    implementation rootProject.ext.dependencies["logger"]
+
+}

@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'com.android.tools.build:gradle:3.0.1'
+  compile gradleApi()
+  compile localGroovy()
+  compile 'org.javassist:javassist:3.22.0-CR2'
+}
+group = "com.duiba"
+version = "0.0.1"
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: uri('../repo'))
+    }
+  }
+}

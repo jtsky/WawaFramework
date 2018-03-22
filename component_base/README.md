@@ -1,0 +1,2 @@
+#base_service
+用于编写公共的service接口
