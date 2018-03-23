@@ -3,13 +3,17 @@ package com.duiba.component_user.home.view;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.receiver.NetworkConnectChangedReceiver;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
@@ -19,6 +23,9 @@ import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Response;
+import okio.ByteString;
+import wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author: jintai
@@ -33,11 +40,19 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     @BindView(R2.id.btn)
     Button mBtn;
 
+    NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_home);
         ButterKnife.bind(this);
+        if (mNetworkConnectChangedReceiver == null) {
+            mNetworkConnectChangedReceiver = new NetworkConnectChangedReceiver();
+        }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mNetworkConnectChangedReceiver, filter);
         RxView.clicks(mBtn).subscribe(aVoid -> getPresenter().login());
     }
 
@@ -63,6 +78,76 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     @Override
     public void print() {
         Toast.makeText(this, "点击", Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * ################################WebSocket 重写方法#####################################
+     */
+    @Override
+    public boolean isOpenWebSocket() {
+        return true;
+    }
+
+    @Override
+    public void createWSStatusListener() {
+        super.createWSStatusListener();
+        mWsAbstractStatusListener = new AbstractWsStatusListener() {
+            @Override
+            public void onOpen(Response response) {
+                super.onOpen(response);
+                Log.d(TAG, "WsManager-----onOpen");
+            }
+
+            @Override
+            public void onMessage(String text) {
+                super.onMessage(text);
+                Log.d(TAG, "WsManager-----onMessage");
+            }
+
+            @Override
+            public void onMessage(ByteString bytes) {
+                super.onMessage(bytes);
+                Log.d(TAG, "WsManager-----onMessage");
+            }
+
+            @Override
+            public void onReconnect() {
+                super.onReconnect();
+                Log.d(TAG, "WsManager-----onReconnect");
+            }
+
+            @Override
+            public void onClosing(int code, String reason) {
+                super.onClosing(code, reason);
+                Log.d(TAG, "WsManager-----onClosing");
+            }
+
+            @Override
+            public void onClosed(int code, String reason) {
+                super.onClosed(code, reason);
+                Log.d(TAG, "WsManager-----onClosed");
+            }
+
+            @Override
+            public void onFailure(Throwable t, Response response) {
+                super.onFailure(t, response);
+                Log.d(TAG, "WsManager-----onFailure");
+            }
+
+            @Override
+            public void onNetClosed() {
+                super.onNetClosed();
+                Log.d(TAG, "WsManager-----onNetClosed");
+            }
+
+            @Override
+            public void onNetOpen() {
+                super.onNetOpen();
+                Log.d(TAG, "WsManager-----onNetOpen");
+            }
+
+        };
     }
 
 

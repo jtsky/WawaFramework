@@ -43,6 +43,7 @@ dependencies {
 
     api project(':library_common')
     api project(':library_network')
+    api project(':library_websocket')
     //#######kotlin 官方提供的库 主要是插件的支持  start######
     api rootProject.ext.dependencies["kotlin-stdlib"]
     api rootProject.ext.dependencies["core-ktx"]
