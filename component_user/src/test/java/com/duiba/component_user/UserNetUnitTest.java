@@ -11,7 +11,7 @@ import org.robolectric.annotation.Config;
 /**
  * @author: jintai
  * @time: 2018/3/22-14:00
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:用户模块的网络单元测试
  */
 @RunWith(RobolectricTestRunner.class)

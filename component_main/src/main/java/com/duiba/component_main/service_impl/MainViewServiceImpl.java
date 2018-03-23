@@ -9,7 +9,7 @@ import com.duiba.component_base.component.main.rpc.IMainViewService;
 /**
  * @author: jintai
  * @time: 2017/11/6-19:02
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:主模块组件控件服务
  */
 @Route(path = MainRouterPath.MAIN_SERVER_VIEW)

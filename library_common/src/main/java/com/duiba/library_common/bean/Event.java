@@ -3,7 +3,7 @@ package com.duiba.library_common.bean;
 /**
  * @author: jintai
  * @time: 2017/6/19-13:58
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:eventBus bean
  */
 public class Event<T extends Object> {

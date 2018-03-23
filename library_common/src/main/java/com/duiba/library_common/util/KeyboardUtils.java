@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * @author: jintai
  * @time: 2017/7/3-14:02.
- * @email: jintai@qccr.com
+ * @email: jintai@duiba.com.cn
  * @desc: 键盘监听类
  */
 public class KeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListener {

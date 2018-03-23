@@ -38,8 +38,19 @@ ext {
                     // ###### kotlin  end ######
 
                     //###### Android Components 组件化 start ######
+                    //https://developer.android.google.cn/topic/libraries/architecture/index.html
                     "lifecycle-compiler"           : "android.arch.lifecycle:compiler:1.1.1",
                     "lifecycle-extensions"         : "android.arch.lifecycle:extensions:1.1.1",
+                    // alternatively, just ViewModel
+                    "lifecycle-viewmodel"          : "android.arch.lifecycle:viewmodel:1.1.1",
+                    // alternatively, just LiveData
+                    "lifecycle-livedata"           : "android.arch.lifecycle:livedata:1.1.1",
+                    // Java8 support for Lifecycles
+                    "lifecycle-common-java8"       : "android.arch.lifecycle:common-java8:1.1.1",
+                    // ReactiveStreams support for LiveData 支持rxjava
+                    "lifecycle-reactivestreams"    : "android.arch.lifecycle:reactivestreams:1.1.1",
+                    //用来测试
+                    "lifecycle-core-testing"       : "android.arch.core:core-testing:1.1.1",
                     //###### Android Components 组件化 end ######
 
                     //###### arouter start ######
@@ -193,12 +204,16 @@ ext {
                     "tencent-ilivesdk"             : "com.tencent.ilivesdk:ilivesdk:1.7.2.1.4",
                     "tencent-livesdk"              : "com.tencent.livesdk:livesdk:1.1.1",
                     "tencent-rtmpsdk"              : "com.tencent.rtmpsdk:rtmpsdk:1.0.1",
+                    //微信登录
                     "wechat-sdk-android-with-mta"  : "com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+",
                     //###### tencent end ######
 
                     //###### mvp框架 start######
-                    "nucleus-support-v4"           : 'info.android15.nucleus5:nucleus-support-v4:7.0.0',
-                    "nucleus-support-v7"           : 'info.android15.nucleus5:nucleus-support-v7:7.0.0',
+                    //https://github.com/sockeqwe/mosby
+                    //http://hannesdorfmann.com/mosby/
+                    //https://blog.csdn.net/sbsujjbcy/article/details/50707696
+                    "mvp"                          : "com.hannesdorfmann.mosby3:mvp:3.1.0",
+                    "mvp_viewstate"                : "com.hannesdorfmann.mosby3:viewstate:3.1.0",
                     //###### mvp框架 end######
                     //######test lib start ######
                     "junit"                        : "junit:junit:4.12",

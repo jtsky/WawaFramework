@@ -9,7 +9,7 @@ import com.duiba.component_base.component.share.rpc.IShareViewService;
 /**
  * @author: jintai
  * @time: 2017/11/6-19:02
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:分享组件控件服务
  */
 @Route(path = ShareRouterPath.SHARE_SERVER_VIEW)

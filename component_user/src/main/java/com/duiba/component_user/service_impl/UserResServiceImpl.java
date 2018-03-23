@@ -10,7 +10,7 @@ import com.orhanobut.logger.Logger;
 /**
  * @author: jintai
  * @time: 2017/11/6-19:02
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:用户资源服务实现
  */
 @Route(path = UserRouterPath.USER_SERVER_RES)

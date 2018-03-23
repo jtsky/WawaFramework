@@ -1,12 +1,13 @@
 package com.duiba.component_main.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.duiba.component_base.activity.BaseActivity;
+import com.duiba.component_base.component.BaseActivity;
 import com.duiba.component_base.component.main.path.MainRouterPath;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserResService;
@@ -15,6 +16,8 @@ import com.duiba.component_main.R2;
 import com.duiba.component_main.bean.TestBean;
 import com.duiba.component_main.net.MainRESTApiImpl;
 import com.duiba.library_network.action.WebSuccessAction;
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 import com.jakewharton.rxbinding.view.RxView;
 import com.orhanobut.logger.Logger;
 
@@ -26,7 +29,7 @@ import butterknife.ButterKnife;
 /**
  * @author: jintai
  * @time: 2017/11/9-18:36
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:
  */
 @Route(path = MainRouterPath.MAIN_ACTIVITY_MAIN)
@@ -73,5 +76,11 @@ public class MainActivity extends BaseActivity {
                     });
 
         });
+    }
+
+    @NonNull
+    @Override
+    public MvpPresenter createPresenter() {
+        return new MvpBasePresenter();
     }
 }

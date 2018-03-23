@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author: jintai
  * @time: 2017/11/7-14:38
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:
  */
 class AssembleTask {

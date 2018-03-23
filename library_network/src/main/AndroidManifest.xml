@@ -1,11 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jin.library_network">
+    package="com.duiba.library_network">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <application
-        android:allowBackup="false"
-        android:supportsRtl="true">
 
-    </application>
 
 </manifest>

@@ -7,7 +7,6 @@ import com.duiba.library_network.converter.ScalarsConverterFactory;
 import com.duiba.library_network.interceptor.RequestInterceptor;
 import com.duiba.library_network.interceptor.addQueryParameterInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.jin.library_network.BuildConfig;
 import com.orhanobut.logger.Logger;
 
 import java.util.Locale;

@@ -15,7 +15,7 @@ import io.reactivex.Observable;
 /**
  * @author: jintai
  * @time: 2018/3/21-16:12
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:主模块组件网络接口
  */
 public class MainRESTApiImpl {

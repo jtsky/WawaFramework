@@ -51,8 +51,11 @@ dependencies {
   testImplementation rootProject.ext.dependencies["mockito-core"]
   //######### test end #########
 
+
+
   api project(':component_base')
   annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
   annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+  annotationProcessor rootProject.ext.dependencies["lifecycle-compiler"]
 }
 

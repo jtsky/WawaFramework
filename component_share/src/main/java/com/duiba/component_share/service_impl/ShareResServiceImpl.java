@@ -10,7 +10,7 @@ import com.duiba.component_share.R;
 /**
  * @author: jintai
  * @time: 2017/11/6-19:02
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:分享组件资源服务
  */
 @Route(path = ShareRouterPath.SHARE_SERVER_RES)

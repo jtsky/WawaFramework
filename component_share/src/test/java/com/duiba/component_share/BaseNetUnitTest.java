@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author: jintai
  * @time: 2018/3/22-14:00
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:基础的网络单元测试
  */
 public class BaseNetUnitTest extends AndroidTestCase{

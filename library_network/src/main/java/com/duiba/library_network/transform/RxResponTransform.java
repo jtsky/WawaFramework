@@ -3,7 +3,7 @@ package com.duiba.library_network.transform;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 
-import com.jin.library_network.BuildConfig;
+import com.duiba.library_network.BuildConfig;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;

@@ -6,7 +6,7 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * @author: jintai
  * @time: 2017/6/19-13:56
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:
  */
 public class EventBusUtil {

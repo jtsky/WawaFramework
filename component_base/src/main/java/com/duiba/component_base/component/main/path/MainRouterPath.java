@@ -3,7 +3,7 @@ package com.duiba.component_base.component.main.path;
 /**
  * @author: jintai
  * @time: 2018/3/20-18:54
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:
  */
 public class MainRouterPath {

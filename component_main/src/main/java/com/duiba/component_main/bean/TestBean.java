@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author: jintai
  * @time: 2018/3/21-16:50
- * @Email: jintai@qccr.com
+ * @Email: jintai@duiba.com.cn
  * @desc:
  */
 public class TestBean implements Serializable {

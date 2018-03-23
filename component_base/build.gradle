@@ -48,16 +48,17 @@ dependencies {
     api rootProject.ext.dependencies["core-ktx"]
     //#######kotlin 官方提供的库 主要是插件的支持  end######
 
-    implementation rootProject.ext.dependencies["multidex"]
-    api rootProject.ext.dependencies["appcompat-v7"]
-    api rootProject.ext.dependencies["support-v4"]
-    api(rootProject.ext.dependencies["nucleus-support-v4"]) {
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
+    //微信登录
+    api rootProject.ext.dependencies["wechat-sdk-android-with-mta"]
 
-    api(rootProject.ext.dependencies["nucleus-support-v7"]) {
-        exclude group: 'com.android.support', module: '*'
-    }
+    implementation rootProject.ext.dependencies["multidex"]
+    //api rootProject.ext.dependencies["appcompat-v7"]
+    //api rootProject.ext.dependencies["support-v4"]
+
+    //======================mvp  start====================
+    api rootProject.ext.dependencies["mvp"]
+    api rootProject.ext.dependencies["mvp_viewstate"]
+    //======================mvp  end====================
 
     api(rootProject.ext.dependencies["butterknife"]) {
         exclude group: 'com.android.support', module: '*'
@@ -67,6 +68,7 @@ dependencies {
     implementation rootProject.ext.dependencies["eventbus"]
     //android component
     api rootProject.ext.dependencies["lifecycle-extensions"]
+
     //ARouter
     api(rootProject.ext.dependencies["arouter-api"]) {
         exclude group: 'com.android.support', module: '*'

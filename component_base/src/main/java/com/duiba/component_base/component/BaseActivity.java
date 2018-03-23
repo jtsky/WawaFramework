@@ -1,15 +1,21 @@
-package com.duiba.component_base.activity;
+package com.duiba.component_base.component;
+
+import android.arch.lifecycle.ViewModel;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Window;
 
+import com.duiba.component_base.BuildConfig;
 import com.duiba.component_base.lifecycle.ActivityLifeCycleEvent;
 import com.duiba.component_base.util.EventBusUtil;
 import com.duiba.library_common.bean.Event;
 import com.duiba.library_common.bean.EventCode;
-import com.jin.component_base.BuildConfig;
+import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby3.mvp.MvpView;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -18,14 +24,13 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 
 import io.reactivex.subjects.PublishSubject;
-import nucleus5.presenter.Presenter;
-import nucleus5.view.NucleusAppCompatActivity;
+import kotlin.jvm.Throws;
 
 /**
  * @author Jin
  */
-public class BaseActivity<PresenterType extends Presenter>
-        extends NucleusAppCompatActivity<PresenterType> {
+public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpView, P extends DuibaMvpPresenter<Model, V>>
+        extends MvpActivity<V, P> {
     protected final String TAG = this.getClass().getSimpleName();
     protected final String TAG_CURRENR = "CurrentActivity";
 
@@ -50,9 +55,24 @@ public class BaseActivity<PresenterType extends Presenter>
         if (isRegisterEventBus()) {
             EventBusUtil.register(this);
         }
+        //初始化并订阅ViewModel
+        subscribeViewModel();
+        if (mViewModel == null) {
+            throw new NullPointerException("请初始化并订阅mViewModel");
+        }
 
         lifecycleSubject.onNext(ActivityLifeCycleEvent.CREATE);
     }
+
+    /**
+     * 基础的viewModel
+     */
+    protected Model mViewModel;
+
+    /**
+     * 初始化并订阅ViewModel
+     */
+    public abstract void subscribeViewModel();
 
     /**
      * 是否注册EventBus
@@ -135,6 +155,7 @@ public class BaseActivity<PresenterType extends Presenter>
         lifecycleSubject.onNext(ActivityLifeCycleEvent.STOP);
         super.onStop();
     }
+
 
     @Override
     protected void onPause() {

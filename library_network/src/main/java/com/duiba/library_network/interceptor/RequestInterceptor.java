@@ -2,7 +2,7 @@ package com.duiba.library_network.interceptor;
 
 import android.util.Log;
 
-import com.jin.library_network.BuildConfig;
+import com.duiba.library_network.BuildConfig;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
