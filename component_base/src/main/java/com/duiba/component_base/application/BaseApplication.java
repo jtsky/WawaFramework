@@ -13,6 +13,13 @@ import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.functions.Consumer;
+
 /**
  * @author: jintai
  * @time: 2018/3/20-20:10
@@ -46,6 +53,18 @@ public class BaseApplication extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter());
     }
 
+    private void initNetworkStatusChangeObservable() {
+
+//        Observable.create(emitter -> {
+//            emitter.
+//        })
+//          .throttleFirst(1000, TimeUnit.MILLISECONDS)
+//          .subscribe(o -> {
+//
+//                });
+
+    }
+
     private void initWechatLogin() {
         mWxAPI = WXAPIFactory.createWXAPI(this, AppDefine.WECHAT_APPID, true);
         mWxAPI.registerApp(AppDefine.WECHAT_APPID);
@@ -58,7 +77,7 @@ public class BaseApplication extends Application {
     }
 
     @NonNull
-    public  IWXAPI getWxAPI() {
+    public IWXAPI getWxAPI() {
         return mWxAPI;
     }
 

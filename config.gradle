@@ -137,7 +137,7 @@ ext {
                     //wiki: https://github.com/dongjunkun/DropDownMenu
                     "dropDownMenu"                 : "com.github.dongjunkun:DropDownMenu:1.0.3",
                     //wiki: https://github.com/JakeWharton/RxBinding
-                    "rxbinding"                    : "com.jakewharton.rxbinding:rxbinding:1.0.1",
+                    "rxbinding"                    : "com.jakewharton.rxbinding2:rxbinding:2.1.1",
                     //wiki: https://github.com/qstumn/BadgeView
                     "badgeview"                    : "q.rorbin:badgeview:1.1.1",
                     //https://github.com/lygttpod/SuperTextView

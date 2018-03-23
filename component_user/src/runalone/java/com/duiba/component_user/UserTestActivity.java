@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_user.home.view.UserHomeActivity;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 

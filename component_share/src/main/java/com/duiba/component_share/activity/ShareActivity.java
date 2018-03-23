@@ -12,9 +12,9 @@ import com.duiba.component_base.component.share.path.ShareRouterPath;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserResService;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
-import com.jakewharton.rxbinding.view.RxView;
 import com.duiba.component_share.R;
 import com.duiba.component_share.R2;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
@@ -49,6 +49,11 @@ public class ShareActivity extends BaseActivity {
             //IMainOtherService mainOtherService = (IMainOtherService) ServiceManager.getService(IMainOtherService.class.getSimpleName());
             //ARouter.getInstance().build(mainOtherService.routerByMainPath()).navigation();
         });
+    }
+
+    @Override
+    public void subscribeViewModel() {
+
     }
 
     @NonNull

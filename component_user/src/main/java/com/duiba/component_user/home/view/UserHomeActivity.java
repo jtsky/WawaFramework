@@ -19,7 +19,7 @@ import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
 import com.duiba.component_user.home.presenter.HomePresenter;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

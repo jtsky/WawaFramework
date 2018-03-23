@@ -18,7 +18,7 @@ import com.duiba.component_main.net.MainRESTApiImpl;
 import com.duiba.library_network.action.WebSuccessAction;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -76,6 +76,11 @@ public class MainActivity extends BaseActivity {
                     });
 
         });
+    }
+
+    @Override
+    public void subscribeViewModel() {
+
     }
 
     @NonNull
