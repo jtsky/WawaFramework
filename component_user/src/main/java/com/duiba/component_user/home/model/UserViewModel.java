@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
  * @author: jintai
  * @time: 2018/3/23-14:45
  * @Email: jintai@qccr.com
- * @desc:
+ * @desc:存储跟页面有关的数据元素
  */
 public class UserViewModel extends ViewModel {
     private MutableLiveData<String> mName;
