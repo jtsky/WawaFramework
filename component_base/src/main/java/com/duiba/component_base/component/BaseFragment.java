@@ -1,5 +1,6 @@
 package com.duiba.component_base.component;
 
+import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import io.reactivex.subjects.PublishSubject;
  * Created by wlw-97 on 2016/11/22.
  */
 
-public abstract class BaseFragment<V extends MvpView, P extends MvpBasePresenter<V>>
+public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpView, P extends DuibaMvpPresenter<Model, V>>
         extends MvpFragment<V, P> {
     protected final String TAG = getClass().getSimpleName();
     protected final String TAG_CURRENR = "CurrentFragment";
@@ -39,9 +40,26 @@ public abstract class BaseFragment<V extends MvpView, P extends MvpBasePresenter
         if (isRegisterEventBus()) {
             EventBusUtil.register(this);
         }
+
+        //初始化并订阅ViewModel
+        subscribeViewModel();
+        if (mViewModel == null) {
+            throw new NullPointerException("请初始化并订阅mViewModel");
+        }
+
         lifecycleSubject.onNext(ActivityLifeCycleEvent.CREATE);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    /**
+     * 基础的viewModel
+     */
+    protected Model mViewModel;
+
+    /**
+     * 初始化并订阅ViewModel
+     */
+    public abstract void subscribeViewModel();
 
     /**
      * 是否注册EventBus

@@ -30,7 +30,7 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
 
     @BindView(R2.id.tv)
     TextView mTv;
-    @BindView(R.id.btn)
+    @BindView(R2.id.btn)
     Button mBtn;
 
     @Override

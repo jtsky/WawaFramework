@@ -14,8 +14,6 @@ import com.duiba.component_base.util.EventBusUtil;
 import com.duiba.library_common.bean.Event;
 import com.duiba.library_common.bean.EventCode;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpView;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -24,7 +22,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 
 import io.reactivex.subjects.PublishSubject;
-import kotlin.jvm.Throws;
 
 /**
  * @author Jin
