@@ -4,9 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@mipmap/share_girl" />
+    <Button
+        android:id="@+id/btn_net"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:filterTouchesWhenObscured="true"
+        android:text="网络测试" />
+
+    <Button
+        android:id="@+id/btn_arouter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:filterTouchesWhenObscured="true"
+        android:text="路由测试" />
+
+    <Button
+        android:id="@+id/btn_mvp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:filterTouchesWhenObscured="true"
+        android:text="mvp测试" />
 </LinearLayout>

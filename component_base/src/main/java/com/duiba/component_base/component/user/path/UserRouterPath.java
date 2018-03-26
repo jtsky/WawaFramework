@@ -18,7 +18,7 @@ public class UserRouterPath {
     /**
      * 用户组件page
      */
-    public static final String USER_ACTIVITY_SHARE = USER_ROOT + "share_activity";
+    public static final String USER_ACTIVITY_HOME = USER_ROOT + "home_activity";
 
     public static final String USER_ACTIVITY_OTHER = USER_ROOT + "other_activity";
 

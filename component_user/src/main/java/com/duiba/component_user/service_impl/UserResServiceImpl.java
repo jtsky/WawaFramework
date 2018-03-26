@@ -22,7 +22,7 @@ public class UserResServiceImpl implements IUserResService {
 
     @Override
     public String provideText() {
-        String text = "jin";
+        String text = "我来自UserResService";
         return text;
     }
 }

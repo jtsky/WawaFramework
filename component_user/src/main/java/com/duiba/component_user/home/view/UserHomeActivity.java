@@ -12,7 +12,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
@@ -26,12 +28,15 @@ import okhttp3.Response;
 import okio.ByteString;
 import wsmanager.listener.AbstractWsStatusListener;
 
+import static com.duiba.component_base.component.user.path.UserRouterPath.USER_ACTIVITY_HOME;
+
 /**
  * @author: jintai
  * @time: 2018/3/23-10:24
  * @Email: jintai@duiba.com.cn
  * @desc:用户测试主页
  */
+@Route(path = UserRouterPath.USER_ACTIVITY_HOME)
 public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, HomePresenter> implements HomeView {
 
     @BindView(R2.id.tv)

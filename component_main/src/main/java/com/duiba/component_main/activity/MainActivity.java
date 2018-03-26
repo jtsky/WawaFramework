@@ -2,7 +2,7 @@ package com.duiba.component_main.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -34,8 +34,7 @@ import butterknife.ButterKnife;
  */
 @Route(path = MainRouterPath.MAIN_ACTIVITY_MAIN)
 public class MainActivity extends BaseActivity {
-    @BindView(R2.id.iv)
-    ImageView mIv;
+
     @Autowired(name = "aaa")
     int aaa;
 
@@ -45,21 +44,21 @@ public class MainActivity extends BaseActivity {
     @Autowired(name = UserRouterPath.USER_SERVER_RES)
     IUserResService mUserResService;
 
+    @BindView(R2.id.btn_net)
+    Button mBtnNet;
+    @BindView(R2.id.btn_arouter)
+    Button mBtnArouter;
+    @BindView(R2.id.btn_mvp)
+    Button mBtnMvp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
-        RxView.clicks(mIv).subscribe(aVoid -> {
-            Logger.v("aaa======>" + aaa);
-            Logger.v(mUserResService.provideText());
-            Logger.v("mUserResService====>" + mUserResService.toString());
-            /**
-             * 服务是以单例形式存在的
-             */
-            IUserResService userResService = (IUserResService) ARouter.getInstance().build(UserRouterPath.USER_SERVER_RES).navigation();
-            Logger.v("userResService======>" + userResService.toString());
+
+        RxView.clicks(mBtnNet).subscribe(aVoid -> {
             //网络调用
             MainRESTApiImpl
                     .getData("Android", null)
@@ -74,13 +73,29 @@ public class MainActivity extends BaseActivity {
 
                         }
                     });
+        });
 
+        RxView.clicks(mBtnArouter).subscribe(aVoid -> {
+            Logger.v("aaa======>" + aaa);
+            Logger.v(mUserResService.provideText());
+            Logger.v("mUserResService====>" + mUserResService.toString());
+            /**
+             * 服务是以单例形式存在的
+             */
+            IUserResService userResService = (IUserResService) ARouter.getInstance().build(UserRouterPath.USER_SERVER_RES).navigation();
+            Logger.v("userResService======>" + userResService.toString());
+
+        });
+
+        RxView.clicks(mBtnMvp).subscribe(aVoid -> {
+            ARouter.getInstance().build(UserRouterPath.USER_ACTIVITY_HOME).navigation();
         });
     }
 
-    @Override
-    public void subscribeViewModel() {
 
+    @Override
+    protected boolean isMVP() {
+        return false;
     }
 
     @NonNull

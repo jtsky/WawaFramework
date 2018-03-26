@@ -51,9 +51,11 @@ public class ShareActivity extends BaseActivity {
         });
     }
 
-    @Override
-    public void subscribeViewModel() {
 
+
+    @Override
+    protected boolean isMVP() {
+        return false;
     }
 
     @NonNull
