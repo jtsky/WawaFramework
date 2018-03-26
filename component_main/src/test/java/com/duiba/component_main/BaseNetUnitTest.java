@@ -2,7 +2,6 @@ package com.duiba.component_main;
 
 import android.test.AndroidTestCase;
 
-import com.jin.component_base.BuildConfig;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
