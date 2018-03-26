@@ -79,8 +79,6 @@ ext {
                     "guava"                        : "com.google.guava:guava:18.0",
 
                     //###### net start ######
-                    "stetho"                       : "com.facebook.stetho:stetho:1.2.0",
-                    "stetho-okhttp"                : "com.facebook.stetho:stetho-okhttp:1.2.0",
                     //https://github.com/square/retrofit
                     "retrofit2"                    : "com.squareup.retrofit2:retrofit:${android["retrofitSdkVersion"]}",
                     "retrofit2-converter-gson"     : "com.squareup.retrofit2:converter-gson:${android["retrofitSdkVersion"]}",

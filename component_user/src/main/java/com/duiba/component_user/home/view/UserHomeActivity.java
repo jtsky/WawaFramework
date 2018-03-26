@@ -1,14 +1,14 @@
 package com.duiba.component_user.home.view;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +45,10 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_home);
         ButterKnife.bind(this);
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fl, new UserHomeFragment());
+        transaction.commit();
         RxView.clicks(mBtn).subscribe(aVoid -> getPresenter().login());
     }
 
@@ -56,7 +60,12 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     }
 
     @Override
-    public ViewModel getViewModel() {
+    protected boolean isMVP() {
+        return true;
+    }
+
+    @Override
+    public UserViewModel getViewModel() {
         return mViewModel;
     }
 

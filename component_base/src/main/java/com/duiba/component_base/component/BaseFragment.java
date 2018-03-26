@@ -20,6 +20,8 @@ import java.util.Arrays;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.subjects.PublishSubject;
 import wsmanager.WsManager;
 import wsmanager.WsManagerFactory;
@@ -37,16 +39,25 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     protected final String TAG = getClass().getSimpleName();
     protected final String TAG_CURRENR = "CurrentFragment";
     protected final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
-
+    /**
+     * 根布局
+     */
+    private View mContentView;
+    /**
+     * 父Activity
+     */
+    private BaseActivity mParentActivity;
     /**
      * 基础的viewModel
      */
     protected Model mViewModel;
 
-    @Nullable
+    private Unbinder mUnbinder;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mParentActivity = (BaseActivity) getActivity();
         //是否注册EventBus事件
         if (isRegisterEventBus()) {
             EventBusUtil.register(this);
@@ -56,10 +67,12 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
             Logger.t(TAG_CURRENR).v("===CurrentFragment====>" + this.getClass().getCanonicalName());
         }
 
-        //初始化并订阅ViewModel
-        subscribeViewModel();
-        if (mViewModel == null) {
-            throw new NullPointerException("请初始化并订阅mViewModel");
+        if (isMVP()) {
+            //初始化并订阅ViewModel
+            subscribeViewModel();
+            if (mViewModel == null) {
+                throw new NullPointerException("请重写subscribeViewModel方法为mViewModel赋值并建立绑定");
+            }
         }
 
         //初始化webSocket
@@ -67,7 +80,32 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
             initWebSocket();
         }
         lifecycleSubject.onNext(ActivityLifeCycleEvent.CREATE);
-        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Deprecated
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+
+        mContentView = inflater.inflate(setLayoutResourceID(), container, false);
+
+        mUnbinder = ButterKnife.bind(this, mContentView);
+        init();
+        return mContentView;
+    }
+
+    /**
+     * 获取activity的ViewModel 拿到是否需要强转
+     */
+    protected ViewModel getParentViewModel() {
+        ViewModel viewModel = mParentActivity.getViewModel();
+        if (viewModel == null) {
+            return null;
+        }
+
+        return viewModel;
     }
 
 
@@ -83,6 +121,27 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
         WsManager wsManager = WsManagerFactory.createWsManager(getActivity().getApplicationContext(), WEBSOCKET_URL);
         wsManager.setWsStatusListener(mWsAbstractStatusListener);
         wsManager.startConnect();
+    }
+
+    /**
+     * 此方法用于返回Fragment设置ContentView的布局文件资源ID
+     *
+     * @return 布局文件资源ID
+     */
+    protected abstract int setLayoutResourceID();
+
+    /**
+     * 此方法用于初始化成员变量及获取Intent传递过来的数据
+     * 注意：这个方法中不能调用所有的View，因为View还没有被初始化，要使用View在initView方法中调用
+     */
+    protected void init() {
+    }
+
+    /**
+     * 进行view的初始化等操作
+     */
+    protected void initView(View view, @Nullable Bundle savedInstanceState) {
+
     }
 
 
@@ -104,7 +163,16 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     /**
      * 初始化并订阅ViewModel
      */
-    public abstract void subscribeViewModel();
+    public void subscribeViewModel() {
+
+    }
+
+    /**
+     * 抽象方法 是否采用mvp模式
+     *
+     * @return true or false
+     */
+    protected abstract boolean isMVP();
 
     /**
      * 是否注册EventBus
@@ -176,6 +244,13 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView(view, savedInstanceState);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         lifecycleSubject.onNext(ActivityLifeCycleEvent.RESUME);
@@ -196,6 +271,7 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mUnbinder.unbind();
         lifecycleSubject.onNext(ActivityLifeCycleEvent.DESTROY);
         if (isRegisterEventBus()) {
             EventBusUtil.unRegister(this);

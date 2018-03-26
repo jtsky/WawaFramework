@@ -54,10 +54,12 @@ public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> 
         ifViewAttached(view -> {
             if (view.getViewModel() == null) {
                 throw new NullPointerException("viewModel 为空");
+            } else if (exceptionIfViewNotAttached) {
+                throw new IllegalStateException(
+                        "No ViewModel attached to Presenter");
             } else {
                 action.run((Model) view.getViewModel());
             }
         });
-
     }
 }

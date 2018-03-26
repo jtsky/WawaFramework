@@ -36,6 +36,11 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     protected final String TAG_CURRENR = "CurrentActivity";
 
     protected final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
+
+    public Model getViewModel() {
+        return mViewModel;
+    }
+
     /**
      * 基础的viewModel
      */
@@ -60,11 +65,14 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         if (isRegisterEventBus()) {
             EventBusUtil.register(this);
         }
-        //初始化并订阅ViewModel
-        subscribeViewModel();
-        if (mViewModel == null) {
-            throw new NullPointerException("请初始化并订阅mViewModel");
+        if (isMVP()) {
+            //初始化并订阅ViewModel
+            subscribeViewModel();
+            if (mViewModel == null) {
+                throw new NullPointerException("请重写subscribeViewModel方法为mViewModel赋值并建立绑定");
+            }
         }
+
 
         //初始化webSocket
         if (isOpenWebSocket()) {
@@ -108,11 +116,20 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
 
     }
 
+    /**
+     * 抽象方法 初始化并订阅ViewModel
+     */
+    protected void subscribeViewModel() {
+
+    }
 
     /**
-     * 初始化并订阅ViewModel
+     * 抽象方法 是否采用mvp模式
+     *
+     * @return true or false
      */
-    public abstract void subscribeViewModel();
+    protected abstract boolean isMVP();
+
 
     /**
      * 是否注册EventBus
