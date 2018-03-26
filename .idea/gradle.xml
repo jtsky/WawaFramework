@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/component_user" />
             <option value="$PROJECT_DIR$/library_common" />
             <option value="$PROJECT_DIR$/library_network" />
+            <option value="$PROJECT_DIR$/library_rxnetwork" />
             <option value="$PROJECT_DIR$/library_websocket" />
           </set>
         </option>

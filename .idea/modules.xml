@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/component_user/component_user.iml" filepath="$PROJECT_DIR$/component_user/component_user.iml" />
       <module fileurl="file://$PROJECT_DIR$/library_common/library_common.iml" filepath="$PROJECT_DIR$/library_common/library_common.iml" />
       <module fileurl="file://$PROJECT_DIR$/library_network/library_network.iml" filepath="$PROJECT_DIR$/library_network/library_network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_rxnetwork/library_rxnetwork.iml" filepath="$PROJECT_DIR$/library_rxnetwork/library_rxnetwork.iml" />
       <module fileurl="file://$PROJECT_DIR$/library_websocket/library_websocket.iml" filepath="$PROJECT_DIR$/library_websocket/library_websocket.iml" />
     </modules>
   </component>

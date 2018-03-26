@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duiba.component_base.component.BaseActivity;
-import com.duiba.component_base.receiver.NetworkConnectChangedReceiver;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
@@ -40,19 +39,12 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     @BindView(R2.id.btn)
     Button mBtn;
 
-    NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_home);
         ButterKnife.bind(this);
-        if (mNetworkConnectChangedReceiver == null) {
-            mNetworkConnectChangedReceiver = new NetworkConnectChangedReceiver();
-        }
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mNetworkConnectChangedReceiver, filter);
         RxView.clicks(mBtn).subscribe(aVoid -> getPresenter().login());
     }
 

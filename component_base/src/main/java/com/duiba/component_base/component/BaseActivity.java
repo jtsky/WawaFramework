@@ -68,6 +68,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
 
         //初始化webSocket
         if (isOpenWebSocket()) {
+            Logger.v("===========OpenWebSocket==============");
             createWSStatusListener();
             initWebSocket();
         }

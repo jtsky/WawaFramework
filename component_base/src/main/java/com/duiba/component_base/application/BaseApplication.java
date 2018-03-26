@@ -4,10 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.duiba.component_base.BuildConfig;
 import com.duiba.component_base.config.AppDefine;
+import com.duiba.rxnetwork.RxNetwork;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -18,13 +20,19 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import wsmanager.WsManager;
+import wsmanager.WsManagerFactory;
+import wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author: jintai
  * @time: 2018/3/20-20:10
  * @Email: jintai@duiba.com.cn
- * @desc:
+ * @desc:BaseApplication
  */
 public class BaseApplication extends Application {
     /**
@@ -32,6 +40,8 @@ public class BaseApplication extends Application {
      */
     private IWXAPI mWxAPI;
     private static BaseApplication application;
+    private static final String TAG = "BaseApplication";
+    Disposable mNetWorkChangeDisposable;
 
     @Override
     public void onCreate() {
@@ -39,6 +49,7 @@ public class BaseApplication extends Application {
         application = this;
         initARouterAndLog();
         initWechatLogin();
+        initNetworkStatusChangeObservable();
     }
 
     private void initARouterAndLog() {
@@ -53,16 +64,27 @@ public class BaseApplication extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter());
     }
 
+
     private void initNetworkStatusChangeObservable() {
+        mNetWorkChangeDisposable = RxNetwork.stream(this)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(hasNetWork -> {
+                    WsManager wsManager = WsManagerFactory.getWsManager();
+                    if (wsManager == null) {
+                        return;
+                    }
+                    AbstractWsStatusListener wsStatusListener = wsManager.getWsStatusListener();
+                    if (wsStatusListener == null) {
+                        return;
+                    }
 
-//        Observable.create(emitter -> {
-//            emitter.
-//        })
-//          .throttleFirst(1000, TimeUnit.MILLISECONDS)
-//          .subscribe(o -> {
-//
-//                });
+                    if (hasNetWork) {
+                        wsStatusListener.onNetOpen();
+                    } else {
+                        wsStatusListener.onNetClosed();
+                    }
 
+                });
     }
 
     private void initWechatLogin() {
@@ -84,4 +106,6 @@ public class BaseApplication extends Application {
     public static BaseApplication getApplication() {
         return application;
     }
+
+
 }

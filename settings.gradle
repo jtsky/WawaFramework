@@ -3,6 +3,8 @@ include ':app', ':library_websocket'
 include ':library_common'
 //网络库
 include ':library_network'
+//网络状态监听库
+include ':library_rxnetwork'
 //基础服务接口 每个功能组件都应该单独引入
 include ':component_base'
 //主模块组件
