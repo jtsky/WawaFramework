@@ -99,10 +99,9 @@ ext {
                   "roundedimageview"           : "com.makeramen:roundedimageview:2.3.0",
 
                   //###### eventbus start ######
-                  //从2.4.0升级到3.0.0 wiki:https://github.com/greenrobot/EventBus
-                  //"eventbus"                   : "de.greenrobot:eventbus:3.1.1",
+                  //wiki:https://github.com/greenrobot/EventBus
                   "eventbus"                   : "org.greenrobot:eventbus:3.1.1",
-                  "eventbus-compiler"          : "org.greenrobot:eventbus-annotation-processor:3.0.1",
+                  "eventbus-compiler"          : "org.greenrobot:eventbus-annotation-processor:3.1.1",
                   //###### eventbus end ######
 
                   //###### butterknife start ######
