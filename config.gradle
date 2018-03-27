@@ -173,6 +173,8 @@ ext {
 
                     //https://github.com/airbnb/lottie
                     "lottie"                       : "com.airbnb.android:lottie:2.0.0",
+                    //https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh  下拉刷新
+                    "ultra-ptr"                    : "in.srain.cube:ultra-ptr:1.0.11",
                     //socket
                     "socket-mina-core"             : "org.apache.mina:mina-core:2.0.16",
                     //verticalviewpager

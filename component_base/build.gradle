@@ -14,15 +14,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-//    sourceSets {
-//        debug {
-//            java.srcDirs = ['src/debug', 'src/debug/java', 'src/debug/java/']
-//        }
-//
-//        main{
-//            java.srcDirs = ['src/main', 'src/main/java', 'src/main/java/']
-//        }
-//    }
 
     lintOptions {
         abortOnError false
@@ -67,9 +58,9 @@ dependencies {
     implementation rootProject.ext.dependencies["multidex"]
     debugImplementation rootProject.ext.dependencies["leakcanary-android"]
     releaseImplementation rootProject.ext.dependencies["leakcanary-android-no-op"]
-    //api rootProject.ext.dependencies["appcompat-v7"]
-    //api rootProject.ext.dependencies["support-v4"]
 
+    //下拉刷新
+    api rootProject.ext.dependencies["ultra-ptr"]
     //======================mvp  start====================
     api rootProject.ext.dependencies["mvp"]
     api rootProject.ext.dependencies["mvp_viewstate"]
