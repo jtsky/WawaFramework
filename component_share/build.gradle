@@ -55,6 +55,7 @@ dependencies {
   annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
   annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
   annotationProcessor rootProject.ext.dependencies["lifecycle-compiler"]
+  annotationProcessor rootProject.ext.dependencies["eventbus-compiler"]
 }
 
 

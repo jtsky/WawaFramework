@@ -1,7 +1,7 @@
 if (isApplyComponentPlugin == 'true') {
-    apply plugin: 'plugin_component'
+  apply plugin: 'plugin_component'
 } else {
-    apply plugin: 'com.android.application'
+  apply plugin: 'com.android.application'
 }
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.alibaba.arouter'
@@ -9,82 +9,80 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    defaultConfig {
-        applicationId rootProject.ext.android.applicationId
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [moduleName: project.getName()]
-            }
-        }
+  compileSdkVersion rootProject.ext.android.compileSdkVersion
+  defaultConfig {
+    applicationId rootProject.ext.android.applicationId
+    minSdkVersion rootProject.ext.android.minSdkVersion
+    targetSdkVersion rootProject.ext.android.targetSdkVersion
+    versionCode rootProject.ext.android.versionCode
+    versionName rootProject.ext.android.versionName
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments =
+            [moduleName: project.getName(), eventBusIndex: 'com.tm.prizeclaw.MyEventBusIndex']
+      }
+    }
+  }
 
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  lintOptions {
+    abortOnError false //经常由于lint错误终止，而这些错误又经常是第三方库中的，我们可以跳过这些错误，继续编译
+    htmlOutput file("$project.buildDir/reports/lint/lint.html")
+    //xmlOutput file("$project.buildDir/reports/lint/lint.xml")
+    disable 'InvalidPackage'
+    checkReleaseBuilds false
+  }
+  resourcePrefix "app_"
+
+  signingConfigs {
+    release {
+      storeFile file(KEYSTORE)
+      storePassword KEYSTORE_PASSWORD
+      keyAlias KEY_ALIAS
+      keyPassword KEYSTORE_PASSWORD
+    }
+  }
+
+  buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
     }
-
-    lintOptions {
-        abortOnError false //经常由于lint错误终止，而这些错误又经常是第三方库中的，我们可以跳过这些错误，继续编译
-        htmlOutput file("$project.buildDir/reports/lint/lint.html")
-        //xmlOutput file("$project.buildDir/reports/lint/lint.xml")
-        disable 'InvalidPackage'
-        checkReleaseBuilds false
-    }
-    resourcePrefix "app_"
-
-    signingConfigs {
-        release {
-            storeFile file(KEYSTORE)
-            storePassword KEYSTORE_PASSWORD
-            keyAlias KEY_ALIAS
-            keyPassword KEYSTORE_PASSWORD
-        }
-    }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-    }
-
+  }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 
-    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
-    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+  annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
+  annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+  annotationProcessor rootProject.ext.dependencies["eventbus-compiler"]
 
-
-    if (isApplyComponentPlugin == 'true') {
-        //###### 引入基础组件 ######
-        debugImplementation project(':component_base')
-        implementation project(':component_base')
-    } else {
-        //###### 引入业务组件 ######
-        implementation project(':component_main')
-        implementation project(':component_share')
-        implementation project(':component_user')
-        debugImplementation project(':component_main')
-        debugImplementation project(':component_share')
-        debugImplementation project(':component_user')
-    }
-
+  if (isApplyComponentPlugin == 'true') {
+    //###### 引入基础组件 ######
+    debugImplementation project(':component_base')
+    implementation project(':component_base')
+  } else {
+    //###### 引入业务组件 ######
+    implementation project(':component_main')
+    implementation project(':component_share')
+    implementation project(':component_user')
+    debugImplementation project(':component_main')
+    debugImplementation project(':component_share')
+    debugImplementation project(':component_user')
+  }
 }
