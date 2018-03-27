@@ -108,8 +108,8 @@ ext {
 
                     //###### butterknife start ######
                     //"butterknife"                : "com.jakewharton:butterknife:8.0.1",
-                    "butterknife"                  : "com.jakewharton:butterknife:8.5.1",
-                    "butterknife-compiler"         : "com.jakewharton:butterknife-compiler:8.5.1",
+                    "butterknife"                  : "com.jakewharton:butterknife:8.8.1",
+                    "butterknife-compiler"         : "com.jakewharton:butterknife-compiler:8.8.1",
                     //###### butterknife end ######
 
                     //###### rxjava2 start ######

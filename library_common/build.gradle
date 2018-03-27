@@ -31,9 +31,9 @@ android {
 dependencies {
   implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-  testApi rootProject.ext.dependencies["junit"]
-  testApi rootProject.ext.dependencies["test-runner"]
-  testApi rootProject.ext.dependencies["espresso-core"]
+  testImplementation rootProject.ext.dependencies["junit"]
+  testImplementation rootProject.ext.dependencies["test-runner"]
+  testImplementation rootProject.ext.dependencies["espresso-core"]
 
   api (rootProject.ext.dependencies["appcompat-v7"]){
     exclude group: 'com.android.support', module: 'multidex'
