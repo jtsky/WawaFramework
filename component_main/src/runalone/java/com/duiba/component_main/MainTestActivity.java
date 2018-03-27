@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.duiba.component_base.component.main.path.MainRouterPath;
 import com.duiba.component_base.component.share.path.ShareRouterPath;
 
 /**
@@ -26,7 +27,7 @@ public class MainTestActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mBtn.setOnClickListener(v -> {
             ARouter.getInstance()
-                    .build(ShareRouterPath.SHARE_ACTIVITY_SHARE)
+                    .build(MainRouterPath.MAIN_ACTIVITY_MAIN)
                     .withInt("aaa", 123)
                     .navigation();
         });

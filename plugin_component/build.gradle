@@ -19,7 +19,7 @@ dependencies {
   compile 'org.javassist:javassist:3.22.0-CR2'
 }
 group = "com.duiba"
-version = "0.0.1"
+version = "0.1.0"
 
 uploadArchives {
   repositories {

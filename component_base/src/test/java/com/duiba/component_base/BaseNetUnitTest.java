@@ -3,12 +3,8 @@ package com.duiba.component_base;
 import android.test.AndroidTestCase;
 
 
-import com.jin.component_base.BuildConfig;
 
 import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;

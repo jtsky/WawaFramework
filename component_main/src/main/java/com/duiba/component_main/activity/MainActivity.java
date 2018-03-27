@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * @author: jintai
  * @time: 2017/11/9-18:36
  * @Email: jintai@duiba.com.cn
- * @desc:
+ * @desc: 主模块首页
  */
 @Route(path = MainRouterPath.MAIN_ACTIVITY_MAIN)
 public class MainActivity extends BaseActivity {
@@ -77,13 +77,17 @@ public class MainActivity extends BaseActivity {
 
         RxView.clicks(mBtnArouter).subscribe(aVoid -> {
             Logger.v("aaa======>" + aaa);
-            Logger.v(mUserResService.provideText());
-            Logger.v("mUserResService====>" + mUserResService.toString());
-            /**
-             * 服务是以单例形式存在的
-             */
+            if (mUserResService != null) {
+                Logger.v(mUserResService.provideText());
+                Logger.v("mUserResService====>" + mUserResService.toString());
+            }
+
+
+            //服务是以单例形式存在的
             IUserResService userResService = (IUserResService) ARouter.getInstance().build(UserRouterPath.USER_SERVER_RES).navigation();
-            Logger.v("userResService======>" + userResService.toString());
+            if (userResService != null) {
+                Logger.v("userResService======>" + userResService.toString());
+            }
 
         });
 

@@ -1,4 +1,4 @@
-package wsmanager;
+package com.duiba.wsmanager;
 
 /**
  * @author zjm

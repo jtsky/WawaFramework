@@ -17,7 +17,7 @@ buildscript {
         //arouter 插件
         classpath "com.alibaba:arouter-register:1.0.2"
         if (isApplyComponentPlugin == 'true') {
-            classpath 'com.duiba:plugin_component:0.0.1'//引入自定义插件
+            classpath 'com.duiba:plugin_component:0.1.0'//引入自定义插件
         }
 
         // NOTE: Do not place your application dependencies here; they belong

@@ -4,29 +4,23 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.duiba.component_base.BuildConfig;
+import com.duiba.component_base.StethoUtil;
 import com.duiba.component_base.config.AppDefine;
 import com.duiba.rxnetwork.RxNetwork;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import wsmanager.WsManager;
-import wsmanager.WsManagerFactory;
-import wsmanager.listener.AbstractWsStatusListener;
+import com.duiba.wsmanager.WsManager;
+import com.duiba.wsmanager.WsManagerFactory;
+import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author: jintai
@@ -47,6 +41,10 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         application = this;
+        //LeakCanary install
+        LeakCanary.install(this);
+        //chrome 调试
+        StethoUtil.init(this);
         initARouterAndLog();
         initWechatLogin();
         initNetworkStatusChangeObservable();

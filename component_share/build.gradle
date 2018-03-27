@@ -10,9 +10,6 @@ apply plugin: 'kotlin-android-extensions'
 android {
   compileSdkVersion rootProject.ext.android["compileSdkVersion"]
   defaultConfig {
-//    if(isApplyComponentPlugin == 'true'){
-//      applicationId project.properties.get("applicationId")
-//    }
     minSdkVersion rootProject.ext.android["minSdkVersion"]
     targetSdkVersion rootProject.ext.android["targetSdkVersion"]
     versionCode rootProject.ext.android["versionCode"]
@@ -27,11 +24,14 @@ android {
     }
   }
 
+  lintOptions {
+    abortOnError false
+  }
+
   resourcePrefix "share_"
 
   buildTypes {
     debug {}
-
     release {}
   }
   compileOptions {

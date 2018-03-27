@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import static org.junit.Assert.assertEquals;
+
 
 /**
  * @author: jintai
@@ -20,6 +22,7 @@ public class UserNetUnitTest extends BaseNetUnitTest {
 
     @Test
     public void getUserTest() {
+        assertEquals(4, 2 + 2);
         //网络调用
 //        MainRESTApiImpl
 //                .getData("Android", null)

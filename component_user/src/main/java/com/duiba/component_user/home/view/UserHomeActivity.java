@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Response;
 import okio.ByteString;
-import wsmanager.listener.AbstractWsStatusListener;
-
-import static com.duiba.component_base.component.user.path.UserRouterPath.USER_ACTIVITY_HOME;
+import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author: jintai

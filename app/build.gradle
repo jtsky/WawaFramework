@@ -39,12 +39,30 @@ android {
         checkReleaseBuilds false
     }
     resourcePrefix "app_"
+
+    signingConfigs {
+        release {
+            storeFile file(KEYSTORE)
+            storePassword KEYSTORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEYSTORE_PASSWORD
+        }
+    }
+
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+
 }
 
 dependencies {
@@ -57,12 +75,16 @@ dependencies {
 
     if (isApplyComponentPlugin == 'true') {
         //###### 引入基础组件 ######
+        debugImplementation project(':component_base')
         implementation project(':component_base')
     } else {
         //###### 引入业务组件 ######
         implementation project(':component_main')
         implementation project(':component_share')
         implementation project(':component_user')
+        debugImplementation project(':component_main')
+        debugImplementation project(':component_share')
+        debugImplementation project(':component_user')
     }
 
 }

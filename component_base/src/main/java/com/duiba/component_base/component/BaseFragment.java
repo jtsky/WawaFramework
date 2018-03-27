@@ -23,9 +23,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.subjects.PublishSubject;
-import wsmanager.WsManager;
-import wsmanager.WsManagerFactory;
-import wsmanager.listener.AbstractWsStatusListener;
+import com.duiba.wsmanager.WsManager;
+import com.duiba.wsmanager.WsManagerFactory;
+import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 import static com.duiba.component_base.component.BaseActivity.WEBSOCKET_URL;
 

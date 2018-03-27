@@ -11,9 +11,6 @@ android {
   compileSdkVersion rootProject.ext.android["compileSdkVersion"]
 
   defaultConfig {
-//    if(isApplyComponentPlugin == 'true'){
-//      applicationId project.properties.get("applicationId")
-//    }
     minSdkVersion rootProject.ext.android["minSdkVersion"]
     targetSdkVersion rootProject.ext.android["targetSdkVersion"]
     versionCode rootProject.ext.android["versionCode"]
@@ -27,6 +24,11 @@ android {
       }
     }
   }
+
+  lintOptions {
+    abortOnError false
+  }
+
   //如果在 library 的 build.gradle 中添加 resourcePrefix ，则所有资源必须以此 prefix 开头
   resourcePrefix "user_"
 

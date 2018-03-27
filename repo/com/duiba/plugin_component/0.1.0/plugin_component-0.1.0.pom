@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.duiba</groupId>
   <artifactId>plugin_component</artifactId>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
   <dependencies>
     <dependency>
       <groupId>com.android.tools.build</groupId>

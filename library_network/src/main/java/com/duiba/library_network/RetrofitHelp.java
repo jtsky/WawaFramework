@@ -40,6 +40,7 @@ public class RetrofitHelp {
                                     .header("User-Agent", buildUserAgent())
                                     .build()))
                     //.addInterceptor(logging)
+                    .addNetworkInterceptor(new StethoInterceptor())
                     .addInterceptor(new RequestInterceptor())
                     //.addInterceptor(new addQueryParameterInterceptor())
                     .connectTimeout(10, TimeUnit.SECONDS)

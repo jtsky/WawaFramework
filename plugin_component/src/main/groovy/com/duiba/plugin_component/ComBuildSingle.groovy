@@ -23,14 +23,17 @@ class ComBuildSingle implements Plugin<Project> {
     void apply(Project project) {
         //创建当前module扩展对象 便于配置 属性名为ComExtension的属性名
         project.extensions.create('comBuild', ComExtension)
-        String mainModuleName = project.rootProject.properties.get("mainModuleName")
-        println("\n")
-        println("\n")
-        println("====mainModuleName====>${mainModuleName}")
+
         //得到当前项目的gradle配置
         List<String> taskNames = project.gradle.startParameter.taskNames
         String str_taskNames = taskNames.toString()
+        println("\n")
+        println("\n")
         println("===taskNames====>${str_taskNames}")
+
+        String mainModuleName = project.rootProject.properties.get("mainModuleName")
+        println("====mainModuleName====>${mainModuleName}")
+
         //当前模块名
         String moduleName = project.path.replace(":", "")
         println("===current module is====>${moduleName}")
@@ -168,20 +171,35 @@ class ComBuildSingle implements Plugin<Project> {
             println("${mCompileModuleName} 没有第三方依赖")
             return
         }
+        //遍历配置文件中配置的组件
         for (String component : compileComponents) {
             println("${mCompileModuleName} 依赖 ${component}")
+
+            //如果组件名中包含：则去指定的文件夹中找指定的arr
             if (component.contains(":")) {
                 File file = project.file("../componentrelease/${component.split(":")[1]}-release.aar")
+                //如果文件存在则关联本地组件
                 if (file.exists()) {
-                    project.dependencies.add("api", "$component-release@aar")
-                    println("$mCompileModuleName 添加 $component--release@aar 成功")
+                    if (assembleTask.isDebug) {
+                        project.dependencies.add("debugImplementation", "$component-release@aar")
+                        println("$mCompileModuleName 添加 $component--release@aar 成功")
+                    } else {
+                        project.dependencies.add("implementation", "$component-release@aar")
+                        println("$mCompileModuleName 添加 $component--release@aar 成功")
+                    }
                 } else {
                     throw new RuntimeException(" $component--release@aar not found")
                 }
-            } else {
-
-                project.dependencies.add("api", project.project(":$component"))
-                println("$mCompileModuleName 添加 :$component 成功")
+            }
+            //否则动态添加组件
+            else {
+                if (assembleTask.isDebug) {
+                    project.dependencies.add("debugImplementation", project.project(":$component"))
+                    println("$mCompileModuleName 添加 :$component 成功")
+                } else {
+                    project.dependencies.add("implementation", project.project(":$component"))
+                    println("$mCompileModuleName 添加 :$component 成功")
+                }
             }
         }
     }
@@ -218,7 +236,7 @@ class ComBuildSingle implements Plugin<Project> {
         AssembleTask assembleTask = new AssembleTask()
         for (String task : taskNames) {
             if (task.toUpperCase().contains("ASSEMBLE") || task.contains("aR") ||
-                    task.toUpperCase().contains("RESGUARD")) {
+                    task.toUpperCase().contains("RESGUARD") || task.toUpperCase().contains("BUILD")) {
                 if (task.toUpperCase().contains("DEBUG")) {
                     assembleTask.isDebug = true
                 }

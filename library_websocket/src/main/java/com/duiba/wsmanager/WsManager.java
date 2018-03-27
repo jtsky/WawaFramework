@@ -1,4 +1,4 @@
-package wsmanager;
+package com.duiba.wsmanager;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -18,7 +18,7 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
-import wsmanager.listener.AbstractWsStatusListener;
+import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author rabtman

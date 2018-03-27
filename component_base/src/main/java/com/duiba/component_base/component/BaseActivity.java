@@ -21,9 +21,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 
 import io.reactivex.subjects.PublishSubject;
-import wsmanager.WsManager;
-import wsmanager.WsManagerFactory;
-import wsmanager.listener.AbstractWsStatusListener;
+import com.duiba.wsmanager.WsManager;
+import com.duiba.wsmanager.WsManagerFactory;
+import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author jintai

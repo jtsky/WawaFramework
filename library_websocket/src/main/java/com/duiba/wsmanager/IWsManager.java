@@ -1,4 +1,4 @@
-package wsmanager;
+package com.duiba.wsmanager;
 
 import okhttp3.WebSocket;
 import okio.ByteString;

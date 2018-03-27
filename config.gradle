@@ -87,8 +87,9 @@ ext {
                     "okhttp3"                      : "com.squareup.okhttp3:okhttp:3.6.0",
                     "okhttp3-logging-interceptor"  : 'com.squareup.okhttp3:logging-interceptor:3.9.0',
                     "okio"                         : "com.squareup.okio:okio:1.6.0",
-                    "stetho"                       : 'com.facebook.stetho:stetho:1.4.2',
-                    "stetho-okhttp3"               : 'com.facebook.stetho:stetho-okhttp3:1.4.2',
+                    //chrome 网络调试
+                    "stetho"                       : 'com.facebook.stetho:stetho:1.5.0',
+                    "stetho-okhttp3"               : 'com.facebook.stetho:stetho-okhttp3:1.5.0',
                     //https://github.com/google/gson
                     "gson"                         : "com.google.code.gson:gson:2.8.2",
                     "picasso"                      : "com.squareup.picasso:picasso:2.5.2",

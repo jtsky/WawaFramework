@@ -1,4 +1,4 @@
-package wsmanager.listener;
+package com.duiba.wsmanager.listener;
 
 import android.util.Log;
 
