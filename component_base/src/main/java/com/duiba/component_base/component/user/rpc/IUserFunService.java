@@ -1,6 +1,7 @@
 package com.duiba.component_base.component.user.rpc;
 
 import com.alibaba.android.arouter.facade.template.IProvider;
+import com.duiba.component_base.component.user.interfaces.IUserFunObj;
 
 /**
  * @author: jintai
@@ -9,4 +10,6 @@ import com.alibaba.android.arouter.facade.template.IProvider;
  * @desc: 定义用户组件对外提供的功能接口
  */
 public interface IUserFunService extends IProvider {
+
+  IUserFunObj provideObj();
 }

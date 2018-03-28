@@ -1,5 +1,6 @@
 package com.duiba.component_main.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.duiba.component_base.component.BaseActivity;
 import com.duiba.component_base.component.main.path.MainRouterPath;
 import com.duiba.component_base.component.user.path.UserRouterPath;
+import com.duiba.component_base.component.user.rpc.IUserFunService;
 import com.duiba.component_base.component.user.rpc.IUserResService;
 import com.duiba.component_main.R;
 import com.duiba.component_main.R2;
@@ -44,6 +46,9 @@ public class MainActivity extends BaseActivity {
     @Autowired(name = UserRouterPath.USER_SERVER_RES)
     IUserResService mUserResService;
 
+    @Autowired(name = UserRouterPath.USER_SERVER_FUN)
+    IUserFunService mUserFunService;
+
     @BindView(R2.id.btn_net)
     Button mBtnNet;
     @BindView(R2.id.btn_arouter)
@@ -51,6 +56,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R2.id.btn_mvp)
     Button mBtnMvp;
 
+    @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +88,9 @@ public class MainActivity extends BaseActivity {
                 Logger.v("mUserResService====>" + mUserResService.toString());
             }
 
+            if (mUserFunService != null) {
+                mUserFunService.provideObj().call();
+            }
 
             //服务是以单例形式存在的
             IUserResService userResService = (IUserResService) ARouter.getInstance().build(UserRouterPath.USER_SERVER_RES).navigation();

@@ -3,8 +3,10 @@ package com.duiba.component_user.service_impl;
 import android.content.Context;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.duiba.component_base.component.user.interfaces.IUserFunObj;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserFunService;
+import com.duiba.component_user.bean.UserFunObj;
 
 /**
  * @author: jintai
@@ -14,7 +16,13 @@ import com.duiba.component_base.component.user.rpc.IUserFunService;
  */
 @Route(path = UserRouterPath.USER_SERVER_FUN)
 public class UserFunServiceImpl implements IUserFunService {
-  @Override public void init(Context context) {
+    @Override
+    public void init(Context context) {
 
-  }
+    }
+
+    @Override
+    public IUserFunObj provideObj() {
+        return new UserFunObj();
+    }
 }
