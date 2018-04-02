@@ -48,8 +48,6 @@ public class RxResponTransform implements ObservableTransformer<String, JSONObje
                 .doOnNext(responsObject -> {
                     if (BuildConfig.DEBUG) {
                         //日志输出
-                        System.out.println("===================================junit response===================================");
-                        System.out.println(responsObject.toString());
                         Logger.i("===================================response json===================================");
                         Logger.json(responsObject.toString());
                         Logger.i("===================================response String===================================");
@@ -77,7 +75,9 @@ public class RxResponTransform implements ObservableTransformer<String, JSONObje
                     if (mProgressDialog != null && mProgressDialog.isShowing())
                         mProgressDialog.dismiss();
                 }).doFinally(() -> {
-                    Logger.v("============doFinally============");
+                    if (BuildConfig.DEBUG) {
+                        //Logger.v("============doFinally============");
+                    }
                 });
     }
 }

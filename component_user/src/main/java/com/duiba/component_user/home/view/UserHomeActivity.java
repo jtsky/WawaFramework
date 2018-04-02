@@ -2,6 +2,7 @@ package com.duiba.component_user.home.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Response;
 import okio.ByteString;
+
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
@@ -142,6 +144,7 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
             public void onNetClosed() {
                 super.onNetClosed();
                 Log.d(TAG, "WsManager-----onNetClosed");
+                showSnackBar("网络已断开", R.color.base_common_white, R.color.base_common_red);
             }
 
             @Override

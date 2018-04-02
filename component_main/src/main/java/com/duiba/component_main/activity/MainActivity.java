@@ -3,6 +3,7 @@ package com.duiba.component_main.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -63,7 +64,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
-
         RxView.clicks(mBtnNet).subscribe(aVoid -> {
             //网络调用
             MainRESTApiImpl

@@ -2,10 +2,15 @@ package com.duiba.component_base.component;
 
 import android.arch.lifecycle.ViewModel;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import android.support.annotation.ColorRes;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.duiba.component_base.BuildConfig;
 import com.duiba.component_base.lifecycle.ActivityLifeCycleEvent;
 import com.duiba.component_base.util.EventBusUtil;
@@ -21,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 
 import io.reactivex.subjects.PublishSubject;
+
 import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
@@ -200,11 +206,63 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         }
     }
 
+    /**
+     * 显示顶部snack bar
+     *
+     * @param message
+     * @param textColor
+     * @param bgColor
+     */
+    protected void showSnackBar(String message, @ColorRes int textColor, @ColorRes int bgColor) {
+        showSnackBar(message, textColor, bgColor, 0, 24, 0, 24);
+    }
+
+    /**
+     * 显示顶部snack bar 详细
+     *
+     * @param message
+     * @param textColor
+     * @param bgColor
+     * @param leftIcon
+     * @param leftSizeDp
+     * @param rightIcon
+     * @param rightSizeDp
+     */
+    protected void showSnackBar(String message, @ColorRes int textColor, @ColorRes int bgColor, @ColorRes int leftIcon, int leftSizeDp, @ColorRes int rightIcon, int rightSizeDp) {
+        if (mRootView == null) {
+            return;
+        }
+        TSnackbar tSnackbar = TSnackbar.make(mRootView, message, TSnackbar.LENGTH_SHORT);
+        //Size in dp - 24 is great!
+        if (leftIcon != 0) {
+            tSnackbar.setIconLeft(leftIcon, leftSizeDp == 0 ? 24 : leftSizeDp);
+        }
+
+        //Resize to bigger dp
+        if (rightIcon != 0) {
+            tSnackbar.setIconRight(rightIcon, rightSizeDp == 0 ? 24 : rightSizeDp);
+        }
+        tSnackbar.setIconPadding(8);
+        tSnackbar.setMaxWidth(3000);
+        View snackbarView = tSnackbar.getView();
+        snackbarView.setBackgroundColor(getResources().getColor(bgColor));
+        TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(textColor));
+        tSnackbar.show();
+    }
+
+    /**
+     * 页面的根布局
+     **/
+    View mRootView;
+
     @Override
     protected void onResume() {
         super.onResume();
         lifecycleSubject.onNext(ActivityLifeCycleEvent.RESUME);
         MobclickAgent.onResume(this);
+        mRootView = findViewById(android.R.id.content);
+        Logger.v("mRootView=====>" + mRootView.toString());
     }
 
     @Override

@@ -47,6 +47,8 @@ dependencies {
   testImplementation rootProject.ext.dependencies["test-runner"]
   testImplementation rootProject.ext.dependencies["espresso-core"]
   testImplementation rootProject.ext.dependencies["robolectric"]
+  testImplementation rootProject.ext.dependencies["shadows-multidex"]
+  testImplementation rootProject.ext.dependencies["leakcanary-android-no-op"]
   testImplementation rootProject.ext.dependencies["opengl-api"]
   testImplementation rootProject.ext.dependencies["mockito-core"]
   //######### test end #########

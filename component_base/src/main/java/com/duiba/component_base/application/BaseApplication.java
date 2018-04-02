@@ -18,9 +18,12 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+
 import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
+
+import java.io.IOException;
 
 /**
  * @author: jintai
@@ -93,7 +96,11 @@ public class BaseApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
+        try {
+            MultiDex.install(this);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     @NonNull
