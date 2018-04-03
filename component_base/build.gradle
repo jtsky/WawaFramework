@@ -14,6 +14,13 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    //http://robolectric.org/getting-started/
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 
     lintOptions {
         abortOnError false

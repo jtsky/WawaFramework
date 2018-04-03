@@ -1,12 +1,17 @@
 package com.duiba.component_main;
 
 
+import android.app.Activity;
+import android.widget.Button;
+
+import com.duiba.component_main.activity.MainActivity;
 import com.duiba.component_main.bean.TestBean;
 import com.duiba.component_main.net.MainRESTApiImpl;
 import com.duiba.library_network.action.WebSuccessAction;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -24,9 +29,14 @@ import java.util.List;
 public class MainNetUnitTest  extends BaseNetUnitTest {
 
     @Test
-    public void getUserTest() {
+    public void ActivityTest() {
+        Activity activity = Robolectric.setupActivity(MainActivity.class);
+
+        Button button = activity.findViewById(R.id.btn_arouter);
+
+        button.performClick();
         //网络调用
-        MainRESTApiImpl
+       /* MainRESTApiImpl
                 .getData("Android", null)
                 .subscribe(new WebSuccessAction<List<TestBean>>() {
                     @Override
@@ -38,6 +48,6 @@ public class MainNetUnitTest  extends BaseNetUnitTest {
                     public void onFailed(int code, String msg) {
                         System.out.println(msg);
                     }
-                });
+                });*/
     }
 }

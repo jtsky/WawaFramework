@@ -217,11 +217,11 @@ ext {
                     //###### mvp框架 end######
                     //######test lib start ######
                     "junit"                      : "junit:junit:4.12",
-                    "robolectric"                : "org.robolectric:robolectric:3.1.4",
-                    "shadows-multidex"           : "org.robolectric:shadows-multidex:3.1.4",
+                    "robolectric"                : "org.robolectric:robolectric:3.8",
+                    "shadows-multidex"           : "org.robolectric:shadows-multidex:3.8",
                     "opengl-api"                 : "org.khronos:opengl-api:gl1.1-android-2.1_r1",
                     "mockito-core"               : "org.mockito:mockito-core:2.2.22",
-                    "test-runner"                : "com.android.support.test:runner:1.0.1",
+                    "test-runner"                : "com.android.support.test:runner:1.0.2-alpha1",
                     "espresso-core"              : "com.android.support.test.espresso:espresso-core:3.0.1"
                     //######test lib end ######
     ]

@@ -26,7 +26,6 @@ public class HomePresenter extends DuibaMvpPresenter<UserViewModel, HomeView> {
         ifViewModelAttached(viewModel -> {
             viewModel.getName().setValue("来自Activity的更新");
         });
-
     }
 }
 

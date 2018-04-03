@@ -262,7 +262,6 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         lifecycleSubject.onNext(ActivityLifeCycleEvent.RESUME);
         MobclickAgent.onResume(this);
         mRootView = findViewById(android.R.id.content);
-        Logger.v("mRootView=====>" + mRootView.toString());
     }
 
     @Override
