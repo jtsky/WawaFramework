@@ -57,6 +57,9 @@ public class MainActivity extends BaseActivity {
     @BindView(R2.id.btn_mvp)
     Button mBtnMvp;
 
+    @BindView(R2.id.btn_h5)
+    Button mBtnH5;
+
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,12 @@ public class MainActivity extends BaseActivity {
 
         RxView.clicks(mBtnMvp).subscribe(aVoid -> {
             ARouter.getInstance().build(UserRouterPath.USER_ACTIVITY_HOME).navigation();
+        });
+        RxView.clicks(mBtnH5).subscribe(aVoid -> {
+            ARouter.getInstance()
+                    .build(MainRouterPath.MAIN_ACTIVITY_WEB)
+                    .withString("url", "file:////android_asset/schame-test.html")
+                    .navigation();
         });
     }
 

@@ -16,6 +16,8 @@ public class MainRouterPath {
      * 用户组件page
      */
     public static final String MAIN_ACTIVITY_MAIN = MAIN_ROOT + "main_activity";
+    //webview
+    public static final String MAIN_ACTIVITY_WEB = MAIN_ROOT + "webview_activity";
 
     public static final String MAIN_ACTIVITY_OTHER = MAIN_ROOT + "other_activity";
 

@@ -6,4 +6,33 @@
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <application android:allowBackup="false">
+        <activity android:name=".h5.SchameFilterActivity">
+            <!-- Schame -->
+            <intent-filter>
+                <data
+                    android:host="m.duiba.com"
+                    android:scheme="wawa" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <!-- App Links -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="m.duiba.com"
+                    android:scheme="http"/>
+                <data
+                    android:host="m.duiba.com"
+                    android:scheme="https"/>
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>
