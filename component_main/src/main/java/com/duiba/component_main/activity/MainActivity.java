@@ -69,6 +69,8 @@ public class MainActivity extends BaseActivity {
     Button mBtnCountDown;
     @BindView(R2.id.btn_add)
     Button mBtnAdd;
+    @BindView(R2.id.btn_reset)
+    Button mBtnReset;
 
     @BindView(R2.id.wawa_countdown)
     WawaSeekBar mWawaCountdown;
@@ -144,8 +146,10 @@ public class MainActivity extends BaseActivity {
         });
 
         RxView.clicks(mBtnAdd).subscribe(aVoid -> {
-            mWawaScore.setProgress(mWawaScore.getProgress() + 1);
-
+            mWawaScore.setProgress(mWawaScore.getProgress() + 10);
+        });
+        RxView.clicks(mBtnReset).subscribe(aVoid -> {
+            mWawaScore.reset(30);
         });
 
         float[] progress = new float[]{0.3f, 0.5f, 0.7f};

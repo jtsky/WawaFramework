@@ -3,6 +3,7 @@ package com.duiba.component_base.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,6 +15,12 @@ import com.blankj.utilcode.util.ConvertUtils;
 import com.duiba.component_base.R;
 import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
 import com.orhanobut.logger.Logger;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * ================================================
@@ -159,6 +166,7 @@ public class WawaSeekBar extends FrameLayout {
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                //倒计时进度条的判定
                 if (mIsCountDown) {
                     for (int i = 0; i < mArgsProgress.length; i++) {
                         if (progress == (int) (mArgsProgress[i] * 100)) {
@@ -172,7 +180,45 @@ public class WawaSeekBar extends FrameLayout {
                         }
                     }
                 }
-                if (mSeekBarChangeListener != null) {
+                //积分的判定
+                else {
+                    //当处于重置状态下的处理
+                    if (isReseting) {
+                        if (progress == 100) {
+                            if (mAddDisposable != null) {
+                                mAddDisposable.dispose();
+                                mAddDisposable = null;
+                            }
+                            mReduceDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
+                                if (Math.abs(getProgress() - mResetProgress) == 1) {
+                                    setProgress(getProgress() - 2);
+                                } else {
+                                    setProgress(getProgress() - 1);
+                                }
+
+                            });
+                        } else if (progress == 0) {
+                            if (mReduceDisposable != null) {
+                                mReduceDisposable.dispose();
+                                mReduceDisposable = null;
+                            }
+
+                            mResetDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
+                                setProgress(getProgress() + 1);
+                            });
+
+                        } else if (progress == mResetProgress) {
+                            if (mResetDisposable != null) {
+                                mResetDisposable.dispose();
+                                mResetDisposable = null;
+                            }
+                            isReseting = false;
+                        }
+                    }
+                }
+
+
+                if (mSeekBarChangeListener != null && !isReseting) {
                     mSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
                 }
             }
@@ -232,6 +278,35 @@ public class WawaSeekBar extends FrameLayout {
         addPointViews();
     }
 
+    Disposable mAddDisposable;
+    Disposable mReduceDisposable;
+    Disposable mResetDisposable;
+    boolean isReseting;
+    int mResetProgress;
+
+    /**
+     * 积分专用
+     *
+     * @param progress 需要重置的进度
+     */
+    public void reset(int progress) {
+        isReseting = true;
+        if (mSeekBar == null) {
+            return;
+        }
+        if (mIsCountDown) {
+            return;
+        }
+        mResetProgress = progress;
+        mAddDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
+            if (Math.abs(getProgress() - mResetProgress) == 1) {
+                setProgress(getProgress() + 2);
+            } else {
+                setProgress(getProgress() + 1);
+            }
+        });
+
+    }
 
     public void setProgress(int progress) {
         if (mSeekBar == null) {
