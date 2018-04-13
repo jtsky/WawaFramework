@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.util.Utils;
 import com.duiba.component_base.BuildConfig;
 import com.duiba.component_base.StethoUtil;
 import com.duiba.component_base.config.AppDefine;
@@ -44,6 +45,8 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         application = this;
+        //工具类初始化
+        Utils.init(application);
         //LeakCanary install
         LeakCanary.install(this);
         //chrome 调试

@@ -3,8 +3,9 @@ package com.duiba.component_main.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -14,6 +15,8 @@ import com.duiba.component_base.component.main.path.MainRouterPath;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserFunService;
 import com.duiba.component_base.component.user.rpc.IUserResService;
+import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
+import com.duiba.component_base.widget.WawaSeekBar;
 import com.duiba.component_main.R;
 import com.duiba.component_main.R2;
 import com.duiba.component_main.bean.TestBean;
@@ -25,9 +28,12 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author: jintai
@@ -59,7 +65,25 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R2.id.btn_h5)
     Button mBtnH5;
+    @BindView(R2.id.btn_countdown)
+    Button mBtnCountDown;
+    @BindView(R2.id.btn_add)
+    Button mBtnAdd;
 
+    @BindView(R2.id.wawa_countdown)
+    WawaSeekBar mWawaCountdown;
+    @BindView(R2.id.wawa_score)
+    WawaSeekBar mWawaScore;
+
+    /**
+     * 倒计时Disposable
+     */
+    Disposable mDownDisposable;
+
+    /**
+     * 闪烁倒计时
+     */
+    //Disposable mBlingDisposable;
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +136,81 @@ public class MainActivity extends BaseActivity {
                     .withString("url", "file:////android_asset/schame-test.html")
                     .navigation();
         });
+        RxView.clicks(mBtnCountDown).subscribe(aVoid -> {
+            mDownDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+                    .subscribe(l -> {
+                        mWawaCountdown.setProgress(mWawaCountdown.getProgress() - 1);
+                    });
+        });
+
+        RxView.clicks(mBtnAdd).subscribe(aVoid -> {
+            mWawaScore.setProgress(mWawaScore.getProgress() + 1);
+
+        });
+
+        float[] progress = new float[]{0.3f, 0.5f, 0.7f};
+        String[] progressTip = new String[]{"good", "great", "perfect"};
+        mWawaCountdown.setCountdownData(progress, progressTip);
+        mWawaCountdown.setSeekBarChangeListener((seekBar, progress1, fromUser) -> {
+            Logger.v("mWawaCountdown==>" + progress1);
+        });
+
+        float[] progress2 = new float[]{0.1f, 0.5f, 0.9f};
+        String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
+        mWawaScore.setScoreData(progress2, progressTicket2);
+        mWawaScore.setSeekBarChangeListener((seekBar, progress12, fromUser) -> {
+            Logger.v("mWawaScore==>" + progress12);
+        });
     }
 
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Logger.v("hasFocus===>" + hasFocus);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        mDownDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+//                .subscribe(l -> {
+//                    mSeekBarCountdown.setProgress(mSeekBarCountdown.getProgress() - 1);
+//                    mSeekBarCountdown.setSecondaryProgress(mSeekBarCountdown.getSecondaryProgress() - 1);
+//                });
+
+//        mBlingDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+//                .subscribe(l -> {
+//                    int progress = mSeekBarCountdown.getProgress();
+//                    if (progress <= 20) {
+//                        if (mShadow.getTag() == null) {
+//                            mShadow.setShadowColor(getResources().getColor(R.color.main_white));
+//                            mShadow.setTag("show");
+//                        } else {
+//                            mShadow.setShadowColor(getResources().getColor(R.color.main_red));
+//                            mShadow.setTag(null);
+//                        }
+//                    } else {
+//                        mShadow.setShadowColor(getResources().getColor(R.color.main_white));
+//                        mShadow.setTag("show");
+//                    }
+//
+//                });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mDownDisposable != null && !mDownDisposable.isDisposed()) {
+            mDownDisposable.dispose();
+            mDownDisposable = null;
+        }
+//        if (!mBlingDisposable.isDisposed()) {
+//            mBlingDisposable.dispose();
+//            mBlingDisposable = null;
+//        }
+    }
 
     @Override
     protected boolean isMVP() {

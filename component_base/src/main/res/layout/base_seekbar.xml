@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#C2E1FF">
+    <!--app:shadowColor="#fb0303"-->
+
+    <!--splitTrack 透明png-->
+    <!--android:thumb="@mipmap/main_ic_cursor"-->
+    <SeekBar
+        android:id="@+id/seekbar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:indeterminateOnly="false"
+        android:maxHeight="30dp"
+        android:minHeight="25dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:progress="0"
+        android:progressDrawable="@drawable/base_countdown_progressbar"
+        android:secondaryProgress="0"
+        android:splitTrack="false"
+        android:thumb="@null"
+        android:thumbOffset="20dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
+
+</FrameLayout>
+

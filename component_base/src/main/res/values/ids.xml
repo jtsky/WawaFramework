@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="base_seek_tv_tip" type="id"/>
+    <item name="base_seek_tv_ticket" type="id"/>
+    <item name="base_seek_iv_point" type="id"/>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--通用颜色-->
+
+
+    <color name="main_white">#FFFFFF</color>
+    <color name="main_red">#fb0303</color>
+    <color name="main_orgnge">#FF7800</color>
+
+</resources>

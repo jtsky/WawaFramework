@@ -11,4 +11,8 @@
   <color name="base_common_white">#FFFFFF</color>
   <color name="base_common_red">#FF0000</color>
 
+  <color name="base_white">#FFFFFF</color>
+  <color name="base_red">#fb0303</color>
+  <color name="base_orgnge">#FF7800</color>
+
 </resources>

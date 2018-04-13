@@ -7,7 +7,7 @@
       android:allowBackup="false"
       android:label="@string/share_app_name"
       android:supportsRtl="true"
-      android:theme="@style/commonAppTheme"
+      android:theme="@style/base_commonAppTheme"
       tools:replace="android:label">
 
     <activity android:name=".ShareTestActivity">
