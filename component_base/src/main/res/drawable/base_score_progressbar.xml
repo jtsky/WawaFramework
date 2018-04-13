@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="10dp" />
+            <!--<gradient-->
+            <!--android:angle="270"-->
+            <!--android:centerColor="#6DA2FF "-->
+            <!--android:centerY="0.45"-->
+            <!--android:endColor="#6DA2FF "-->
+            <!--android:startColor="#6DA2FF" />-->
+            <solid android:color="#6DA2FF" />
+            <stroke
+                android:width="2dp"
+                android:color="#397AEE" />
+        </shape>
+
+    </item>
+
+    <!--clip会进行裁剪右边会变成直角  而scale不会进行裁剪-->
+    <item
+        android:id="@android:id/progress"
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+
+        <scale android:scaleWidth="100%">
+            <shape>
+                <corners android:radius="10dp" />
+                <gradient
+                    android:angle="45"
+                    android:endColor="#ffea71"
+                    android:startColor="#71e9ff" />
+            </shape>
+        </scale>
+    </item>
+
+    <item
+        android:id="@android:id/secondaryProgress"
+        android:bottom="4dp"
+        android:left="4dp"
+        android:right="4dp"
+        android:top="4dp">
+
+        <scale android:scaleWidth="100%">
+            <shape>
+                <corners android:radius="10dp" />
+                <gradient
+                    android:angle="270"
+                    android:centerColor="#33ffffff"
+                    android:endColor="#00000000"
+                    android:startColor="#55ffffff" />
+            </shape>
+        </scale>
+    </item>
+</layer-list>

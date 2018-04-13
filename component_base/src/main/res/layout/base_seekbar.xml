@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#C2E1FF">
+    tools:background="#C2E1FF">
     <!--app:shadowColor="#fb0303"-->
 
     <!--splitTrack 透明png-->
     <!--android:thumb="@mipmap/main_ic_cursor"-->
-    <SeekBar
+    <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/seekbar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"

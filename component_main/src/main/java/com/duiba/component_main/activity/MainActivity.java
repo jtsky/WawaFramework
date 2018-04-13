@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity {
         });
 
         RxView.clicks(mBtnAdd).subscribe(aVoid -> {
-            mWawaScore.setProgress(mWawaScore.getProgress() + 10);
+            mWawaScore.setProgressWithAnim(mWawaScore.getProgress() + 10);
         });
         RxView.clicks(mBtnReset).subscribe(aVoid -> {
             mWawaScore.reset(30);

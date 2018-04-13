@@ -1,7 +1,11 @@
 package com.duiba.component_base.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -146,6 +150,7 @@ public class WawaSeekBar extends FrameLayout {
     /**
      * 添加子控件
      */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void addChildView(Context context) {
         View countDownView = View.inflate(context, R.layout.base_seekbar, this);
         //设置SeekBar的高度
@@ -154,13 +159,25 @@ public class WawaSeekBar extends FrameLayout {
         mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleCommon));
         mSeekBar.setProgress(mDefaultProgress);
         mSeekBar.setSecondaryProgress(mDefaultProgress);
+        mSeekBar.setOnTouchListener((v, event) -> true);
         if (mIsCountDown) {
             mSeekBar.setThumb(null);
             mSeekBar.setThumbOffset(0);
             mSeekBar.setSplitTrack(false);
         } else {
-            mSeekBar.setOnTouchListener((v, event) -> true);
-            mSeekBar.setThumb(getResources().getDrawable(mProgressBarThumb));
+            try {
+                Drawable thumb = getResources().getDrawable(mProgressBarThumb);
+                if (thumb != null) {
+                    mSeekBar.setThumb(thumb);
+                    if (thumb instanceof AnimationDrawable) {
+                        ((AnimationDrawable) thumb).start();
+                    }
+                } else {
+                    mSeekBar.setThumb(null);
+                }
+            } catch (Exception e) {
+                mSeekBar.setThumb(null);
+            }
             mSeekBar.setThumbOffset(mProgressThumbOffset);
         }
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -180,47 +197,52 @@ public class WawaSeekBar extends FrameLayout {
                         }
                     }
                 }
-                //积分的判定
-                else {
-                    //当处于重置状态下的处理
-                    if (isReseting) {
-                        if (progress == 100) {
-                            if (mAddDisposable != null) {
-                                mAddDisposable.dispose();
-                                mAddDisposable = null;
-                            }
-                            mReduceDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
-                                if (Math.abs(getProgress() - mResetProgress) == 1) {
-                                    setProgress(getProgress() - 2);
-                                } else {
-                                    setProgress(getProgress() - 1);
-                                }
-
-                            });
-                        } else if (progress == 0) {
-                            if (mReduceDisposable != null) {
-                                mReduceDisposable.dispose();
-                                mReduceDisposable = null;
-                            }
-
-                            mResetDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
-                                setProgress(getProgress() + 1);
-                            });
-
-                        } else if (progress == mResetProgress) {
-                            if (mResetDisposable != null) {
-                                mResetDisposable.dispose();
-                                mResetDisposable = null;
-                            }
-                            isReseting = false;
+                //积分的判定 当处于重置状态下的处理
+                else if (isReseting) {
+                    if (progress == 100) {
+                        if (mAddDisposable != null) {
+                            mAddDisposable.dispose();
+                            mAddDisposable = null;
                         }
+                        mReduceDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
+                            if (mReduceDisposable == null || mReduceDisposable.isDisposed()) {
+                                return;
+                            }
+
+                            if (Math.abs(getProgress() - mResetProgress) == 1) {
+                                setProgress(getProgress() - 2);
+                            } else {
+                                setProgress(getProgress() - 1);
+                            }
+
+                        });
+                    } else if (progress == 0) {
+                        if (mReduceDisposable != null) {
+                            mReduceDisposable.dispose();
+                            mReduceDisposable = null;
+                        }
+
+                        mResetDisposable = Observable.interval(0, 60, TimeUnit.MILLISECONDS).subscribe(l -> {
+                            if (mResetDisposable == null || mResetDisposable.isDisposed()) {
+                                return;
+                            }
+                            setProgress(getProgress() + 1);
+
+                        });
+
+                    } else if (progress == mResetProgress) {
+                        if (mResetDisposable != null) {
+                            mResetDisposable.dispose();
+                            mResetDisposable = null;
+                        }
+                        isReseting = false;
                     }
-                }
 
-
-                if (mSeekBarChangeListener != null && !isReseting) {
+                } else if (mSeekBarChangeListener != null && !isReseting) {
+                    cancleDisposables();
                     mSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
                 }
+
             }
 
             @Override
@@ -281,8 +303,29 @@ public class WawaSeekBar extends FrameLayout {
     Disposable mAddDisposable;
     Disposable mReduceDisposable;
     Disposable mResetDisposable;
+    Disposable mCommonDisposable;
     boolean isReseting;
     int mResetProgress;
+
+    /**
+     * 取消所有定时器
+     */
+    private void cancleDisposables() {
+        if (mAddDisposable != null) {
+            mAddDisposable.dispose();
+            mAddDisposable = null;
+        }
+        if (mReduceDisposable != null) {
+            mReduceDisposable.dispose();
+            mReduceDisposable = null;
+        }
+        if (mResetDisposable != null) {
+            mResetDisposable.dispose();
+            mResetDisposable = null;
+        }
+
+    }
+
 
     /**
      * 积分专用
@@ -299,6 +342,9 @@ public class WawaSeekBar extends FrameLayout {
         }
         mResetProgress = progress;
         mAddDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
+            if (mAddDisposable == null || mAddDisposable.isDisposed()) {
+                return;
+            }
             if (Math.abs(getProgress() - mResetProgress) == 1) {
                 setProgress(getProgress() + 2);
             } else {
@@ -314,6 +360,30 @@ public class WawaSeekBar extends FrameLayout {
         }
         mSeekBar.setProgress(progress);
         mSeekBar.setSecondaryProgress(progress);
+    }
+
+    /**
+     * 积分专用 动效递增
+     *
+     * @param progress
+     */
+    public void setProgressWithAnim(int progress) {
+        if (mSeekBar == null) {
+            return;
+        }
+        if (Math.abs(progress - getProgress()) <= 5) {
+            setProgress(progress);
+        } else {
+            mCommonDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS).subscribe(l -> {
+                if (getProgress() == progress) {
+                    if (mCommonDisposable != null) {
+                        mCommonDisposable.dispose();
+                        mCommonDisposable = null;
+                    }
+                }
+                setProgress(getProgress() + 1);
+            });
+        }
     }
 
     public int getProgress() {

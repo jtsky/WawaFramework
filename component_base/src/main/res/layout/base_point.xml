@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="perfect"
-            android:textColor="@color/base_orgnge"
+            android:textColor="@color/base_orange"
             android:textSize="14sp" />
 
         <ImageView
