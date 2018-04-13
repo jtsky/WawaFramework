@@ -76,7 +76,7 @@ dependencies {
     //======================mvp  end====================
 
     //边框阴影
-    api rootProject.ext.dependencies["shadow"]
+   // api rootProject.ext.dependencies["shadow"]
 
     api(rootProject.ext.dependencies["butterknife"]) {
         exclude group: 'com.android.support', module: '*'

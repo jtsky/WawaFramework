@@ -12,7 +12,7 @@ ext {
                //            suppotrSdkVersion: "22+",
                //            buildToolsVersion: "22.0.1",
                applicationId     : "com.tm.prizeclaw",
-               minSdkVersion     : 17,
+               minSdkVersion     : 16,
                targetSdkVersion  : 26,
                versionCode       : 201,
                versionName       : "2.0.1",
