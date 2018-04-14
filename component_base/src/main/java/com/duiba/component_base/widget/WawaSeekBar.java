@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * ================================================
@@ -77,7 +75,7 @@ public class WawaSeekBar extends FrameLayout {
         mDefaultProgress = a.getInt(R.styleable.base_wawa_seekbar_base_default_progress, 0);
         mIsCountDown = a.getBoolean(R.styleable.base_wawa_seekbar_base_count_down, false);
         mProgressThumbOffset = a.getDimensionPixelOffset(R.styleable.base_wawa_seekbar_base_progress_thumbOffset, ConvertUtils.dp2px(20));
-        mProgressBarThumb = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_thumb, R.mipmap.base_ic_cursor);
+        mProgressBarThumb = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_thumb, -1);
         mProgressStyleCommon = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_style_common, R.drawable.base_countdown_progressbar);
         mProgressStyleLast = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_style_last, R.drawable.base_countdown_progressbar2);
         //回收
@@ -98,7 +96,8 @@ public class WawaSeekBar extends FrameLayout {
 
     }
 
-    private int mPointWidth = 120;
+
+    private int mPointWidth_dp = 70;
 
     /**
      * 动态添加指针views
@@ -109,16 +108,6 @@ public class WawaSeekBar extends FrameLayout {
         for (int i = 0; i < mArgsProgress.length; i++) {
             LinearLayout pointView = (LinearLayout) View.inflate(mContext, R.layout.base_point, null);
             mPointWrap.addView(pointView);
-            LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px(mPointWidth), LinearLayout.LayoutParams.WRAP_CONTENT);
-            int marginLeft;
-            if (i == 0) {
-                marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth / 2));
-            } else {
-                marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth));
-            }
-
-            pointParams.setMargins(marginLeft, 0, 0, 0);
-            pointView.setLayoutParams(pointParams);
             TextView tvTicket = pointView.findViewById(R.id.tv_ticket);
             TextView tvTip = pointView.findViewById(R.id.tv_tip);
             ImageView ivPoint = pointView.findViewById(R.id.iv_point);
@@ -130,7 +119,7 @@ public class WawaSeekBar extends FrameLayout {
                 }
 
             } else {
-                tvTip.setVisibility(INVISIBLE);
+                tvTip.setVisibility(GONE);
                 tvTicket.setVisibility(VISIBLE);
                 if (mArgsTicket != null) {
                     tvTicket.setText(mArgsTicket[i]);
@@ -138,7 +127,30 @@ public class WawaSeekBar extends FrameLayout {
 
             }
 
+            LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px(mPointWidth_dp), LinearLayout.LayoutParams.WRAP_CONTENT);
+            int marginLeft;
+            //积分
+            if (!mIsCountDown) {
+                if (i == 0) {
+                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp / 2));
+                } else {
+                    marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth_dp));
+                }
+                pointParams.setMargins(marginLeft, 0, 0, mProgressbarHeight - 20);
+            } else {//倒计时
+                if (i == 0) {
+                    //20为图标的宽度
+                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp) + 40);
+                } else {
+                    marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth_dp));
+                }
+                pointParams.setMargins(marginLeft, 0, 0, (int) ((mProgressbarHeight - tvTip.getTextSize()) / 2));
+            }
+
+            pointView.setLayoutParams(pointParams);
+
         }
+
         if (mIsCountDown) {
             hideAllChild();
             mPointWrap.getChildAt(mPointWrap.getChildCount() - 1).setVisibility(VISIBLE);
@@ -155,7 +167,8 @@ public class WawaSeekBar extends FrameLayout {
         View countDownView = View.inflate(context, R.layout.base_seekbar, this);
         //设置SeekBar的高度
         mSeekBar = countDownView.findViewById(R.id.seekbar);
-        mSeekBar.setMinimumHeight(mProgressbarHeight);
+        mSeekBar.getLayoutParams().height = mProgressbarHeight;
+
         mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleCommon));
         mSeekBar.setProgress(mDefaultProgress);
         mSeekBar.setSecondaryProgress(mDefaultProgress);

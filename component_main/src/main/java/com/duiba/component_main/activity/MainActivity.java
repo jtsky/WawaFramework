@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity {
             mWawaScore.reset(30);
         });
 
-        float[] progress = new float[]{0.3f, 0.5f, 0.7f};
+        float[] progress = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTip = new String[]{"good", "great", "perfect"};
         mWawaCountdown.setCountdownData(progress, progressTip);
         mWawaCountdown.setSeekBarChangeListener((seekBar, progress1, fromUser) -> {
