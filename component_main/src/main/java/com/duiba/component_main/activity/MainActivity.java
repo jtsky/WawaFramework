@@ -71,6 +71,10 @@ public class MainActivity extends BaseActivity {
     Button mBtnAdd;
     @BindView(R2.id.btn_reset)
     Button mBtnReset;
+    @BindView(R2.id.btn_anim)
+    Button mBtnAnim;
+    @BindView(R2.id.btn_guide)
+    Button mBtnGuide;
 
     @BindView(R2.id.wawa_countdown)
     WawaSeekBar mWawaCountdown;
@@ -148,10 +152,21 @@ public class MainActivity extends BaseActivity {
         RxView.clicks(mBtnAdd).subscribe(aVoid -> {
             mWawaScore.setProgressWithAnim(mWawaScore.getProgress() + 10);
         });
+
         RxView.clicks(mBtnReset).subscribe(aVoid -> {
             mWawaScore.reset(30);
         });
 
+        RxView.clicks(mBtnGuide).subscribe(aVoid -> {
+            ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_GUIDE).navigation();
+        });
+
+        RxView.clicks(mBtnAnim).subscribe(aVoid -> {
+            ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_ANIM).navigation();
+        });
+
+
+        //倒计时初始化
         float[] progress = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTip = new String[]{"good", "great", "perfect"};
         mWawaCountdown.setCountdownData(progress, progressTip);
@@ -159,6 +174,7 @@ public class MainActivity extends BaseActivity {
             Logger.v("mWawaCountdown==>" + progress1);
         });
 
+        //积分初始化
         float[] progress2 = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
         mWawaScore.setScoreData(progress2, progressTicket2);

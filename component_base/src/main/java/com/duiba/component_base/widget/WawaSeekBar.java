@@ -3,6 +3,7 @@ package com.duiba.component_base.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -48,6 +49,12 @@ public class WawaSeekBar extends FrameLayout {
 
 
     SeekBar mSeekBar;
+
+
+    /**
+     * 进度条thumb
+     */
+    Drawable mSeekBarThumb;
     LinearLayout mPointWrap;
     Context mContext;
     float[] mArgsProgress;
@@ -58,6 +65,20 @@ public class WawaSeekBar extends FrameLayout {
 
     public void setSeekBarChangeListener(OnWawaSeekBarChangeListener seekBarChangeListener) {
         this.mSeekBarChangeListener = seekBarChangeListener;
+    }
+
+    /**
+     * 获取thumb在屏幕中的位置
+     * https://blog.csdn.net/tmj2014/article/details/53283804 getLocationInWindow和getLocationOnScreen的异同
+     * @return point
+     */
+    public Point getmSeekBarThumbPos() {
+        Point point = new Point();
+        if (mSeekBarThumb != null) {
+            //point.x =mSeekBar.getLocationInWindow();
+            //mSeekBar.getLocationOnScreen();
+        }
+        return point;
     }
 
     public WawaSeekBar(Context context, AttributeSet attrs) {
@@ -181,6 +202,8 @@ public class WawaSeekBar extends FrameLayout {
             try {
                 Drawable thumb = getResources().getDrawable(mProgressBarThumb);
                 if (thumb != null) {
+                    //thumb赋值
+                    mSeekBarThumb = thumb;
                     mSeekBar.setThumb(thumb);
                     if (thumb instanceof AnimationDrawable) {
                         ((AnimationDrawable) thumb).start();

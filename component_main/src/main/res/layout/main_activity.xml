@@ -7,7 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:divider="@color/base_common_colorPrimary"
+        android:orientation="vertical"
+        android:showDividers="middle|end">
 
         <Button
             android:id="@+id/btn_net"
@@ -36,6 +38,21 @@
             android:layout_height="wrap_content"
             android:filterTouchesWhenObscured="true"
             android:text="h5跳转测试" />
+        <!--新手引导页-->
+        <Button
+            android:id="@+id/btn_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:filterTouchesWhenObscured="true"
+            android:text="新手引导测试" />
+        <!--动画测试-->
+        <Button
+            android:id="@+id/btn_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:filterTouchesWhenObscured="true"
+            android:text="积分动画测试" />
+
 
         <Button
             android:id="@+id/btn_countdown"

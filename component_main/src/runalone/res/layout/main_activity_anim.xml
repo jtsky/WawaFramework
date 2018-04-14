@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wawa="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="我是动画效果页"
+        android:textSize="24sp" />
+
+    <com.duiba.component_base.widget.WawaSeekBar
+        android:id="@+id/wawa_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="10dp"
+        android:background="#C2E1FF"
+        wawa:base_count_down="false"
+        wawa:base_default_progress="10"
+        wawa:base_progress_style_common="@drawable/base_score_progressbar"
+        wawa:base_progress_thumb="@drawable/base_snailanim"
+        wawa:base_progress_thumbOffset="0dp"
+        wawa:base_progressbar_height="20dp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_wrap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/iv_snail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/s1" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_wrap"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:filterTouchesWhenObscured="true"
+        android:text="start"
+        android:textSize="16sp" />
+</RelativeLayout>

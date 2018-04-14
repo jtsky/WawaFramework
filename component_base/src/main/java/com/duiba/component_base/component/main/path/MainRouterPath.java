@@ -16,6 +16,14 @@ public class MainRouterPath {
      * 用户组件page
      */
     public static final String MAIN_ACTIVITY_MAIN = MAIN_ROOT + "main_activity";
+    /**
+     * 动画页
+     */
+    public static final String MAIN_ACTIVITY_ANIM = MAIN_ROOT + "anim_activity";
+    /**
+     * 新手引导页
+     */
+    public static final String MAIN_ACTIVITY_GUIDE = MAIN_ROOT + "guide_activity";
     //webview
     public static final String MAIN_ACTIVITY_WEB = MAIN_ROOT + "webview_activity";
 

@@ -19,6 +19,8 @@
     </activity>
     <activity android:name=".activity.MainActivity"/>
     <activity android:name=".activity.WebviewActivity" />
+    <activity android:name=".GuideActivity" />
+    <activity android:name=".AnimActivity" />
 
       <meta-data
           android:name="preloaded_fonts"
