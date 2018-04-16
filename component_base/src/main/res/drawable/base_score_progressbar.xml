@@ -9,10 +9,10 @@
             <!--android:centerY="0.45"-->
             <!--android:endColor="#6DA2FF "-->
             <!--android:startColor="#6DA2FF" />-->
-            <solid android:color="#6DA2FF" />
+            <solid android:color="#96bbff" />
             <stroke
                 android:width="2dp"
-                android:color="#397AEE" />
+                android:color="#96bbff" />
         </shape>
 
     </item>

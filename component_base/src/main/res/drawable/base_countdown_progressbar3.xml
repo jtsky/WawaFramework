@@ -24,10 +24,8 @@
         android:left="2dp"
         android:right="2dp"
         android:top="2dp">
-        <clip
-            android:clipOrientation="horizontal"
-            android:gravity="left">
-            <!--<scale android:scaleWidth="100%">-->
+
+        <scale android:scaleWidth="100%">
             <shape>
                 <corners android:radius="10dp" />
                 <gradient
@@ -35,8 +33,8 @@
                     android:endColor="#ffd200"
                     android:startColor="#ff6600" />
             </shape>
-            <!--</scale>-->
-        </clip>
+        </scale>
+
     </item>
 
     <item
@@ -45,10 +43,8 @@
         android:left="4dp"
         android:right="4dp"
         android:top="4dp">
-        <clip
-            android:clipOrientation="horizontal"
-            android:gravity="left">
-            <!--<scale android:scaleWidth="100%">-->
+
+        <scale android:scaleWidth="100%">
             <shape>
                 <corners android:radius="10dp" />
                 <gradient
@@ -57,7 +53,7 @@
                     android:endColor="#00000000"
                     android:startColor="#88ffffff" />
             </shape>
-            <!--</scale>-->
-        </clip>
+        </scale>
+
     </item>
 </layer-list>

@@ -70,6 +70,7 @@
             wawa:base_count_down="true"
             wawa:base_default_progress="100"
             wawa:base_progress_style_common="@drawable/base_countdown_progressbar"
+            wawa:base_progress_style_last="@drawable/base_countdown_progressbar3"
             wawa:base_progressbar_height="20dp" />
 
         <LinearLayout

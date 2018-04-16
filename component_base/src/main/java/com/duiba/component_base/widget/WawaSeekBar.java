@@ -62,7 +62,7 @@ public class WawaSeekBar extends FrameLayout {
     /**
      * 倒计时最后进度条改变的时机
      */
-    int mProgreeBarChangeByProgress;
+    float mProgreeBarChangeByProgress;
 
     SeekBar mSeekBar;
     ImageView mThumb;
@@ -288,6 +288,7 @@ public class WawaSeekBar extends FrameLayout {
                 }
                 //倒计时
                 if (mIsCountDown) {
+                    //隐藏当前指针 显示下一个指针
                     for (int i = 0; i < mArgsProgress.length; i++) {
                         if (progress == (int) (mArgsProgress[i] * 100)) {
                             Logger.t(TAG).v("progress == mArgsProgress" + mArgsProgress[i]);
@@ -299,6 +300,11 @@ public class WawaSeekBar extends FrameLayout {
                             continue;
                         }
                     }
+                    //改变进度条样式
+                    if (progress == (int) (mProgreeBarChangeByProgress * 100)) {
+                        mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleLast));
+                    }
+
                 }
                 //积分的判定 当处于重置状态下的处理
                 else if (isReseting) {
@@ -415,16 +421,18 @@ public class WawaSeekBar extends FrameLayout {
     /**
      * 设置倒计时的指针的显示位置
      *
-     * @param argsProgress
+     * @param argsProgress               进度数组 只允许小数
      * @param argsTip
+     * @param progreeBarChangeByProgress 改变进度条样式进度
      */
-    public void setCountdownData(float[] argsProgress, String[] argsTip) {
+    public void setCountdownData(float[] argsProgress, String[] argsTip, float progreeBarChangeByProgress) {
         if (argsProgress.length != argsTip.length) {
             throw new RuntimeException("argsProgrss argsTicket 两者的长度必须一致");
 
         }
         mArgsProgress = argsProgress;
         mArgsTip = argsTip;
+        mProgreeBarChangeByProgress = progreeBarChangeByProgress;
         //表示当前控件还没测量完毕，直接返回等待测量完成以后在添加子view
         if (mWidth == 0) {
             return;
