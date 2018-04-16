@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:oneshot="false">
+
+    <item
+        android:drawable="@mipmap/static_42"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_47"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_52"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_57"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_62"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_67"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_72"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_77"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_82"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_87"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_92"
+        android:duration="150" />
+
+
+    <item
+        android:drawable="@mipmap/static_97"
+        android:duration="150" />
+
+    <item
+        android:drawable="@mipmap/static_102"
+        android:duration="150" />
+
+    <item
+        android:drawable="@mipmap/static_107"
+        android:duration="150" />
+
+    <item
+        android:drawable="@mipmap/static_112"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_117"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_122"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_127"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_132"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_137"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_142"
+        android:duration="150" />
+
+    <item
+        android:drawable="@mipmap/static_147"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/static_149"
+        android:duration="150" />
+</animation-list>

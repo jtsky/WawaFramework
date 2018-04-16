@@ -70,8 +70,6 @@
             wawa:base_count_down="true"
             wawa:base_default_progress="100"
             wawa:base_progress_style_common="@drawable/base_countdown_progressbar"
-            wawa:base_progress_thumb="@null"
-            wawa:base_progress_thumbOffset="0dp"
             wawa:base_progressbar_height="20dp" />
 
         <LinearLayout
@@ -92,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:filterTouchesWhenObscured="true"
                 android:text="重置" />
+
         </LinearLayout>
 
 
@@ -102,10 +101,10 @@
             android:layout_marginTop="10dp"
             android:background="#C2E1FF"
             wawa:base_count_down="false"
-            wawa:base_default_progress="10"
+            wawa:base_default_progress="0"
             wawa:base_progress_style_common="@drawable/base_score_progressbar"
-            wawa:base_progress_thumb="@drawable/base_snailanim"
-            wawa:base_progress_thumbOffset="0dp"
+            wawa:base_progress_thumb_activity="@drawable/base_star_active"
+            wawa:base_progress_thumb_common="@drawable/base_star_common"
             wawa:base_progressbar_height="15dp" />
 
         <TextView

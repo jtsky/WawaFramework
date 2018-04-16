@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:oneshot="false">
+
+    <item
+        android:drawable="@mipmap/activity_39"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_40"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_41"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_42"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_43"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_44"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_45"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_46"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_47"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_48"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_49"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_50"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_51"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_52"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_53"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_54"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_55"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_56"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_57"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/activity_58"
+        android:duration="150" />
+
+</animation-list>

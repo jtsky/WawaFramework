@@ -1,10 +1,20 @@
 package com.duiba.component_main;
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -33,8 +43,12 @@ public class AnimActivity extends BaseActivity {
     WawaSeekBar mWawaScore;
     @BindView(R2.id.iv_snail)
     ImageView mIvSnail;
+    @BindView(R2.id.ll_wrap)
+    LinearLayout mllWrap;
     @BindView(R.id.btn)
     Button mBtn;
+    @BindView(R.id.btn_progress)
+    Button mBtnAdd;
 
     @SuppressLint("CheckResult")
     @Override
@@ -52,8 +66,47 @@ public class AnimActivity extends BaseActivity {
         });
 
         RxView.clicks(mBtn).subscribe(aVoid -> {
-            Toast.makeText(this, "a", Toast.LENGTH_SHORT).show();
+            mEndPoint = mWawaScore.getSeekBarThumbPos();
+            startAnimation();
         });
+
+        RxView.clicks(mBtnAdd).subscribe(aVoid -> {
+            mWawaScore.setProgressWithAnim(mWawaScore.getProgress() + 10);
+        });
+
+
+    }
+
+    Point mEndPoint = null;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mEndPoint = mWawaScore.getSeekBarThumbPos();
+        Logger.v("point===>" + mEndPoint.toString());
+    }
+
+
+    private void startAnimation() {
+        int[] rect = new int[2];
+        mllWrap.getLocationOnScreen(rect);
+        AnimationSet set = new AnimationSet(false);
+        Animation translateAnimation = new TranslateAnimation(0, mEndPoint.x - rect[0], 0, mEndPoint.y - rect[1]);
+        //Animation translateAnimation = new TranslateAnimation(0, mEndPoint.x - rect[0], 0, 0);
+        set.addAnimation(translateAnimation);
+
+//        Animation scaleAnimation = new ScaleAnimation(2, 1, 2, 1);
+//        set.addAnimation(scaleAnimation);
+
+        set.setDuration(2000);
+        mllWrap.startAnimation(set);
+
+        Animation rotateAnimation = new RotateAnimation(0f, 360f * 3, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setDuration(2000);
+        mIvSnail.startAnimation(rotateAnimation);
+    }
+
+    public void setAnim(final View v) {
 
 
     }
@@ -62,7 +115,6 @@ public class AnimActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override

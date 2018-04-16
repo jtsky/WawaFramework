@@ -2,6 +2,7 @@ package com.duiba.component_base.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
@@ -42,19 +43,39 @@ public class WawaSeekBar extends FrameLayout {
     int mProgressbarHeight;
     int mDefaultProgress;
     boolean mIsCountDown;
-    int mProgressThumbOffset;
-    int mProgressBarThumb;
+    /**
+     * 普通状态
+     */
+    int mProgressBarThumbCommResId;
+    /**
+     * 激活状态
+     */
+    int mProgressBarThumbActivityResId;
+    /**
+     * 普通进度条样式
+     */
     int mProgressStyleCommon;
+    /**
+     * 倒计时最后的进度条样式
+     */
     int mProgressStyleLast;
-
+    /**
+     * 倒计时最后进度条改变的时机
+     */
+    int mProgreeBarChangeByProgress;
 
     SeekBar mSeekBar;
+    ImageView mThumb;
 
 
     /**
-     * 进度条thumb
+     * 静止状态下的进度条thumb
      */
-    Drawable mSeekBarThumb;
+    Drawable mCommonThumb;
+    /**
+     * 运动状态下的进度条thumb
+     */
+    Drawable mActivityThumb;
     LinearLayout mPointWrap;
     Context mContext;
     float[] mArgsProgress;
@@ -70,24 +91,32 @@ public class WawaSeekBar extends FrameLayout {
     /**
      * 获取thumb在屏幕中的位置
      * https://blog.csdn.net/tmj2014/article/details/53283804 getLocationInWindow和getLocationOnScreen的异同
+     * 当控件处于activity中时，两者的值是一致的
+     *
      * @return point
      */
-    public Point getmSeekBarThumbPos() {
+    public Point getSeekBarThumbPos() {
         Point point = new Point();
-        if (mSeekBarThumb != null) {
-            //point.x =mSeekBar.getLocationInWindow();
-            //mSeekBar.getLocationOnScreen();
+        int[] rect0 = new int[2];
+        if (mCommonThumb != null) {
+            //mSeekBar.getLocationInWindow(rect0);
+            mSeekBar.getLocationOnScreen(rect0);
+            //Logger.v("rect0[0]===>" + rect0[0] + "  rect0[1]===>"+ rect0[1]  + "  rect1[0]===>" + rect1[0] + "   rect1[1]===>"+rect1[1]);
         }
+
+        point.x = (int) (rect0[0] + mWidth * mSeekBar.getProgress() / 100.0);
+        point.y = rect0[1];
+
         return point;
     }
 
     public WawaSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setScoreData(context, attrs);
+        init(context, attrs);
     }
 
 
-    private void setScoreData(Context context, AttributeSet attrs) {
+    private void init(Context context, AttributeSet attrs) {
         mContext = context;
         //第二个参数就是我们在styles.xml文件中的<declare-styleable>标签
         //即属性集合的标签，在R文件中名称为R.styleable+name
@@ -95,8 +124,8 @@ public class WawaSeekBar extends FrameLayout {
         mProgressbarHeight = a.getDimensionPixelSize(R.styleable.base_wawa_seekbar_base_progressbar_height, ConvertUtils.dp2px(20));
         mDefaultProgress = a.getInt(R.styleable.base_wawa_seekbar_base_default_progress, 0);
         mIsCountDown = a.getBoolean(R.styleable.base_wawa_seekbar_base_count_down, false);
-        mProgressThumbOffset = a.getDimensionPixelOffset(R.styleable.base_wawa_seekbar_base_progress_thumbOffset, ConvertUtils.dp2px(20));
-        mProgressBarThumb = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_thumb, -1);
+        mProgressBarThumbCommResId = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_thumb_common, -1);
+        mProgressBarThumbActivityResId = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_thumb_activity, -1);
         mProgressStyleCommon = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_style_common, R.drawable.base_countdown_progressbar);
         mProgressStyleLast = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_style_last, R.drawable.base_countdown_progressbar2);
         //回收
@@ -119,6 +148,27 @@ public class WawaSeekBar extends FrameLayout {
 
 
     private int mPointWidth_dp = 70;
+    private int mPointIcWidth_px = 40;
+    /**
+     * thumb中完整显示星星的偏移量
+     */
+    private int mThumbStarOffset_px;
+    /**
+     * seekbar 距离底部的margin
+     */
+    private int mSeekBarBottom_px = 0;
+    /**
+     * thumb 的高度
+     */
+    private int mThumbHeight_px = 0;
+    /**
+     * thumb 的宽度
+     */
+    private int mThumbWidth_px = 0;
+    /**
+     * thumb 图片的宽高比
+     */
+    private float mThumbRatio = (float) (5 / 2.0);
 
     /**
      * 动态添加指针views
@@ -145,7 +195,6 @@ public class WawaSeekBar extends FrameLayout {
                 if (mArgsTicket != null) {
                     tvTicket.setText(mArgsTicket[i]);
                 }
-
             }
 
             LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px(mPointWidth_dp), LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -157,11 +206,11 @@ public class WawaSeekBar extends FrameLayout {
                 } else {
                     marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth_dp));
                 }
-                pointParams.setMargins(marginLeft, 0, 0, mProgressbarHeight - 20);
+                pointParams.setMargins(marginLeft, 0, 0, mProgressbarHeight + mSeekBarBottom_px - 10);
             } else {//倒计时
                 if (i == 0) {
-                    //20为图标的宽度
-                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp) + 40);
+                    //40为图标的宽度
+                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp) + mPointIcWidth_px);
                 } else {
                     marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth_dp));
                 }
@@ -176,8 +225,21 @@ public class WawaSeekBar extends FrameLayout {
             hideAllChild();
             mPointWrap.getChildAt(mPointWrap.getChildCount() - 1).setVisibility(VISIBLE);
         }
-        //Logger.t(TAG).v("childCount====>" + mPointWrap.getChildCount());
+    }
 
+    /**
+     * 启动动画
+     *
+     * @param thumb
+     */
+    private void startThumbAnim(Drawable thumb) {
+        if (thumb != null) {
+            mThumb.setImageDrawable(thumb);
+            //thumb赋值
+            if (thumb instanceof AnimationDrawable) {
+                ((AnimationDrawable) thumb).start();
+            }
+        }
     }
 
     /**
@@ -186,40 +248,45 @@ public class WawaSeekBar extends FrameLayout {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void addChildView(Context context) {
         View countDownView = View.inflate(context, R.layout.base_seekbar, this);
+        //获取thumb
+        try {
+            mCommonThumb = getResources().getDrawable(mProgressBarThumbCommResId);
+            mActivityThumb = getResources().getDrawable(mProgressBarThumbActivityResId);
+            //为了居中
+            mThumbHeight_px = mProgressbarHeight * 2;
+            mThumbWidth_px = (int) (mThumbHeight_px * mThumbRatio);
+            //因为星星占图片高度的1/2 并且上下留白对称
+            mSeekBarBottom_px = (int) (mProgressbarHeight / 2.0);
+            mThumbStarOffset_px = (int) (mThumbWidth_px * 0.3);
+        } catch (Resources.NotFoundException e) {
+            mCommonThumb = null;
+            mActivityThumb = null;
+        }
+
         //设置SeekBar的高度
         mSeekBar = countDownView.findViewById(R.id.seekbar);
-        mSeekBar.getLayoutParams().height = mProgressbarHeight;
+        FrameLayout.LayoutParams seekbarParams = (FrameLayout.LayoutParams) mSeekBar.getLayoutParams();
+        seekbarParams.height = mProgressbarHeight;
+        seekbarParams.bottomMargin = mSeekBarBottom_px;
 
         mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleCommon));
         mSeekBar.setProgress(mDefaultProgress);
         mSeekBar.setSecondaryProgress(mDefaultProgress);
+        //设置thumb不能手动拖动
         mSeekBar.setOnTouchListener((v, event) -> true);
-        if (mIsCountDown) {
-            mSeekBar.setThumb(null);
-            mSeekBar.setThumbOffset(0);
-            mSeekBar.setSplitTrack(false);
-        } else {
-            try {
-                Drawable thumb = getResources().getDrawable(mProgressBarThumb);
-                if (thumb != null) {
-                    //thumb赋值
-                    mSeekBarThumb = thumb;
-                    mSeekBar.setThumb(thumb);
-                    if (thumb instanceof AnimationDrawable) {
-                        ((AnimationDrawable) thumb).start();
-                    }
-                } else {
-                    mSeekBar.setThumb(null);
-                }
-            } catch (Exception e) {
-                mSeekBar.setThumb(null);
-            }
-            mSeekBar.setThumbOffset(mProgressThumbOffset);
-        }
+        mSeekBar.setSplitTrack(false);
+
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //倒计时进度条的判定
+                //积分条进度条thumb的判定
+                //不用原生的原因 参考：SeekBar的thumbOffset属性 https://blog.csdn.net/xiao5678yun/article/details/77774607
+                if (mCommonThumb != null) {
+                    FrameLayout.LayoutParams params = (LayoutParams) mThumb.getLayoutParams();
+                    params.setMargins(((int) (mWidth * progress / 100.0) - mThumbWidth_px + mThumbStarOffset_px), 0, 0, 0);
+                    mThumb.setLayoutParams(params);
+                }
+                //倒计时
                 if (mIsCountDown) {
                     for (int i = 0; i < mArgsProgress.length; i++) {
                         if (progress == (int) (mArgsProgress[i] * 100)) {
@@ -291,10 +358,39 @@ public class WawaSeekBar extends FrameLayout {
 
             }
         });
+
+        //获取自定义thumb
+
+
+        if (mCommonThumb != null) {
+            mThumb = countDownView.findViewById(R.id.iv_thumb);
+            FrameLayout.LayoutParams thumbParams = (LayoutParams) mThumb.getLayoutParams();
+            thumbParams.height = mThumbHeight_px;
+            thumbParams.width = mThumbWidth_px;
+            thumbParams.setMargins(((int) (mWidth * mSeekBar.getProgress() / 100.0) - mThumbWidth_px + mThumbStarOffset_px), 0, 0, 0);
+            startThumbAnim(mCommonThumb);
+        }
         //获取包装LinearLayout
         mPointWrap = countDownView.findViewById(R.id.ll_point);
     }
 
+
+    public void updateScoreData(float[] argsProgress, String[] argsTicket) {
+        if (mIsCountDown) {
+            return;
+        }
+        if (argsProgress.length != argsTicket.length) {
+            throw new RuntimeException("argsProgrss argsTicket 两者的长度必须一致");
+
+        }
+        mArgsProgress = argsProgress;
+        mArgsTicket = argsTicket;
+        //表示当前控件还没测量完毕，直接返回等待测量完成以后在添加子view
+        if (mWidth == 0) {
+            return;
+        }
+        addPointViews();
+    }
 
     /**
      * 设置积分的指针的显示位置
@@ -407,6 +503,10 @@ public class WawaSeekBar extends FrameLayout {
         if (mSeekBar == null) {
             return;
         }
+
+        //启动激活动画
+        startThumbAnim(mActivityThumb);
+
         if (Math.abs(progress - getProgress()) <= 5) {
             setProgress(progress);
         } else {
@@ -415,6 +515,8 @@ public class WawaSeekBar extends FrameLayout {
                     if (mCommonDisposable != null) {
                         mCommonDisposable.dispose();
                         mCommonDisposable = null;
+                        //重置为静止动画
+                        startThumbAnim(mCommonThumb);
                     }
                 }
                 setProgress(getProgress() + 1);

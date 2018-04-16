@@ -154,7 +154,11 @@ public class MainActivity extends BaseActivity {
         });
 
         RxView.clicks(mBtnReset).subscribe(aVoid -> {
-            mWawaScore.reset(30);
+            mWawaScore.reset(20);
+            //积分初始化
+            float[] progress2 = new float[]{0.3f, 0.5f, 0.7f};
+            String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
+            mWawaScore.updateScoreData(progress2, progressTicket2);
         });
 
         RxView.clicks(mBtnGuide).subscribe(aVoid -> {
@@ -194,29 +198,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-//        mDownDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
-//                .subscribe(l -> {
-//                    mSeekBarCountdown.setProgress(mSeekBarCountdown.getProgress() - 1);
-//                    mSeekBarCountdown.setSecondaryProgress(mSeekBarCountdown.getSecondaryProgress() - 1);
-//                });
 
-//        mBlingDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
-//                .subscribe(l -> {
-//                    int progress = mSeekBarCountdown.getProgress();
-//                    if (progress <= 20) {
-//                        if (mShadow.getTag() == null) {
-//                            mShadow.setShadowColor(getResources().getColor(R.color.main_white));
-//                            mShadow.setTag("show");
-//                        } else {
-//                            mShadow.setShadowColor(getResources().getColor(R.color.main_red));
-//                            mShadow.setTag(null);
-//                        }
-//                    } else {
-//                        mShadow.setShadowColor(getResources().getColor(R.color.main_white));
-//                        mShadow.setTag("show");
-//                    }
-//
-//                });
     }
 
     @Override
@@ -226,10 +208,7 @@ public class MainActivity extends BaseActivity {
             mDownDisposable.dispose();
             mDownDisposable = null;
         }
-//        if (!mBlingDisposable.isDisposed()) {
-//            mBlingDisposable.dispose();
-//            mBlingDisposable = null;
-//        }
+
     }
 
     @Override

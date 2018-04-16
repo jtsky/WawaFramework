@@ -157,7 +157,7 @@ ext {
                     "timber"                     : "com.jakewharton.timber:timber:4.5.1",
                     "slf4j-timber"               : "com.arcao:slf4j-timber:3.0",
                     //wiki:https://github.com/orhanobut/logger
-                    "logger"                     : 'com.orhanobut:logger:2.1.1',
+                    "logger"                     : 'com.orhanobut:logger:2.2.0',
                     //###### logger end ######
 
                     //###### jpush start ######

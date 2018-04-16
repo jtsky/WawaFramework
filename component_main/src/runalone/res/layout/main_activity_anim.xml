@@ -24,13 +24,12 @@
         wawa:base_count_down="false"
         wawa:base_default_progress="10"
         wawa:base_progress_style_common="@drawable/base_score_progressbar"
-        wawa:base_progress_thumb="@drawable/base_snailanim"
-        wawa:base_progress_thumbOffset="0dp"
+        wawa:base_progress_thumb_common="@drawable/base_star_common"
         wawa:base_progressbar_height="20dp" />
 
-    <RelativeLayout
-        android:id="@+id/rl_wrap"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/ll_wrap"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
@@ -39,17 +38,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/s1" />
-    </RelativeLayout>
+            android:src="@mipmap/static_42" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rl_wrap"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/ll_wrap"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:filterTouchesWhenObscured="true"
         android:text="start"
         android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:filterTouchesWhenObscured="true"
+        android:text="增加"
+        android:textSize="16sp" />
+
+
 </RelativeLayout>

@@ -20,9 +20,11 @@
         <attr name="base_progress_style_common" format="reference" />
         <!--倒计时到最后的样式-->
         <attr name="base_progress_style_last" format="reference" />
-        <!--progress 卡标 倒计时没有-->
-        <attr name="base_progress_thumb" format="reference" />
+        <!--progress 普通卡标 倒计时没有-->
+        <attr name="base_progress_thumb_common" format="reference" />
+        <!--progress 激活卡标 倒计时没有-->
+        <attr name="base_progress_thumb_activity" format="reference" />
         <!--progress 卡标偏移量 倒计时没有-->
-        <attr name="base_progress_thumbOffset" format="dimension" />
+        <!--<attr name="base_progress_thumbOffset" format="dimension" />-->
     </declare-styleable>
 </resources>
