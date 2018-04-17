@@ -15,6 +15,7 @@
         <attr name="base_default_progress" format="integer" />
         <!--声明我们的属性，名称为default_size,取值类型为尺寸类型（dp,px等）-->
         <attr name="base_progressbar_height" format="dimension" />
+        <attr name="base_progressbar_margin" format="dimension" />
         <attr name="base_count_down" format="boolean" />
         <!--倒计时普通的样式-->
         <attr name="base_progress_style_common" format="reference" />

@@ -172,8 +172,8 @@ public class MainActivity extends BaseActivity {
 
         //倒计时初始化
         float[] progress = new float[]{0.1f, 0.5f, 0.9f};
-        String[] progressTip = new String[]{"good", "great", "perfect"};
-        mWawaCountdown.setCountdownData(progress, progressTip,0.3f);
+        String[] progressTip = new String[]{"", "", ""};
+        mWawaCountdown.setCountdownData(null, null, 0.3f);
         mWawaCountdown.setSeekBarChangeListener((seekBar, progress1, fromUser) -> {
             Logger.v("mWawaCountdown==>" + progress1);
         });

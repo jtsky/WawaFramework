@@ -71,7 +71,9 @@
             wawa:base_default_progress="100"
             wawa:base_progress_style_common="@drawable/base_countdown_progressbar"
             wawa:base_progress_style_last="@drawable/base_countdown_progressbar3"
-            wawa:base_progressbar_height="20dp" />
+            wawa:base_progressbar_height="15dp"
+            wawa:base_progressbar_margin="10dp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,7 +108,8 @@
             wawa:base_progress_style_common="@drawable/base_score_progressbar"
             wawa:base_progress_thumb_activity="@drawable/base_star_active"
             wawa:base_progress_thumb_common="@drawable/base_star_common"
-            wawa:base_progressbar_height="15dp" />
+            wawa:base_progressbar_height="15dp"
+            wawa:base_progressbar_margin="15dp" />
 
         <TextView
             android:layout_width="wrap_content"

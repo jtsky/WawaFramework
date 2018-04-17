@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +42,7 @@ public class WawaSeekBar extends FrameLayout {
     private int mHeight;
 
     int mProgressbarHeight;
+    int mProgressbarMargin;
     int mDefaultProgress;
     boolean mIsCountDown;
     /**
@@ -122,6 +124,7 @@ public class WawaSeekBar extends FrameLayout {
         //即属性集合的标签，在R文件中名称为R.styleable+name
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.base_wawa_seekbar);
         mProgressbarHeight = a.getDimensionPixelSize(R.styleable.base_wawa_seekbar_base_progressbar_height, ConvertUtils.dp2px(20));
+        mProgressbarMargin = a.getDimensionPixelSize(R.styleable.base_wawa_seekbar_base_progressbar_margin, 0);
         mDefaultProgress = a.getInt(R.styleable.base_wawa_seekbar_base_default_progress, 0);
         mIsCountDown = a.getBoolean(R.styleable.base_wawa_seekbar_base_count_down, false);
         mProgressBarThumbCommResId = a.getResourceId(R.styleable.base_wawa_seekbar_base_progress_thumb_common, -1);
@@ -133,7 +136,7 @@ public class WawaSeekBar extends FrameLayout {
         addChildView(context);
         //添加最后整个控件的高度监听
         getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            mWidth = getWidth();
+            mWidth = getWidth() - mProgressbarMargin * 2;
             mHeight = getHeight();
 //            Logger.t(TAG).v("width===>" + mWidth + "  height==>" + mHeight);
 
@@ -174,8 +177,21 @@ public class WawaSeekBar extends FrameLayout {
      * 动态添加指针views
      */
     private void addPointViews() {
-        mPointWrap.removeAllViews();
+        //设置thumb的厨师位置
+        if (mThumb != null && mWidth != 0) {
+            FrameLayout.LayoutParams thumbParams = (LayoutParams) mThumb.getLayoutParams();
+            thumbParams.height = mThumbHeight_px;
+            thumbParams.width = mThumbWidth_px;
+            thumbParams.setMargins(((int) (mWidth * mSeekBar.getProgress() / 100.0) - mThumbWidth_px + mThumbStarOffset_px), 0, 0, 0);
+            startThumbAnim(mCommonThumb);
+        }
+        //设置llWrap的宽度
+        ViewGroup.LayoutParams params = mPointWrap.getLayoutParams();
+        params.width = mWidth;
+        params.height = LayoutParams.WRAP_CONTENT;
+        mPointWrap.setLayoutParams(params);
 
+        mPointWrap.removeAllViews();
         for (int i = 0; i < mArgsProgress.length; i++) {
             LinearLayout pointView = (LinearLayout) View.inflate(mContext, R.layout.base_point, null);
             mPointWrap.addView(pointView);
@@ -202,7 +218,7 @@ public class WawaSeekBar extends FrameLayout {
             //积分
             if (!mIsCountDown) {
                 if (i == 0) {
-                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp / 2));
+                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp / 3));
                 } else {
                     marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth_dp));
                 }
@@ -210,7 +226,7 @@ public class WawaSeekBar extends FrameLayout {
             } else {//倒计时
                 if (i == 0) {
                     //40为图标的宽度
-                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px(mPointWidth_dp) + mPointIcWidth_px);
+                    marginLeft = (int) (mWidth * mArgsProgress[i] - ConvertUtils.dp2px((float) (mPointWidth_dp / 1.8)));
                 } else {
                     marginLeft = (int) (mWidth * (mArgsProgress[i] - mArgsProgress[i - 1]) - ConvertUtils.dp2px(mPointWidth_dp));
                 }
@@ -257,7 +273,7 @@ public class WawaSeekBar extends FrameLayout {
             mThumbWidth_px = (int) (mThumbHeight_px * mThumbRatio);
             //因为星星占图片高度的1/2 并且上下留白对称
             mSeekBarBottom_px = (int) (mProgressbarHeight / 2.0);
-            mThumbStarOffset_px = (int) (mThumbWidth_px * 0.3);
+            mThumbStarOffset_px = (int) (mThumbWidth_px * 0.3) + mProgressbarMargin;
         } catch (Resources.NotFoundException e) {
             mCommonThumb = null;
             mActivityThumb = null;
@@ -267,6 +283,8 @@ public class WawaSeekBar extends FrameLayout {
         mSeekBar = countDownView.findViewById(R.id.seekbar);
         FrameLayout.LayoutParams seekbarParams = (FrameLayout.LayoutParams) mSeekBar.getLayoutParams();
         seekbarParams.height = mProgressbarHeight;
+        seekbarParams.leftMargin = mProgressbarMargin;
+        seekbarParams.rightMargin = mProgressbarMargin;
         seekbarParams.bottomMargin = mSeekBarBottom_px;
 
         mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleCommon));
@@ -289,17 +307,20 @@ public class WawaSeekBar extends FrameLayout {
                 //倒计时
                 if (mIsCountDown) {
                     //隐藏当前指针 显示下一个指针
-                    for (int i = 0; i < mArgsProgress.length; i++) {
-                        if (progress == (int) (mArgsProgress[i] * 100)) {
-                            Logger.t(TAG).v("progress == mArgsProgress" + mArgsProgress[i]);
-                            hideAllChild();
-                            if (mPointWrap.getChildAt(i - 1) != null) {
-                                mPointWrap.getChildAt(i - 1).setVisibility(VISIBLE);
+                    if (mArgsProgress != null) {
+                        for (int i = 0; i < mArgsProgress.length; i++) {
+                            if (progress == (int) (mArgsProgress[i] * 100)) {
+                                Logger.t(TAG).v("progress == mArgsProgress" + mArgsProgress[i]);
+                                hideAllChild();
+                                if (mPointWrap.getChildAt(i - 1) != null) {
+                                    mPointWrap.getChildAt(i - 1).setVisibility(VISIBLE);
+                                }
+                            } else {
+                                continue;
                             }
-                        } else {
-                            continue;
                         }
                     }
+
                     //改变进度条样式
                     if (progress == (int) (mProgreeBarChangeByProgress * 100)) {
                         mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleLast));
@@ -366,16 +387,7 @@ public class WawaSeekBar extends FrameLayout {
         });
 
         //获取自定义thumb
-
-
-        if (mCommonThumb != null) {
-            mThumb = countDownView.findViewById(R.id.iv_thumb);
-            FrameLayout.LayoutParams thumbParams = (LayoutParams) mThumb.getLayoutParams();
-            thumbParams.height = mThumbHeight_px;
-            thumbParams.width = mThumbWidth_px;
-            thumbParams.setMargins(((int) (mWidth * mSeekBar.getProgress() / 100.0) - mThumbWidth_px + mThumbStarOffset_px), 0, 0, 0);
-            startThumbAnim(mCommonThumb);
-        }
+        mThumb = countDownView.findViewById(R.id.iv_thumb);
         //获取包装LinearLayout
         mPointWrap = countDownView.findViewById(R.id.ll_point);
     }
@@ -426,10 +438,13 @@ public class WawaSeekBar extends FrameLayout {
      * @param progreeBarChangeByProgress 改变进度条样式进度
      */
     public void setCountdownData(float[] argsProgress, String[] argsTip, float progreeBarChangeByProgress) {
-        if (argsProgress.length != argsTip.length) {
-            throw new RuntimeException("argsProgrss argsTicket 两者的长度必须一致");
-
+        if (argsProgress != null && argsTip != null) {
+            if (argsProgress.length != argsTip.length) {
+                throw new RuntimeException("argsProgrss argsTicket 两者的长度必须一致");
+            }
         }
+
+
         mArgsProgress = argsProgress;
         mArgsTip = argsTip;
         mProgreeBarChangeByProgress = progreeBarChangeByProgress;
@@ -526,8 +541,10 @@ public class WawaSeekBar extends FrameLayout {
                         //重置为静止动画
                         startThumbAnim(mCommonThumb);
                     }
+                } else {
+                    setProgress(getProgress() + 1);
                 }
-                setProgress(getProgress() + 1);
+
             });
         }
     }
