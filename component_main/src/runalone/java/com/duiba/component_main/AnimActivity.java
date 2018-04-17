@@ -4,18 +4,13 @@ import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
@@ -26,8 +21,14 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author: jintai
@@ -41,14 +42,26 @@ public class AnimActivity extends BaseActivity {
 
     @BindView(R2.id.wawa_score)
     WawaSeekBar mWawaScore;
-    @BindView(R2.id.iv_snail)
-    ImageView mIvSnail;
-    @BindView(R2.id.ll_wrap)
-    LinearLayout mllWrap;
     @BindView(R.id.btn)
     Button mBtn;
     @BindView(R.id.btn_progress)
     Button mBtnAdd;
+    @BindView(R2.id.iv_target)
+    ImageView mIvTarget;
+
+    @BindView(R.id.iv_source0)
+    ImageView mIvSource0;
+    @BindView(R.id.iv_source1)
+    ImageView mIvSource1;
+    @BindView(R.id.iv_source2)
+    ImageView mIvSource2;
+    @BindView(R.id.iv_source3)
+    ImageView mIvSource3;
+    @BindView(R.id.iv_source4)
+    ImageView mIvSource4;
+    @BindView(R.id.iv_source5)
+    ImageView mIvSource5;
+    List<ImageView> list = new ArrayList<>();
 
     @SuppressLint("CheckResult")
     @Override
@@ -56,7 +69,12 @@ public class AnimActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_anim);
         ButterKnife.bind(this);
-
+        list.add(mIvSource5);
+        list.add(mIvSource4);
+        list.add(mIvSource3);
+        list.add(mIvSource2);
+        list.add(mIvSource1);
+        list.add(mIvSource0);
         //积分初始化
         float[] progress2 = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
@@ -87,26 +105,47 @@ public class AnimActivity extends BaseActivity {
     }
 
 
-    private void startAnimation() {
+    private int[] getTargetPos() {
         int[] rect = new int[2];
-        mllWrap.getLocationOnScreen(rect);
-        AnimationSet set = new AnimationSet(false);
-        Animation translateAnimation = new TranslateAnimation(0, mEndPoint.x - rect[0], 0, mEndPoint.y - rect[1]);
-        //Animation translateAnimation = new TranslateAnimation(0, mEndPoint.x - rect[0], 0, 0);
-        set.addAnimation(translateAnimation);
-
-//        Animation scaleAnimation = new ScaleAnimation(2, 1, 2, 1);
-//        set.addAnimation(scaleAnimation);
-
-        set.setDuration(2000);
-        mllWrap.startAnimation(set);
-
-        Animation rotateAnimation = new RotateAnimation(0f, 360f * 3, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateAnimation.setDuration(2000);
-        mIvSnail.startAnimation(rotateAnimation);
+        if (mIvTarget != null) {
+            mIvTarget.getLocationOnScreen(rect);
+        }
+        return rect;
     }
 
-    public void setAnim(final View v) {
+    private int[] getSourcePos() {
+        int[] rect = new int[2];
+        if (mIvSource0 != null) {
+            mIvSource0.getLocationOnScreen(rect);
+        }
+        return rect;
+    }
+
+    Disposable mDisposable;
+    int mCount;
+
+    private void startAnimation() {
+
+        mDisposable = Observable.interval(0, 200, TimeUnit.MILLISECONDS)
+                .subscribe(l -> {
+                    if (mCount == 6) {
+                        if (mDisposable != null) {
+                            mDisposable.dispose();
+                            mDisposable = null;
+                            mCount = 0;
+                        }
+                    }
+                    AnimationSet set = new AnimationSet(false);
+                    Animation translateAnimation = new TranslateAnimation(0, getTargetPos()[0] - getSourcePos()[0], 0, getTargetPos()[1] - getSourcePos()[1]);
+                    set.addAnimation(translateAnimation);
+
+                    Animation scaleAnimation = new ScaleAnimation(2, 1, 2, 1);
+                    set.addAnimation(scaleAnimation);
+                    set.setDuration(1000);
+                    list.get(mCount).startAnimation(set);
+                    mCount++;
+
+                });
 
 
     }

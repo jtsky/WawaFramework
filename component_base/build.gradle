@@ -91,6 +91,9 @@ dependencies {
     api (rootProject.ext.dependencies["topsnackbar"]){
         exclude group: 'com.android.support', module: '*'
     }
+    //Glide动画框架
+    api rootProject.ext.dependencies["glide"]
+
 
     //ARouter
     api(rootProject.ext.dependencies["arouter-api"]) {
