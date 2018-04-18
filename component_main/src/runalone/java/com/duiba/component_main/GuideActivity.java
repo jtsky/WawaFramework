@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * @desc: 新手引导页
  */
 @Route(path = MainRouterPath.MAIN_ACTIVITY_GUIDE)
-public class Guide2Activity extends BaseActivity {
+public class GuideActivity extends BaseActivity {
     @BindView(R2.id.video)
     VideoView mVideoView;
     @BindView(R2.id.iv_handle)
