@@ -1,5 +1,6 @@
 package com.duiba.component_base.interfaces;
 
+import android.view.View;
 import android.widget.SeekBar;
 
 /**
@@ -12,6 +13,20 @@ import android.widget.SeekBar;
  * ================================================
  */
 public interface OnWawaSeekBarChangeListener {
+    /**
+     * 进度条进度改变时的回调函数
+     *
+     * @param seekBar
+     * @param progress
+     * @param fromUser
+     */
     void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
+
+    /**
+     * 当进度条到达指定进度时的回调
+     * @param view 指定位置的view
+     * @param progress 当前进度
+     */
+    void onProgressArrive2Point(View view, int progress);
 
 }

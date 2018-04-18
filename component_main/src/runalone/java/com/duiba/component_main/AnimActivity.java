@@ -5,16 +5,19 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
 import com.duiba.component_base.component.main.path.MainRouterPath;
+import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
 import com.duiba.component_base.widget.WawaSeekBar;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
@@ -79,8 +82,16 @@ public class AnimActivity extends BaseActivity {
         float[] progress2 = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
         mWawaScore.setScoreData(progress2, progressTicket2);
-        mWawaScore.setSeekBarChangeListener((seekBar, progress12, fromUser) -> {
-            Logger.v("mWawaScore==>" + progress12);
+        mWawaScore.setSeekBarChangeListener(new OnWawaSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onProgressArrive2Point(View view, int progress) {
+
+            }
         });
 
         RxView.clicks(mBtn).subscribe(aVoid -> {
@@ -139,7 +150,7 @@ public class AnimActivity extends BaseActivity {
                     Animation translateAnimation = new TranslateAnimation(0, getTargetPos()[0] - getSourcePos()[0], 0, getTargetPos()[1] - getSourcePos()[1]);
                     set.addAnimation(translateAnimation);
 
-                    Animation scaleAnimation = new ScaleAnimation(2, 1, 2, 1);
+                    Animation scaleAnimation = new ScaleAnimation(1, 2, 1, 2);
                     set.addAnimation(scaleAnimation);
                     set.setDuration(1000);
                     list.get(mCount).startAnimation(set);

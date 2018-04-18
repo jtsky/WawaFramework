@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -174,16 +175,32 @@ public class MainActivity extends BaseActivity {
         float[] progress = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTip = new String[]{"", "", ""};
         mWawaCountdown.setCountdownData(null, null, 0.3f);
-        mWawaCountdown.setSeekBarChangeListener((seekBar, progress1, fromUser) -> {
-            Logger.v("mWawaCountdown==>" + progress1);
+        mWawaCountdown.setSeekBarChangeListener(new OnWawaSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onProgressArrive2Point(View view, int progress) {
+
+            }
         });
 
         //积分初始化
         float[] progress2 = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
         mWawaScore.setScoreData(progress2, progressTicket2);
-        mWawaScore.setSeekBarChangeListener((seekBar, progress12, fromUser) -> {
-            Logger.v("mWawaScore==>" + progress12);
+        mWawaScore.setSeekBarChangeListener(new OnWawaSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onProgressArrive2Point(View view, int progress) {
+
+            }
         });
     }
 

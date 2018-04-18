@@ -17,14 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+
 import com.blankj.utilcode.util.ConvertUtils;
 import com.duiba.component_base.R;
 import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
-import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -79,6 +82,10 @@ public class WawaSeekBar extends FrameLayout {
      */
     Drawable mActivityThumb;
     LinearLayout mPointWrap;
+    /**
+     * 对应 mPointWrap
+     */
+    List<LinearLayout> mPointViews = new ArrayList<>();
     Context mContext;
     float[] mArgsProgress;
     String[] mArgsTicket;
@@ -110,6 +117,15 @@ public class WawaSeekBar extends FrameLayout {
         point.y = rect0[1];
 
         return point;
+    }
+
+    public SeekBar getSeekBar() {
+        if (mSeekBar != null) {
+
+            return mSeekBar;
+        }
+        return null;
+
     }
 
     public WawaSeekBar(Context context, AttributeSet attrs) {
@@ -177,7 +193,7 @@ public class WawaSeekBar extends FrameLayout {
      * 动态添加指针views
      */
     private void addPointViews() {
-        //设置thumb的厨师位置
+
         if (mThumb != null && mWidth != 0) {
             FrameLayout.LayoutParams thumbParams = (LayoutParams) mThumb.getLayoutParams();
             thumbParams.height = mThumbHeight_px;
@@ -192,9 +208,11 @@ public class WawaSeekBar extends FrameLayout {
         mPointWrap.setLayoutParams(params);
 
         mPointWrap.removeAllViews();
+        mPointViews.clear();
         for (int i = 0; i < mArgsProgress.length; i++) {
             LinearLayout pointView = (LinearLayout) View.inflate(mContext, R.layout.base_point, null);
             mPointWrap.addView(pointView);
+            mPointViews.add(pointView);
             TextView tvTicket = pointView.findViewById(R.id.tv_ticket);
             TextView tvTip = pointView.findViewById(R.id.tv_tip);
             ImageView ivPoint = pointView.findViewById(R.id.iv_point);
@@ -213,7 +231,7 @@ public class WawaSeekBar extends FrameLayout {
                 }
             }
 
-            LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px(mPointWidth_dp), LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px( mPointWidth_dp), LinearLayout.LayoutParams.WRAP_CONTENT);
             int marginLeft;
             //积分
             if (!mIsCountDown) {
@@ -297,7 +315,7 @@ public class WawaSeekBar extends FrameLayout {
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //积分条进度条thumb的判定
+                //积分条进度条thumb的位置判定
                 //不用原生的原因 参考：SeekBar的thumbOffset属性 https://blog.csdn.net/xiao5678yun/article/details/77774607
                 if (mCommonThumb != null) {
                     FrameLayout.LayoutParams params = (LayoutParams) mThumb.getLayoutParams();
@@ -310,7 +328,7 @@ public class WawaSeekBar extends FrameLayout {
                     if (mArgsProgress != null) {
                         for (int i = 0; i < mArgsProgress.length; i++) {
                             if (progress == (int) (mArgsProgress[i] * 100)) {
-                                Logger.t(TAG).v("progress == mArgsProgress" + mArgsProgress[i]);
+                                //Logger.t(TAG).v("progress == mArgsProgress" + mArgsProgress[i]);
                                 hideAllChild();
                                 if (mPointWrap.getChildAt(i - 1) != null) {
                                     mPointWrap.getChildAt(i - 1).setVisibility(VISIBLE);
@@ -325,6 +343,10 @@ public class WawaSeekBar extends FrameLayout {
                     if (progress == (int) (mProgreeBarChangeByProgress * 100)) {
                         mSeekBar.setProgressDrawable(getResources().getDrawable(mProgressStyleLast));
                     }
+                    //回调进度
+                    if (mSeekBarChangeListener != null) {
+                        mSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+                    }
 
                 }
                 //积分的判定 当处于重置状态下的处理
@@ -334,31 +356,35 @@ public class WawaSeekBar extends FrameLayout {
                             mAddDisposable.dispose();
                             mAddDisposable = null;
                         }
-                        mReduceDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
-                            if (mReduceDisposable == null || mReduceDisposable.isDisposed()) {
-                                return;
-                            }
+                        mReduceDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(l -> {
+                                    if (mReduceDisposable == null || mReduceDisposable.isDisposed()) {
+                                        return;
+                                    }
 
-                            if (Math.abs(getProgress() - mResetProgress) == 1) {
-                                setProgress(getProgress() - 2);
-                            } else {
-                                setProgress(getProgress() - 1);
-                            }
+                                    if (Math.abs(getProgress() - mResetProgress) == 1) {
+                                        setProgress(getProgress() - 2);
+                                    } else {
+                                        setProgress(getProgress() - 1);
+                                    }
 
-                        });
+                                });
                     } else if (progress == 0) {
                         if (mReduceDisposable != null) {
                             mReduceDisposable.dispose();
                             mReduceDisposable = null;
                         }
 
-                        mResetDisposable = Observable.interval(0, 60, TimeUnit.MILLISECONDS).subscribe(l -> {
-                            if (mResetDisposable == null || mResetDisposable.isDisposed()) {
-                                return;
-                            }
-                            setProgress(getProgress() + 1);
+                        mResetDisposable = Observable.interval(0, 60, TimeUnit.MILLISECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(l -> {
+                                    if (mResetDisposable == null || mResetDisposable.isDisposed()) {
+                                        return;
+                                    }
+                                    setProgress(getProgress() + 1);
 
-                        });
+                                });
 
                     } else if (progress == mResetProgress) {
                         if (mResetDisposable != null) {
@@ -367,10 +393,20 @@ public class WawaSeekBar extends FrameLayout {
                         }
                         isReseting = false;
                     }
-
                 } else if (mSeekBarChangeListener != null && !isReseting) {
                     cancleDisposables();
                     mSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+                }
+
+                //判断进度条时候到达指定的位置
+                if (mArgsProgress != null && mPointViews.size() == mArgsProgress.length) {
+                    for (int i = 0; i < mArgsProgress.length; i++) {
+                        int targetProgress = (int) (mArgsProgress[i] * 100);
+                        if (targetProgress == progress) {
+                            ImageView point = mPointViews.get(i).findViewById(R.id.iv_point);
+                            mSeekBarChangeListener.onProgressArrive2Point(point, progress);
+                        }
+                    }
                 }
 
             }
@@ -388,6 +424,7 @@ public class WawaSeekBar extends FrameLayout {
 
         //获取自定义thumb
         mThumb = countDownView.findViewById(R.id.iv_thumb);
+
         //获取包装LinearLayout
         mPointWrap = countDownView.findViewById(R.id.ll_point);
     }
@@ -443,8 +480,6 @@ public class WawaSeekBar extends FrameLayout {
                 throw new RuntimeException("argsProgrss argsTicket 两者的长度必须一致");
             }
         }
-
-
         mArgsProgress = argsProgress;
         mArgsTip = argsTip;
         mProgreeBarChangeByProgress = progreeBarChangeByProgress;
@@ -496,16 +531,18 @@ public class WawaSeekBar extends FrameLayout {
             return;
         }
         mResetProgress = progress;
-        mAddDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS).subscribe(l -> {
-            if (mAddDisposable == null || mAddDisposable.isDisposed()) {
-                return;
-            }
-            if (Math.abs(getProgress() - mResetProgress) == 1) {
-                setProgress(getProgress() + 2);
-            } else {
-                setProgress(getProgress() + 1);
-            }
-        });
+        mAddDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(l -> {
+                    if (mAddDisposable == null || mAddDisposable.isDisposed()) {
+                        return;
+                    }
+                    if (Math.abs(getProgress() - mResetProgress) == 1) {
+                        setProgress(getProgress() + 2);
+                    } else {
+                        setProgress(getProgress() + 1);
+                    }
+                });
 
     }
 
@@ -533,19 +570,21 @@ public class WawaSeekBar extends FrameLayout {
         if (Math.abs(progress - getProgress()) <= 5) {
             setProgress(progress);
         } else {
-            mCommonDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS).subscribe(l -> {
-                if (getProgress() == progress) {
-                    if (mCommonDisposable != null) {
-                        mCommonDisposable.dispose();
-                        mCommonDisposable = null;
-                        //重置为静止动画
-                        startThumbAnim(mCommonThumb);
-                    }
-                } else {
-                    setProgress(getProgress() + 1);
-                }
+            mCommonDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(l -> {
+                        if (getProgress() == progress) {
+                            if (mCommonDisposable != null) {
+                                mCommonDisposable.dispose();
+                                mCommonDisposable = null;
+                                //重置为静止动画
+                                startThumbAnim(mCommonThumb);
+                            }
+                        } else {
+                            setProgress(getProgress() + 1);
+                        }
 
-            });
+                    });
         }
     }
 
