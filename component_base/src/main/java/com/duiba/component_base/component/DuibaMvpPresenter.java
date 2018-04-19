@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.duiba.component_base.component.BaseActivity;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpView;
+import com.orhanobut.logger.Logger;
 
 /**
  * @author: jintai
@@ -53,7 +54,8 @@ public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> 
     protected final void ifViewModelAttached(boolean exceptionIfViewNotAttached, ViewModelAction<Model> action) {
         ifViewAttached(view -> {
             if (view.getViewModel() == null) {
-                throw new NullPointerException("viewModel 为空");
+                Logger.e("viewModel 为空");
+                //throw new NullPointerException("viewModel 为空");
             } else if (exceptionIfViewNotAttached) {
                 throw new IllegalStateException(
                         "No ViewModel attached to Presenter");
