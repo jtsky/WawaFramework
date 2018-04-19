@@ -231,7 +231,7 @@ public class WawaSeekBar extends FrameLayout {
                 }
             }
 
-            LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px( mPointWidth_dp), LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(ConvertUtils.dp2px(mPointWidth_dp), LinearLayout.LayoutParams.WRAP_CONTENT);
             int marginLeft;
             //积分
             if (!mIsCountDown) {
@@ -531,18 +531,37 @@ public class WawaSeekBar extends FrameLayout {
             return;
         }
         mResetProgress = progress;
-        mAddDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(l -> {
-                    if (mAddDisposable == null || mAddDisposable.isDisposed()) {
-                        return;
-                    }
-                    if (Math.abs(getProgress() - mResetProgress) == 1) {
-                        setProgress(getProgress() + 2);
-                    } else {
-                        setProgress(getProgress() + 1);
-                    }
-                });
+        if (getProgress() == 100) {
+            mReduceDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(l -> {
+                        if (mReduceDisposable == null || mReduceDisposable.isDisposed()) {
+                            return;
+                        }
+
+                        if (Math.abs(getProgress() - mResetProgress) == 1) {
+                            setProgress(getProgress() - 2);
+                        } else {
+                            setProgress(getProgress() - 1);
+                        }
+
+                    });
+        } else {
+            mAddDisposable = Observable.interval(0, 5, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(l -> {
+                        if (mAddDisposable == null || mAddDisposable.isDisposed()) {
+                            return;
+                        }
+
+                        if (Math.abs(getProgress() - mResetProgress) == 1) {
+                            setProgress(getProgress() + 2);
+                        } else {
+                            setProgress(getProgress() + 1);
+                        }
+                    });
+        }
+
 
     }
 
