@@ -586,8 +586,10 @@ public class WawaSeekBar extends FrameLayout {
         //启动激活动画
         startThumbAnim(mActivityThumb);
 
-        if (Math.abs(progress - getProgress()) <= 5) {
+        if (Math.abs(progress - getProgress()) < 5) {
             setProgress(progress);
+            //重置为静止动画
+            startThumbAnim(mCommonThumb);
         } else {
             mCommonDisposable = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
