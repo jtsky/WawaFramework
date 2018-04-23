@@ -136,8 +136,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24sp"
-            android:fontFamily="@font/nobile_bold_italic"
-            android:text="我是自定义字体"
+            android:fontFamily="@font/aclonica"
+            android:text="zzzzz"
             android:textSize="20sp"
             android:typeface="monospace" />
 

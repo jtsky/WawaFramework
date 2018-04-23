@@ -165,6 +165,7 @@ public class GuideActivity extends BaseActivity {
                     mVideoView.setVideoURI((Uri) guideBean.getPath());
                     mIvHandle.setVisibility(View.INVISIBLE);
                     mRlWrap.setVisibility(View.VISIBLE);
+                    playAudio();
                     break;
                 case IMAGE:
                     //是否循环播放gif
@@ -177,38 +178,7 @@ public class GuideActivity extends BaseActivity {
 
                     mIvHandle.setVisibility(View.VISIBLE);
                     mRlWrap.setVisibility(View.INVISIBLE);
-                    //是否循环播放音频
-                    int audioCanRepet = Arrays.binarySearch(mAudioRepetIndexs, mCurrentPos);
-                    if (audioCanRepet >= 0) {
-                        if (mMediaPlayer.isPlaying()) {
-                            mMediaPlayer.stop();
-                            mMediaPlayer.reset();
-                        }
-                        int audioResId = mAllGuideAudio.get(mCurrentPos);
-                        if (audioResId > 0) {
-                            AssetFileDescriptor file = getResources().openRawResourceFd(audioResId);
-                            mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-                            mMediaPlayer.setLooping(true);
-                            mMediaPlayer.prepare();
-                            file.close();
-                        }
-
-                    } else {
-                        if (mMediaPlayer.isPlaying()) {
-                            mMediaPlayer.stop();
-                            mMediaPlayer.reset();
-                        }
-                        int audioResId = mAllGuideAudio.get(mCurrentPos);
-                        if (audioResId > 0) {
-                            AssetFileDescriptor file = getResources().openRawResourceFd(audioResId);
-                            mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-                            mMediaPlayer.setLooping(false);
-                            mMediaPlayer.prepare();
-                            file.close();
-                        }
-
-                    }
-                    mMediaPlayer.start();
+                    playAudio();
 
                     break;
                 default:
@@ -218,6 +188,46 @@ public class GuideActivity extends BaseActivity {
             mCurrentPos = mCurrentPos + 1;
         } catch (Exception e) {
             needJump();
+        }
+
+    }
+
+    /**
+     * 播放音频
+     */
+    private void playAudio() throws Exception {
+        //是否循环播放音频
+        int audioCanRepet = Arrays.binarySearch(mAudioRepetIndexs, mCurrentPos);
+        if (audioCanRepet >= 0) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+                mMediaPlayer.reset();
+            }
+            int audioResId = mAllGuideAudio.get(mCurrentPos);
+            if (audioResId > 0) {
+                AssetFileDescriptor file = getResources().openRawResourceFd(audioResId);
+                mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.prepare();
+                file.close();
+                mMediaPlayer.start();
+            }
+
+        } else {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+                mMediaPlayer.reset();
+            }
+            int audioResId = mAllGuideAudio.get(mCurrentPos);
+            if (audioResId > 0) {
+                AssetFileDescriptor file = getResources().openRawResourceFd(audioResId);
+                mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
+                mMediaPlayer.setLooping(false);
+                mMediaPlayer.prepare();
+                file.close();
+                mMediaPlayer.start();
+            }
+
         }
 
     }
