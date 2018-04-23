@@ -5,17 +5,12 @@ import android.app.Activity;
 import android.widget.Button;
 
 import com.duiba.component_main.activity.MainActivity;
-import com.duiba.component_main.bean.TestBean;
-import com.duiba.component_main.net.MainRESTApiImpl;
-import com.duiba.library_network.action.WebSuccessAction;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.List;
 
 
 /**

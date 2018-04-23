@@ -11,6 +11,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -151,16 +152,23 @@ public class WawaSeekBar extends FrameLayout {
         a.recycle();
         addChildView(context);
         //添加最后整个控件的高度监听
-        getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            mWidth = getWidth() - mProgressbarMargin * 2;
-            mHeight = getHeight();
+        ViewTreeObserver vto = getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mWidth != 0) {
+                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+
+                mWidth = getWidth() - mProgressbarMargin * 2;
+                mHeight = getHeight();
 //            Logger.t(TAG).v("width===>" + mWidth + "  height==>" + mHeight);
 
-            //测量完毕并添加指针views
-            if (mPointWrap.getChildCount() == 0 && mArgsProgress != null) {
-                addPointViews();
+                //测量完毕并添加指针views
+                if (mWidth != 0 && mPointWrap.getChildCount() == 0 && mArgsProgress != null) {
+                    addPointViews();
+                }
             }
-
         });
 
     }

@@ -1,9 +1,9 @@
 package com.duiba.component_main.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -17,9 +17,11 @@ import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserFunService;
 import com.duiba.component_base.component.user.rpc.IUserResService;
 import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
+import com.duiba.component_base.util.ActivitySwitcher;
 import com.duiba.component_base.widget.WawaSeekBar;
 import com.duiba.component_main.R;
 import com.duiba.component_main.R2;
+import com.duiba.component_main.TransitionActivity;
 import com.duiba.component_main.bean.TestBean;
 import com.duiba.component_main.net.MainRESTApiImpl;
 import com.duiba.library_network.action.WebSuccessAction;
@@ -81,11 +83,18 @@ public class MainActivity extends BaseActivity {
     WawaSeekBar mWawaCountdown;
     @BindView(R2.id.wawa_score)
     WawaSeekBar mWawaScore;
+    @BindView(R2.id.btn_io)
+    Button mBtnIo;
+    @BindView(R2.id.btn_lottie)
+    Button mBtnLottie;
+    @BindView(R2.id.btn_transition)
+    Button mBtnTransition;
 
     /**
      * 倒计时Disposable
      */
     Disposable mDownDisposable;
+
 
     /**
      * 闪烁倒计时
@@ -170,6 +179,18 @@ public class MainActivity extends BaseActivity {
             ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_ANIM).navigation();
         });
 
+        RxView.clicks(mBtnIo).subscribe(aVoid -> {
+            ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_IO).navigation();
+        });
+
+        RxView.clicks(mBtnLottie).subscribe(aVoid -> {
+            ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_LOTTIE).navigation();
+        });
+        RxView.clicks(mBtnTransition).subscribe(aVoid -> {
+            // ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_LOTTIE).navigation();
+            animatedStartActivity();
+        });
+
 
         //倒计时初始化
         float[] progress = new float[]{0.1f, 0.5f, 0.9f};
@@ -213,9 +234,23 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        ActivitySwitcher.animationIn(findViewById(R.id.container),
+                getWindowManager());
         super.onResume();
+    }
 
-
+    //activity
+    private void animatedStartActivity() {
+        // we only animateOut this activity here.
+        // The new activity will animateIn from its onResume() - be sure to
+        // implement it.
+        final Intent intent = new Intent(getApplicationContext(),
+                TransitionActivity.class);
+        // disable default animation for new intent
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        ActivitySwitcher.animationOut(findViewById(R.id.container),
+                getWindowManager(),
+                () -> startActivity(intent));
     }
 
     @Override

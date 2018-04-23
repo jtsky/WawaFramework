@@ -93,6 +93,8 @@ dependencies {
     }
     //Glide动画框架
     api rootProject.ext.dependencies["glide"]
+    //airbnb动画框架
+    api rootProject.ext.dependencies["lottie"]
 
 
     //ARouter

@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@mipmap/screen0"
+            android:src="@mipmap/guide_g2"
             android:visibility="gone" />
     </FrameLayout>
 

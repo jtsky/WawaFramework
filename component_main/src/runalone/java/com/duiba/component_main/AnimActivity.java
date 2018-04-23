@@ -2,6 +2,7 @@ package com.duiba.component_main;
 
 import android.annotation.SuppressLint;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -66,18 +67,20 @@ public class AnimActivity extends BaseActivity {
     ImageView mIvSource5;
     List<ImageView> list = new ArrayList<>();
 
+
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_anim);
         ButterKnife.bind(this);
-        list.add(mIvSource5);
-        list.add(mIvSource4);
-        list.add(mIvSource3);
-        list.add(mIvSource2);
-        list.add(mIvSource1);
         list.add(mIvSource0);
+        list.add(mIvSource1);
+        list.add(mIvSource2);
+        list.add(mIvSource3);
+        list.add(mIvSource4);
+        list.add(mIvSource5);
+
         //积分初始化
         float[] progress2 = new float[]{0.1f, 0.5f, 0.9f};
         String[] progressTicket2 = new String[]{"券x10", "券x10", "券x10"};
@@ -124,10 +127,10 @@ public class AnimActivity extends BaseActivity {
         return rect;
     }
 
-    private int[] getSourcePos() {
+    private int[] getSourcePos(View view) {
         int[] rect = new int[2];
-        if (mIvSource0 != null) {
-            mIvSource0.getLocationOnScreen(rect);
+        if (view != null) {
+            view.getLocationOnScreen(rect);
         }
         return rect;
     }
@@ -144,15 +147,22 @@ public class AnimActivity extends BaseActivity {
                             mDisposable.dispose();
                             mDisposable = null;
                             mCount = 0;
+
                         }
+                        return;
                     }
+                    //解决一边移动一遍放大时位置估算不准的bug
+                    int endPosX = (int) ((getTargetPos()[0] - getSourcePos(list.get(mCount))[0]) * (1 / 1.5));
+                    int endPosY = (int) ((getTargetPos()[1] - getSourcePos(list.get(mCount))[1]) * (1 / 1.5));
+//                    int endPosX = (int) (getTargetPos()[0] - getSourcePos(list.get(mCount))[0]);
+//                    int endPosY = (int) (getTargetPos()[1] - getSourcePos(list.get(mCount))[1]);
                     AnimationSet set = new AnimationSet(false);
-                    Animation translateAnimation = new TranslateAnimation(0, getTargetPos()[0] - getSourcePos()[0], 0, getTargetPos()[1] - getSourcePos()[1]);
+                    Animation translateAnimation = new TranslateAnimation(0, endPosX, 0, endPosY);
                     set.addAnimation(translateAnimation);
 
-                    Animation scaleAnimation = new ScaleAnimation(1, 2, 1, 2);
+                    Animation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                     set.addAnimation(scaleAnimation);
-                    set.setDuration(1000);
+                    set.setDuration(500);
                     list.get(mCount).startAnimation(set);
                     mCount++;
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_white"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:filterTouchesWhenObscured="true"
+        android:text="播放" />
+
+    <FrameLayout
+        android:id="@+id/fl_wrap"
+        android:layout_width="200dp"
+        android:layout_height="300dp">
+
+        <TextView
+            android:id="@+id/tv_hit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="连击X5"
+            android:textColor="@color/base_red"
+            android:textSize="30sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_boom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#55000000" />
+    </FrameLayout>
+
+
+</LinearLayout>

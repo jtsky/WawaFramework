@@ -24,6 +24,12 @@ public class MainRouterPath {
      * 新手引导页
      */
     public static final String MAIN_ACTIVITY_GUIDE = MAIN_ROOT + "guide_activity";
+    /**
+     * IO test 页面
+     */
+    public static final String MAIN_ACTIVITY_IO = MAIN_ROOT + "io_activity";
+
+    public static final String MAIN_ACTIVITY_LOTTIE = MAIN_ROOT + "lottie_activity";
     //webview
     public static final String MAIN_ACTIVITY_WEB = MAIN_ROOT + "webview_activity";
 

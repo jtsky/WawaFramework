@@ -22,7 +22,11 @@
         <activity android:name=".activity.WebviewActivity" />
         <activity android:name=".GuideActivity" />
         <activity android:name=".AnimActivity" />
-
+        <activity android:name=".IOActivity" />
+        <activity android:name=".LottieActivity" />
+        <activity android:name=".TransitionActivity"
+            android:label="TransitionActivity"
+            />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
