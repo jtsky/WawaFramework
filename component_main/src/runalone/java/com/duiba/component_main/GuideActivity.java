@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -56,6 +57,7 @@ public class GuideActivity extends BaseActivity {
     //设置可重复播放的位置
     private int[] mGifRepetIndexs;
     private int[] mAudioRepetIndexs;
+    private int[] mVideoRepetIndexs;
     private static final int MESSAGE_SUCCESS = 200;
     List<GuideBean> mAllGuide = new ArrayList<>();
     List<Integer> mAllGuideAudio = new ArrayList<>();
@@ -87,16 +89,25 @@ public class GuideActivity extends BaseActivity {
      * 初始化资源图片id和视频地址
      */
     private void initRes() {
-        mGifRepetIndexs = new int[]{0, 2, 4};
-        mAudioRepetIndexs = new int[]{0, 8};
+        mGifRepetIndexs = new int[]{8, 10};
+        mAudioRepetIndexs = new int[]{8, 10};
+        mVideoRepetIndexs = new int[]{1, 3, 5};
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setVolume(1.0f, 1.0f);
         //初始化gif列表
-        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g2));
-        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g5));
-        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g8));
-        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g11));
-        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g13));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v0)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v1_loop)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v2)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v3_loop)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v4)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v5_loop)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v6)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v7)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g8_loop));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v9)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.IMAGE, R.mipmap.guide_g10_loop));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v11)));
+        mAllGuide.add(new GuideBean(GuideBean.GuideType.VODEO, Uri.parse(VIDEO_PATH_ROOT + R.raw.guide_v12)));
         //初始化音频列表
         mAllGuideAudio.add(R.raw.guide_a0);
         mAllGuideAudio.add(R.raw.guide_a1);
@@ -106,23 +117,30 @@ public class GuideActivity extends BaseActivity {
         mAllGuideAudio.add(-4);
         mAllGuideAudio.add(R.raw.guide_a5);
         mAllGuideAudio.add(R.raw.guide_a6);
+        mAllGuideAudio.add(R.raw.guide_a7);
+        mAllGuideAudio.add(R.raw.guide_a8_loop);
         //表示不播放该段音频
-        mAllGuideAudio.add(-7);
-        mAllGuideAudio.add(R.raw.guide_a8);
-        mAllGuideAudio.add(R.raw.guide_a9_loop);
-        //表示不播放该段音频
-        mAllGuideAudio.add(-10);
-        mAllGuideAudio.add(R.raw.guide_a11_loop);
+        mAllGuideAudio.add(-9);
+        mAllGuideAudio.add(R.raw.guide_a10_loop);
+        mAllGuideAudio.add(R.raw.guide_a11);
         mAllGuideAudio.add(R.raw.guide_a12);
-        mAllGuideAudio.add(R.raw.guide_a13);
     }
 
 
     private void setupVideo() {
+        mVideoView.setOnClickListener(v -> play());
         mVideoView.setOnPreparedListener(mp -> mVideoView.start());
         mVideoView.setOnCompletionListener(mp -> {
-            stopPlaybackVideo();
-            play();
+            //是否循环播放音频
+            int videoCanRepet = Arrays.binarySearch(mVideoRepetIndexs, mCurrentPos - 1);
+            if (videoCanRepet >= 0) {
+                mVideoView.setClickable(true);
+            } else {
+                mVideoView.setClickable(false);
+                stopPlaybackVideo();
+                play();
+            }
+
         });
         mVideoView.setOnErrorListener((mp, what, extra) -> {
             stopPlaybackVideo();
@@ -162,6 +180,13 @@ public class GuideActivity extends BaseActivity {
 
             switch (guideBean.getType()) {
                 case VODEO:
+                    //是否循环播放音频
+                    int videoCanRepet = Arrays.binarySearch(mVideoRepetIndexs, mCurrentPos);
+                    if (videoCanRepet >= 0) {
+                        mVideoView.setClickable(true);
+                    } else {
+                        mVideoView.setClickable(false);
+                    }
                     mVideoView.setVideoURI((Uri) guideBean.getPath());
                     mIvHandle.setVisibility(View.INVISIBLE);
                     mRlWrap.setVisibility(View.VISIBLE);
@@ -195,41 +220,58 @@ public class GuideActivity extends BaseActivity {
     /**
      * 播放音频
      */
-    private void playAudio() throws Exception {
+    private void playAudio() {
         //是否循环播放音频
-        int audioCanRepet = Arrays.binarySearch(mAudioRepetIndexs, mCurrentPos);
-        if (audioCanRepet >= 0) {
-            if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.stop();
-                mMediaPlayer.reset();
-            }
+        try {
+            int audioCanRepet = Arrays.binarySearch(mAudioRepetIndexs, mCurrentPos);
             int audioResId = mAllGuideAudio.get(mCurrentPos);
-            if (audioResId > 0) {
-                AssetFileDescriptor file = getResources().openRawResourceFd(audioResId);
-                mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
+            if (audioResId <= 0) {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.stop();
+                    mMediaPlayer.release();
+                }
+                return;
+            }
+            if (audioCanRepet >= 0) {
+                mMediaPlayer = createMediaplayerFromAssets(audioResId);
+                mMediaPlayer.stop();
                 mMediaPlayer.setLooping(true);
                 mMediaPlayer.prepare();
-                file.close();
                 mMediaPlayer.start();
-            }
 
-        } else {
-            if (mMediaPlayer.isPlaying()) {
+            } else {
+                mMediaPlayer = createMediaplayerFromAssets(audioResId);
                 mMediaPlayer.stop();
-                mMediaPlayer.reset();
-            }
-            int audioResId = mAllGuideAudio.get(mCurrentPos);
-            if (audioResId > 0) {
-                AssetFileDescriptor file = getResources().openRawResourceFd(audioResId);
-                mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
                 mMediaPlayer.setLooping(false);
                 mMediaPlayer.prepare();
-                file.close();
                 mMediaPlayer.start();
             }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+
+    }
+
+    private MediaPlayer createMediaplayerFromAssets(int audioResId) {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+        }
+        MediaPlayer mediaPlayer = null;
+        try {
+            AssetFileDescriptor assetFileDescritor = getResources().openRawResourceFd(audioResId);
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(assetFileDescritor.getFileDescriptor(),
+                    assetFileDescritor.getStartOffset(),
+                    assetFileDescritor.getLength());
+            mediaPlayer.prepare();
+            mediaPlayer.setVolume(1.0f, 1.0f);
+        } catch (Exception e) {
+            mediaPlayer = null;
+            Log.e(TAG, "error: " + e.getMessage(), e);
+        }
+        return mediaPlayer;
     }
 
     /**
