@@ -20,7 +20,6 @@
         </activity>
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.WebviewActivity" />
-        <activity android:name=".GuideActivity" />
         <activity android:name=".AnimActivity" />
         <activity android:name=".IOActivity" />
         <activity android:name=".LottieActivity" />

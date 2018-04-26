@@ -16,7 +16,7 @@ import android.view.animation.Animation;
  * ================================================
  */
 public class ActivitySwitcher {
-    private final static int DURATION = 500;
+    private final static int DURATION = 600;
     private final static float DEPTH = 400.0f;
 
     /* ----------------------------------------------- */
