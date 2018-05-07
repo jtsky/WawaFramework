@@ -12,14 +12,14 @@ public class TestCommResponse<T> {
     T data;
     @SerializedName("code")
     private int code;
+    private boolean error;
+
     @SerializedName("msg")
     private String msg;
 
     public boolean isError() {
         return error;
     }
-
-    private boolean error;
 
     public int getCode() {
         return code;

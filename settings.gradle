@@ -1,4 +1,6 @@
-include ':app', ':library_websocket'
+include ':app'
+//websocket库
+include ':library_websocket'
 //common库
 include ':library_common'
 //网络库

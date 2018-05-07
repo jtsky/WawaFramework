@@ -27,6 +27,11 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/tv_response"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        />
     <FrameLayout
         android:id="@+id/fl"
         android:layout_width="match_parent"

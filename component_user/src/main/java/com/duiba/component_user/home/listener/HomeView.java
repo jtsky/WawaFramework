@@ -11,4 +11,6 @@ import com.hannesdorfmann.mosby3.mvp.MvpView;
  */
 public interface HomeView extends DuibaMvpView {
     void print();
+
+    void setResponse(String response);
 }

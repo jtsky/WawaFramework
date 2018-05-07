@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.duiba.component_base.BuildConfig;
-import com.duiba.component_base.lifecycle.ActivityLifeCycleEvent;
 import com.duiba.component_base.util.EventBusUtil;
 import com.duiba.library_common.bean.Event;
 import com.duiba.library_common.bean.EventCode;
@@ -38,7 +37,6 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
         extends MvpFragment<V, P> {
     protected final String TAG = getClass().getSimpleName();
     protected final String TAG_CURRENR = "CurrentFragment";
-    protected final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
     /**
      * 根布局
      */
@@ -79,7 +77,6 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
         if (isOpenWebSocket()) {
             initWebSocket();
         }
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.CREATE);
     }
 
     @Deprecated
@@ -253,42 +250,27 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     public void onResume() {
         super.onResume();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.RESUME);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.STOP);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.PAUSE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mUnbinder.unbind();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.DESTROY);
         if (isRegisterEventBus()) {
             EventBusUtil.unRegister(this);
         }
     }
 
 
-//  @NonNull public <T> Observable.Transformer<T, T> bindUntilEvent(
-//      @NonNull final ActivityLifeCycleEvent event) {
-//    return sourceObservable -> {
-//      Observable<ActivityLifeCycleEvent> o = lifecycleSubject.takeFirst(
-//          activityLifeCycleEvent -> activityLifeCycleEvent.equals(event));
-//            /*
-//            *TakeUntil订阅原始的Observable并发射数据，此外它还监视你提供的第二个Observable。
-//            * 当第二个Observable发射了一项数据或者发射一项终止的通知时（onError通知或者onCompleted通知），TakeUntil返回的Observable会停止发射原始的Observable
-//            */
-//      return sourceObservable.takeUntil(o);
-//    };
-//  }
+
 }

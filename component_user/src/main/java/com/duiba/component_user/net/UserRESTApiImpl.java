@@ -2,11 +2,14 @@ package com.duiba.component_user.net;
 
 import android.app.ProgressDialog;
 
+import com.duiba.component_user.bean.GankBean;
 import com.duiba.library_network.RetrofitHelp;
 import com.duiba.library_network.bean.TestCommResponse;
-import com.duiba.library_network.transform.RxCommonResultTransform;
+import com.duiba.library_network.transform.RxCommResultArrayTransform;
 import com.duiba.library_network.transform.RxResponTransform;
 
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -19,9 +22,9 @@ import io.reactivex.Observable;
 public class UserRESTApiImpl {
     static UserRESTApi api = RetrofitHelp.getRetrofit().create(UserRESTApi.class);
 
-    public static Observable<TestCommResponse<Object>> getData(String type, ProgressDialog progressDialog) {
+    public static Observable<TestCommResponse<List<GankBean>>> getData(String type, ProgressDialog progressDialog) {
         return api.getData(type)
                 .compose(new RxResponTransform(progressDialog))
-                .compose(new RxCommonResultTransform<Object>());
+                .compose(new RxCommResultArrayTransform<>(GankBean.class));
     }
 }

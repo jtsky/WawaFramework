@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 
 import com.duiba.library_network.RetrofitHelp;
 import com.duiba.library_network.bean.TestCommResponse;
-import com.duiba.library_network.transform.RxCommonResultTransform;
+import com.duiba.library_network.transform.RxCommResultObjectTransform;
 import com.duiba.library_network.transform.RxResponTransform;
 
 import io.reactivex.Observable;
@@ -21,6 +21,6 @@ public class ShareRESTApiImpl {
     public static Observable<TestCommResponse<Object>> getData(String type, ProgressDialog progressDialog) {
         return api.getData(type)
                 .compose(new RxResponTransform(progressDialog))
-                .compose(new RxCommonResultTransform<Object>());
+                .compose(new RxCommResultObjectTransform<Object>());
     }
 }

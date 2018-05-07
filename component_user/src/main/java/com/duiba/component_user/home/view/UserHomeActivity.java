@@ -2,7 +2,6 @@ package com.duiba.component_user.home.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -20,14 +19,13 @@ import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
 import com.duiba.component_user.home.presenter.HomePresenter;
+import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Response;
 import okio.ByteString;
-
-import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
  * @author: jintai
@@ -42,6 +40,8 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     TextView mTv;
     @BindView(R2.id.btn)
     Button mBtn;
+    @BindView(R2.id.tv_response)
+    TextView mTvResponse;
 
 
     @Override
@@ -75,7 +75,7 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
 
     @NonNull
     @Override
-    public HomePresenter createPresenter() {
+    public HomePresenter onCreatePresenter() {
         return new HomePresenter();
     }
 
@@ -83,6 +83,11 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     @Override
     public void print() {
         Toast.makeText(this, "点击", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setResponse(String response) {
+        mTvResponse.setText(response);
     }
 
 

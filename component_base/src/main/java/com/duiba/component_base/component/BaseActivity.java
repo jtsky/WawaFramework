@@ -2,17 +2,16 @@ package com.duiba.component_base.component;
 
 import android.arch.lifecycle.ViewModel;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.androidadvance.topsnackbar.TSnackbar;
 import com.duiba.component_base.BuildConfig;
-import com.duiba.component_base.lifecycle.ActivityLifeCycleEvent;
 import com.duiba.component_base.util.EventBusUtil;
 import com.duiba.library_common.bean.Event;
 import com.duiba.library_common.bean.EventCode;
@@ -24,8 +23,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
-
-import io.reactivex.subjects.PublishSubject;
 
 import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
@@ -41,7 +38,6 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     protected final String TAG = this.getClass().getSimpleName();
     protected final String TAG_CURRENR = "CurrentActivity";
 
-    protected final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
 
     public Model getViewModel() {
         return mViewModel;
@@ -86,9 +82,6 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
             createWSStatusListener();
             initWebSocket();
         }
-
-
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.CREATE);
     }
 
     /**
@@ -251,6 +244,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         tSnackbar.show();
     }
 
+
     /**
      * 页面的根布局
      **/
@@ -259,14 +253,12 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     protected void onResume() {
         super.onResume();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.RESUME);
         MobclickAgent.onResume(this);
         mRootView = findViewById(android.R.id.content);
     }
 
     @Override
     protected void onStop() {
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.STOP);
         super.onStop();
     }
 
@@ -274,35 +266,38 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     protected void onPause() {
         super.onPause();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.PAUSE);
         MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        lifecycleSubject.onNext(ActivityLifeCycleEvent.DESTROY);
         if (isRegisterEventBus()) {
             EventBusUtil.unRegister(this);
         }
     }
 
 
-//    @NonNull
-//    public <T extends CommResponse, R extends CommResponse> ObservableTransformer bindUntilEvent(
-//            @NonNull final ActivityLifeCycleEvent event) {
-//        return new ObservableTransformer<T, R>() {
-//            @Override
-//            public ObservableSource<R> apply(Observable<T> upstream) {
-//                Observable<ActivityLifeCycleEvent> o = lifecycleSubject.takeFirst(
-//                        activityLifeCycleEvent -> activityLifeCycleEvent.equals(event));
-//                /*TakeUntil订阅原始的Observable并发射数据，此外它还监视你提供的第二个Observable。
-//                 当第二个Observable发射了一项数据或者发射一项终止的通知时（onError通知或者onCompleted通知），
-//                 TakeUntil返回的Observable会停止发射原始的Observable*/
-//                return (ObservableSource<R>) upstream.takeUntil(o);
-//            }
-//
-//
-//        };
-//    }
+    /**
+     * 不建议重写此方法
+     * @return
+     */
+    @Deprecated
+    @NonNull
+    @Override
+    public P createPresenter() {
+        P presenter = onCreatePresenter();
+        if(presenter == null){
+            return null;
+        }
+        getLifecycle().addObserver(presenter);
+        return presenter;
+
+    }
+
+    /**
+     * 返回自定义的Presenter
+     * @return P
+     */
+    public abstract  P onCreatePresenter();
 }

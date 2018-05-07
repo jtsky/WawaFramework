@@ -1,12 +1,20 @@
 package com.duiba.component_base.component;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.lifecycle.LifecycleTransformer;
+import com.duiba.component_base.lifecycle.RxLifecycle;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpView;
 import com.orhanobut.logger.Logger;
+
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * @author: jintai
@@ -14,7 +22,7 @@ import com.orhanobut.logger.Logger;
  * @Email: jintai@qccr.com
  * @desc:
  */
-public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> extends MvpBasePresenter<V> {
+public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> extends MvpBasePresenter<V> implements LifecycleObserver {
 
     /**
      * An Action that is executed to interact with the view.
@@ -63,5 +71,29 @@ public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> 
                 action.run((Model) view.getViewModel());
             }
         });
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    void onCreate() {
+        lifecycleSubject.onNext(Lifecycle.State.CREATED);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    void onResume() {
+        lifecycleSubject.onNext(Lifecycle.State.RESUMED);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    void onDestory() {
+        lifecycleSubject.onNext(Lifecycle.State.DESTROYED);
+    }
+
+
+    private final BehaviorSubject<Lifecycle.State> lifecycleSubject = BehaviorSubject.create();
+
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull Lifecycle.State event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 }
