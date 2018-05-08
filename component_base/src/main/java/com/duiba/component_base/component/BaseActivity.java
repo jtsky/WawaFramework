@@ -1,9 +1,11 @@
 package com.duiba.component_base.component;
 
+import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModel;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
+import android.support.annotation.CheckResult;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 
 import com.androidadvance.topsnackbar.TSnackbar;
 import com.duiba.component_base.BuildConfig;
+import com.duiba.component_base.lifecycle.LifecycleTransformer;
+import com.duiba.component_base.lifecycle.RxLifecycle;
 import com.duiba.component_base.util.EventBusUtil;
 import com.duiba.library_common.bean.Event;
 import com.duiba.library_common.bean.EventCode;
@@ -28,6 +32,8 @@ import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
+import io.reactivex.subjects.BehaviorSubject;
+
 /**
  * @author jintai
  * @date 2018/03/23
@@ -36,7 +42,7 @@ import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpView, P extends DuibaMvpPresenter<Model, V>>
         extends MvpActivity<V, P> {
     protected final String TAG = this.getClass().getSimpleName();
-    protected final String TAG_CURRENR = "CurrentActivity";
+    protected final String TAG_CURRENT = "CurrentActivity";
 
 
     public Model getViewModel() {
@@ -60,7 +66,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //输出当前activity
         if (BuildConfig.DEBUG) {
-            Logger.t(TAG_CURRENR).v("===CurrentActivity====>" + this.getClass().getCanonicalName());
+            Logger.t(TAG_CURRENT).v("===CurrentActivity====>" + this.getClass().getCanonicalName());
         }
 
         //onCreat时候注册EventBus事件
@@ -82,6 +88,8 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
             createWSStatusListener();
             initWebSocket();
         }
+        //发送生命周期时间
+        lifecycleSubject.onNext(Lifecycle.State.CREATED);
     }
 
     /**
@@ -255,6 +263,8 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         super.onResume();
         MobclickAgent.onResume(this);
         mRootView = findViewById(android.R.id.content);
+        //发送生命周期时间
+        lifecycleSubject.onNext(Lifecycle.State.RESUMED);
     }
 
     @Override
@@ -275,12 +285,14 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         if (isRegisterEventBus()) {
             EventBusUtil.unRegister(this);
         }
+        //发送生命周期时间
+        lifecycleSubject.onNext(Lifecycle.State.DESTROYED);
     }
 
 
     /**
-     * 不建议重写此方法
-     * @return
+     * 不建议重写此方法  只需要重写onCreatePresenter即刻
+     * @return P
      */
     @Deprecated
     @NonNull
@@ -300,4 +312,12 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
      * @return P
      */
     public abstract  P onCreatePresenter();
+
+    private final BehaviorSubject<Lifecycle.State> lifecycleSubject = BehaviorSubject.create();
+
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull Lifecycle.State event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    }
 }

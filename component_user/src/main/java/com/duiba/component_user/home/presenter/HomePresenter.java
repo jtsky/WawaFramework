@@ -37,6 +37,7 @@ public class HomePresenter extends DuibaMvpPresenter<UserViewModel, HomeView> {
             viewModel.getName().setValue("来自Activity的更新");
         });
 
+        //延迟3s请求接口
         Observable.timer(3, TimeUnit.SECONDS).subscribe(l->{
             UserRESTApiImpl.getData("Android",null)
                     .compose(bindUntilEvent(Lifecycle.State.DESTROYED))
