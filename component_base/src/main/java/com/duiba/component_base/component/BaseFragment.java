@@ -1,13 +1,18 @@
 package com.duiba.component_base.component;
 
+import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.duiba.component_base.BuildConfig;
+import com.duiba.component_base.lifecycle.LifecycleTransformer;
+import com.duiba.component_base.lifecycle.RxLifecycle;
 import com.duiba.component_base.util.EventBusUtil;
 import com.duiba.library_common.bean.Event;
 import com.duiba.library_common.bean.EventCode;
@@ -21,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
@@ -77,6 +83,8 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
         if (isOpenWebSocket()) {
             initWebSocket();
         }
+        //发送生命周期时间
+        lifecycleSubject.onNext(Lifecycle.State.CREATED);
     }
 
     @Deprecated
@@ -250,6 +258,8 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     public void onResume() {
         super.onResume();
+        //发送生命周期时间
+        lifecycleSubject.onNext(Lifecycle.State.RESUMED);
     }
 
     @Override
@@ -269,8 +279,39 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
         if (isRegisterEventBus()) {
             EventBusUtil.unRegister(this);
         }
+        //发送生命周期时间
+        lifecycleSubject.onNext(Lifecycle.State.DESTROYED);
     }
 
+    /**
+     * 不建议重写此方法  只需要重写onCreatePresenter即刻
+     * @return P
+     */
+    @Deprecated
+    @NonNull
+    @Override
+    public P createPresenter() {
+        P presenter = onCreatePresenter();
+        if(presenter == null){
+            return null;
+        }
+        getLifecycle().addObserver(presenter);
+        return presenter;
 
+    }
+
+    /**
+     * 返回自定义的Presenter
+     * @return P
+     */
+    public abstract  P onCreatePresenter();
+
+    private final BehaviorSubject<Lifecycle.State> lifecycleSubject = BehaviorSubject.create();
+
+    @NonNull
+    @CheckResult
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull Lifecycle.State event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    }
 
 }

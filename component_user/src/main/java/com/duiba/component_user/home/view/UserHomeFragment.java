@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.duiba.component_base.component.BaseFragment;
+import com.duiba.component_base.component.DuibaMvpPresenter;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
+import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
 import com.duiba.component_user.home.presenter.HomePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
@@ -59,9 +61,11 @@ public class UserHomeFragment extends BaseFragment {
     }
 
     @Override
-    public MvpPresenter createPresenter() {
+    public DuibaMvpPresenter onCreatePresenter() {
         return new HomePresenter();
     }
+
+
 
     @Override
     public void onDestroy() {
