@@ -27,4 +27,10 @@ public class UserRESTApiImpl {
                 .compose(new RxResponTransform(progressDialog))
                 .compose(new RxCommResultArrayTransform<>(GankBean.class));
     }
+
+    public static Observable<TestCommResponse<List<GankBean>>> test(ProgressDialog progressDialog) {
+        return api.test()
+                .compose(new RxResponTransform(progressDialog))
+                .compose(new RxCommResultArrayTransform<>(GankBean.class));
+    }
 }

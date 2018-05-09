@@ -15,6 +15,8 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 
 /**
@@ -38,15 +40,14 @@ public class HomePresenter extends DuibaMvpPresenter<UserViewModel, HomeView> {
         });
 
         //延迟3s请求接口
-        Observable.timer(3, TimeUnit.SECONDS).subscribe(l->{
-            UserRESTApiImpl.getData("Android",null)
-                    .compose(bindUntilEvent(Lifecycle.State.DESTROYED))
-                    .subscribe(response->{
-                        GankBean bean  = response.getData().get(0);
-                        getView().setResponse(bean.toString());
-                    });
-
-        });
+        Observable.timer(3, TimeUnit.SECONDS)
+                .flatMap(aLong ->
+                        UserRESTApiImpl.getData("Android",null)
+                                .compose(bindUntilEvent(Lifecycle.State.DESTROYED)))
+                .subscribe(response -> {
+                    GankBean bean = response.getData().get(0);
+                    getView().setResponse(bean.toString());
+                }, e -> e.printStackTrace());
 
     }
 

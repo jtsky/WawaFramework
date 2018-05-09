@@ -4,6 +4,7 @@ package com.duiba.library_network;
 import android.os.Build;
 
 import com.duiba.library_network.converter.ScalarsConverterFactory;
+import com.duiba.library_network.interceptor.MockDataApiInterceptor;
 import com.duiba.library_network.interceptor.RequestInterceptor;
 import com.duiba.library_network.interceptor.addQueryParameterInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
@@ -40,8 +41,8 @@ public class RetrofitHelp {
                                     .header("User-Agent", buildUserAgent())
                                     .build()))
                     //.addInterceptor(logging)
-                    .addNetworkInterceptor(new StethoInterceptor())
                     .addInterceptor(new RequestInterceptor())
+                    .addInterceptor(new MockDataApiInterceptor())
                     //.addInterceptor(new addQueryParameterInterceptor())
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)

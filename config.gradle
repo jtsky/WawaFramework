@@ -85,8 +85,9 @@ ext {
                     "retrofit2-converter-gson"   : "com.squareup.retrofit2:converter-gson:${android["retrofitSdkVersion"]}",
                     "retrofit2-adapter-rxjava"   : "com.squareup.retrofit2:adapter-rxjava2:${android["retrofitSdkVersion"]}",
                     //https://github.com/square/okhttp
-                    "okhttp3"                    : "com.squareup.okhttp3:okhttp:3.6.0",
-                    "okhttp3-logging-interceptor": 'com.squareup.okhttp3:logging-interceptor:3.9.0',
+                    "okhttp3"                    : "com.squareup.okhttp3:okhttp:3.10.0",
+                    "okhttp3-mockwebserver"      : "com.squareup.okhttp3:mockwebserver:3.10.0",
+                    "okhttp3-logging-interceptor": 'com.squareup.okhttp3:logging-interceptor:3.10.0',
                     "okio"                       : "com.squareup.okio:okio:1.6.0",
                     //chrome 网络调试
                     "stetho"                     : 'com.facebook.stetho:stetho:1.5.0',

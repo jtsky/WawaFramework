@@ -47,6 +47,7 @@ dependencies {
     testImplementation rootProject.ext.dependencies["junit"]
 //    testImplementation rootProject.ext.dependencies["json"]
     testImplementation rootProject.ext.dependencies["robolectric"]
+    testImplementation rootProject.ext.dependencies["okhttp3-mockwebserver"]
     //androidTestCompile rootProject.ext.dependencies["espresso-core"]
 
     api rootProject.ext.dependencies["retrofit2"]

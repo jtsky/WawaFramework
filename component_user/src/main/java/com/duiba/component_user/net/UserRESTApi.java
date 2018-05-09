@@ -19,6 +19,9 @@ public interface UserRESTApi {
     @GET("api/data/{type}/10/1")
     Observable<String> getData(@Path("type") String type);
 
+    @GET("api/test0")
+    Observable<String> test();
+
     @POST("login/login")
     Observable<String> getBannersCall(@QueryMap Map<String, String> map);
 }

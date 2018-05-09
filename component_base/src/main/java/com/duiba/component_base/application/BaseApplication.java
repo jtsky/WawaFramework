@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.Utils;
 import com.duiba.component_base.BuildConfig;
 import com.duiba.component_base.StethoUtil;
 import com.duiba.component_base.config.AppDefine;
+import com.duiba.library_network.util.ApplicationUtil;
 import com.duiba.rxnetwork.RxNetwork;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -44,6 +45,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ApplicationUtil.instance = this;
         application = this;
         //工具类初始化
         Utils.init(application);
