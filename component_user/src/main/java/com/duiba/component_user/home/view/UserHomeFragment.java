@@ -1,22 +1,21 @@
 package com.duiba.component_user.home.view;
 
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.duiba.component_base.component.BaseFragment;
-import com.duiba.component_base.component.DuibaMvpPresenter;
+import com.duiba.component_base.component.DefaultMvpPresenter;
+import com.duiba.component_base.component.DefaultMvpView;
+import com.duiba.component_base.component.DefaultViewModel;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
-import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
-import com.duiba.component_user.home.presenter.HomePresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import butterknife.BindView;
@@ -27,7 +26,7 @@ import butterknife.BindView;
  * @Email: jintai@qccr.com
  * @desc:
  */
-public class UserHomeFragment extends BaseFragment {
+public class UserHomeFragment extends BaseFragment<DefaultViewModel, DefaultMvpView, DefaultMvpPresenter> {
     @BindView(R2.id.btn)
     Button mBtn;
     @BindView(R2.id.tv)
@@ -49,11 +48,16 @@ public class UserHomeFragment extends BaseFragment {
     }
 
     @Override
-    public void subscribeViewModel() {
-        mViewModel = userViewModel = (UserViewModel) getParentViewModel();
-        Observer<String> nameObserver = s -> mTv.setText(s);
-        userViewModel.getName().observe(this, nameObserver);
+    protected DefaultViewModel createViewModel() {
+        userViewModel = (UserViewModel) getParentViewModel();
+        return ViewModelProviders.of(this).get(DefaultViewModel.class);
     }
+
+    @Override
+    protected void performSubscribe(DefaultViewModel viewModel) {
+
+    }
+
 
     @Override
     protected boolean isMVP() {
@@ -61,10 +65,9 @@ public class UserHomeFragment extends BaseFragment {
     }
 
     @Override
-    public DuibaMvpPresenter onCreatePresenter() {
-        return new HomePresenter();
+    public DefaultMvpPresenter onCreatePresenter() {
+        return new DefaultMvpPresenter();
     }
-
 
 
     @Override

@@ -38,6 +38,7 @@ dependencies {
   api (rootProject.ext.dependencies["appcompat-v7"]){
     exclude group: 'com.android.support', module: 'multidex'
   }
+  api rootProject.ext.dependencies["annotations"]
   api rootProject.ext.dependencies["support-v4"]
 
   api rootProject.ext.dependencies["design"]

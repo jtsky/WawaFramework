@@ -22,12 +22,9 @@ import com.duiba.component_base.util.ActivitySwitcher;
 import com.duiba.component_base.widget.WawaSeekBar;
 import com.duiba.component_main.R;
 import com.duiba.component_main.R2;
-import com.duiba.component_main.TransitionActivity;
 import com.duiba.component_main.bean.TestBean;
 import com.duiba.component_main.net.MainRESTApiImpl;
 import com.duiba.library_network.action.WebSuccessAction;
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
 
@@ -189,7 +186,7 @@ public class MainActivity extends BaseActivity {
         });
         RxView.clicks(mBtnTransition).subscribe(aVoid -> {
             // ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_LOTTIE).navigation();
-            animatedStartActivity();
+            //animatedStartActivity();
         });
 
 
@@ -241,18 +238,7 @@ public class MainActivity extends BaseActivity {
     }
 
     //activity
-    private void animatedStartActivity() {
-        // we only animateOut this activity here.
-        // The new activity will animateIn from its onResume() - be sure to
-        // implement it.
-        final Intent intent = new Intent(getApplicationContext(),
-                TransitionActivity.class);
-        // disable default animation for new intent
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        ActivitySwitcher.animationOut(findViewById(R.id.container),
-                getWindowManager(),
-                () -> startActivity(intent));
-    }
+
 
     @Override
     protected void onPause() {

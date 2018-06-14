@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
 import com.duiba.component_base.component.user.path.UserRouterPath;
+import com.duiba.component_base.util.WindowUtils;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
@@ -53,14 +54,21 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fl, new UserHomeFragment());
         transaction.commit();
-        RxView.clicks(mBtn).subscribe(aVoid -> getPresenter().login());
+        RxView.clicks(mBtn).subscribe(aVoid -> {
+            getPresenter().login();
+        });
+    }
+
+
+    @Override
+    protected UserViewModel createViewModel() {
+        return ViewModelProviders.of(this).get(UserViewModel.class);
     }
 
     @Override
-    public void subscribeViewModel() {
-        mViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+    protected void performSubscribe(UserViewModel viewModel) {
         Observer<String> nameObserver = s -> mTv.setText(s);
-        mViewModel.getName().observe(this, nameObserver);
+        viewModel.getName().observe(this, nameObserver);
     }
 
     @Override
@@ -68,10 +76,6 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
         return true;
     }
 
-    @Override
-    public UserViewModel getViewModel() {
-        return mViewModel;
-    }
 
     @NonNull
     @Override

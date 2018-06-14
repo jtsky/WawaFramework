@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.component.DuibaMvpPresenter;
 import com.duiba.component_base.component.main.path.MainRouterPath;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
@@ -132,9 +133,11 @@ public class IOActivity extends BaseActivity {
         return false;
     }
 
-    @NonNull
+
+
+
     @Override
-    public MvpPresenter createPresenter() {
-        return new MvpBasePresenter();
+    public DuibaMvpPresenter onCreatePresenter() {
+        return null;
     }
 }

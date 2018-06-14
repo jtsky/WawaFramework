@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.component.DuibaMvpPresenter;
 import com.duiba.component_base.component.main.path.MainRouterPath;
 import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
 import com.duiba.component_base.widget.WawaSeekBar;
@@ -188,9 +189,9 @@ public class AnimActivity extends BaseActivity {
         return false;
     }
 
-    @NonNull
+
     @Override
-    public MvpPresenter createPresenter() {
-        return new MvpBasePresenter();
+    public DuibaMvpPresenter onCreatePresenter() {
+        return null;
     }
 }

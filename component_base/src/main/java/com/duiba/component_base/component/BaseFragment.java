@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
+
 import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
@@ -54,7 +55,7 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     /**
      * 基础的viewModel
      */
-    protected Model mViewModel;
+    private Model mViewModel;
 
     private Unbinder mUnbinder;
 
@@ -166,11 +167,28 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     }
 
     /**
-     * 初始化并订阅ViewModel
+     * 订阅viewModel
      */
-    public void subscribeViewModel() {
-
+    private void subscribeViewModel() {
+        mViewModel = createViewModel();
+        if (mViewModel != null) {
+            performSubscribe(mViewModel);
+        }
     }
+
+    /**
+     * 抽象方法 创建ViewModel
+     *
+     * @return Model
+     */
+    protected abstract Model createViewModel();
+
+    /**
+     * 执行ViewModel订阅
+     *
+     * @param viewModel
+     */
+    protected abstract void performSubscribe(Model viewModel);
 
     /**
      * 抽象方法 是否采用mvp模式
@@ -285,6 +303,7 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
 
     /**
      * 不建议重写此方法  只需要重写onCreatePresenter即刻
+     *
      * @return P
      */
     @Deprecated
@@ -292,7 +311,7 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     public P createPresenter() {
         P presenter = onCreatePresenter();
-        if(presenter == null){
+        if (presenter == null) {
             return null;
         }
         getLifecycle().addObserver(presenter);
@@ -302,9 +321,10 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
 
     /**
      * 返回自定义的Presenter
+     *
      * @return P
      */
-    public abstract  P onCreatePresenter();
+    public abstract P onCreatePresenter();
 
     private final BehaviorSubject<Lifecycle.State> lifecycleSubject = BehaviorSubject.create();
 

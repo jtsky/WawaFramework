@@ -15,9 +15,6 @@
 package com.duiba.component_base.lifecycle;
 
 import org.reactivestreams.Publisher;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
@@ -40,7 +37,6 @@ import static com.duiba.component_base.lifecycle.Preconditions.checkNotNull;
 /**
  * Transformer that continues a subscription until a second Observable emits an event.
  */
-@ParametersAreNonnullByDefault
 public final class LifecycleTransformer<T> implements ObservableTransformer<T, T>,
         FlowableTransformer<T, T>,
         SingleTransformer<T, T>,

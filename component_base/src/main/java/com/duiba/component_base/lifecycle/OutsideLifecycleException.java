@@ -14,7 +14,8 @@
 
 package com.duiba.component_base.lifecycle;
 
-import javax.annotation.Nullable;
+
+import android.support.annotation.Nullable;
 
 /**
  * This is an exception that can be thrown to indicate that the caller has attempted to bind to a lifecycle outside

@@ -42,7 +42,7 @@ public class HomePresenter extends DuibaMvpPresenter<UserViewModel, HomeView> {
         //延迟3s请求接口
         Observable.timer(3, TimeUnit.SECONDS)
                 .flatMap(aLong ->
-                        UserRESTApiImpl.getData("Android",null)
+                        UserRESTApiImpl.getData("Android", null)
                                 .compose(bindUntilEvent(Lifecycle.State.DESTROYED)))
                 .subscribe(response -> {
                     GankBean bean = response.getData().get(0);

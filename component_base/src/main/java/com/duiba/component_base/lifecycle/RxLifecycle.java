@@ -1,9 +1,10 @@
 package com.duiba.component_base.lifecycle;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 
+
+import android.support.annotation.NonNull;
 import io.reactivex.Observable;
+import io.reactivex.annotations.CheckReturnValue;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -33,10 +34,10 @@ public class RxLifecycle {
      * @param event the event which should conclude notifications from the source
      * @return a reusable {@link LifecycleTransformer} that unsubscribes the source at the specified event
      */
-    @Nonnull
+    @NonNull
     @CheckReturnValue
-    public static <T, R> LifecycleTransformer<T> bindUntilEvent(@Nonnull final Observable<R> lifecycle,
-                                                                @Nonnull final R event) {
+    public static <T, R> LifecycleTransformer<T> bindUntilEvent(@NonNull final Observable<R> lifecycle,
+                                                                @NonNull final R event) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(event, "event == null");
         return bind(takeUntilEvent(lifecycle, event));
@@ -61,9 +62,9 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence
      * @return a reusable {@link LifecycleTransformer} that unsubscribes the source whenever the lifecycle emits
      */
-    @Nonnull
+    @NonNull
     @CheckReturnValue
-    public static <T, R> LifecycleTransformer<T> bind(@Nonnull final Observable<R> lifecycle) {
+    public static <T, R> LifecycleTransformer<T> bind(@NonNull final Observable<R> lifecycle) {
         return new LifecycleTransformer<>(lifecycle);
     }
 
@@ -81,10 +82,10 @@ public class RxLifecycle {
      * @param correspondingEvents a function which tells the source when to unsubscribe
      * @return a reusable {@link LifecycleTransformer} that unsubscribes the source during the Fragment lifecycle
      */
-    @Nonnull
+    @NonNull
     @CheckReturnValue
-    public static <T, R> LifecycleTransformer<T> bind(@Nonnull Observable<R> lifecycle,
-                                                      @Nonnull final Function<R, R> correspondingEvents) {
+    public static <T, R> LifecycleTransformer<T> bind(@NonNull Observable<R> lifecycle,
+                                                      @NonNull final Function<R, R> correspondingEvents) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(correspondingEvents, "correspondingEvents == null");
         return bind(takeUntilCorrespondingEvent(lifecycle.share(), correspondingEvents));

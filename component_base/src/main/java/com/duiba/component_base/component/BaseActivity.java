@@ -1,7 +1,9 @@
 package com.duiba.component_base.component;
 
 import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -52,7 +54,8 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     /**
      * 基础的viewModel
      */
-    protected Model mViewModel;
+    private Model mViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,11 +127,25 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     }
 
     /**
-     * 抽象方法 初始化并订阅ViewModel
+     * 订阅viewModel
      */
-    protected void subscribeViewModel() {
-
+    private void subscribeViewModel() {
+        mViewModel = createViewModel();
+        performSubscribe(mViewModel);
     }
+
+    /**
+     * 抽象方法 创建ViewModel
+     *
+     * @return Model
+     */
+    protected abstract Model createViewModel();
+
+    /**
+     * 执行ViewModel订阅
+     * @param viewModel
+     */
+    protected abstract void performSubscribe(Model viewModel);
 
     /**
      * 抽象方法 是否采用mvp模式
@@ -158,6 +175,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
             receiveEvent(event);
         }
     }
+
 
     /**
      * 不要重写该方法 不设置权限为private的原因是因为 eventBus规定订阅方法必须为public
@@ -292,6 +310,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
 
     /**
      * 不建议重写此方法  只需要重写onCreatePresenter即刻
+     *
      * @return P
      */
     @Deprecated
@@ -299,7 +318,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     public P createPresenter() {
         P presenter = onCreatePresenter();
-        if(presenter == null){
+        if (presenter == null) {
             return null;
         }
         getLifecycle().addObserver(presenter);
@@ -309,9 +328,10 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
 
     /**
      * 返回自定义的Presenter
+     *
      * @return P
      */
-    public abstract  P onCreatePresenter();
+    public abstract P onCreatePresenter();
 
     private final BehaviorSubject<Lifecycle.State> lifecycleSubject = BehaviorSubject.create();
 

@@ -8,6 +8,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.component.DuibaMvpPresenter;
 import com.duiba.component_base.component.share.path.ShareRouterPath;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserResService;
@@ -58,9 +59,9 @@ public class ShareActivity extends BaseActivity {
         return false;
     }
 
-    @NonNull
+
     @Override
-    public MvpPresenter createPresenter() {
+    public DuibaMvpPresenter onCreatePresenter() {
         return null;
     }
 }
