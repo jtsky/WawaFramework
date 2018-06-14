@@ -8,9 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application android:allowBackup="false">
-        <activity
-            android:name=".home.view.UserHomeActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".home.view.UserHomeActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.duiba.component_base.component.BaseFragment;
+import com.duiba.component_base.component.BaseFragmentationFragment;
 import com.duiba.component_base.component.DefaultMvpPresenter;
 import com.duiba.component_base.component.DefaultMvpView;
 import com.duiba.component_base.component.DefaultViewModel;
@@ -26,7 +27,7 @@ import butterknife.BindView;
  * @Email: jintai@qccr.com
  * @desc:
  */
-public class UserHomeFragment extends BaseFragment<DefaultViewModel, DefaultMvpView, DefaultMvpPresenter> {
+public class UserHomeFragment extends BaseFragmentationFragment<DefaultViewModel, DefaultMvpView, DefaultMvpPresenter> {
     @BindView(R2.id.btn)
     Button mBtn;
     @BindView(R2.id.tv)

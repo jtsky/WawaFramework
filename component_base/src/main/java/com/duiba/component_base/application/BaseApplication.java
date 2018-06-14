@@ -20,6 +20,8 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import me.yokeyword.fragmentation.Fragmentation;
+import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
 import com.duiba.wsmanager.WsManager;
 import com.duiba.wsmanager.WsManagerFactory;
@@ -56,6 +58,25 @@ public class BaseApplication extends Application {
         initARouterAndLog();
         initWechatLogin();
         initNetworkStatusChangeObservable();
+        initFragmentation();
+    }
+
+    /**
+     * 初始化Fragment管理
+     */
+    private void initFragmentation() {
+        // 建议在Application里初始化
+        Fragmentation.builder()
+                // 显示悬浮球 ; 其他Mode:SHAKE: 摇一摇唤出   NONE：隐藏
+                .stackViewMode(Fragmentation.BUBBLE)
+                .debug(BuildConfig.DEBUG)
+                .handleException(new ExceptionHandler() {
+                    @Override
+                    public void onException(@NonNull Exception e) {
+                        Logger.e(e.getMessage());
+                    }
+                })
+                .install();
     }
 
     private void initARouterAndLog() {

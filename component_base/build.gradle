@@ -104,8 +104,10 @@ dependencies {
     api(rootProject.ext.dependencies["rxbinding"]) {
         exclude group: 'io.reactivex.rxjava2', module: '*'
     }
-
     api rootProject.ext.dependencies["rxpermissions"]
+
+    //fragment管理
+    api rootProject.ext.dependencies["fragmentation"]
 
     implementation rootProject.ext.dependencies["umeng-analytics"]
 

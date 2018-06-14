@@ -1,6 +1,7 @@
 package com.duiba.component_user.home.view;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,8 +14,8 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.duiba.component_base.component.BaseActivity;
+import com.duiba.component_base.component.BaseFragmentationActivity;
 import com.duiba.component_base.component.user.path.UserRouterPath;
-import com.duiba.component_base.util.WindowUtils;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
 import com.duiba.component_user.home.listener.HomeView;
@@ -35,7 +36,7 @@ import okio.ByteString;
  * @desc:用户测试主页
  */
 @Route(path = UserRouterPath.USER_ACTIVITY_HOME)
-public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, HomePresenter> implements HomeView {
+public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, HomeView, HomePresenter> implements HomeView {
 
     @BindView(R2.id.tv)
     TextView mTv;
@@ -50,10 +51,11 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_home);
         ButterKnife.bind(this);
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fl, new UserHomeFragment());
-        transaction.commit();
+//        FragmentManager manager = getSupportFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.replace(R.id.fl, new UserHomeFragment());
+//        transaction.commit();
+        loadRootFragment(R.id.fl, new UserHomeFragment());
         RxView.clicks(mBtn).subscribe(aVoid -> {
             getPresenter().login();
         });
@@ -64,6 +66,7 @@ public class UserHomeActivity extends BaseActivity<UserViewModel, HomeView, Home
     protected UserViewModel createViewModel() {
         return ViewModelProviders.of(this).get(UserViewModel.class);
     }
+
 
     @Override
     protected void performSubscribe(UserViewModel viewModel) {
