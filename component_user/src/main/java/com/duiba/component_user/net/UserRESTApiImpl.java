@@ -25,7 +25,7 @@ public class UserRESTApiImpl {
     public static Observable<TestCommResponse<List<GankBean>>> getData(String type, ProgressDialog progressDialog) {
         return api.getData(type)
                 .compose(new RxResponTransform(progressDialog))
-                .compose(new RxCommResultArrayTransform<>(GankBean.class));
+                .compose(new RxCommResultArrayTransform<GankBean>(GankBean.class));
     }
 
     public static Observable<TestCommResponse<List<GankBean>>> test(ProgressDialog progressDialog) {

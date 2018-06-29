@@ -1,10 +1,9 @@
 package com.duiba.component_base.component;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import android.support.annotation.CheckResult;
@@ -51,6 +50,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         return mViewModel;
     }
 
+    private LifecycleRegistry mLifecycleRegistry;
     /**
      * 基础的viewModel
      */
@@ -61,10 +61,10 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //竖向
-        int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        if (getRequestedOrientation() != orientation) {
-            setRequestedOrientation(orientation);
-        }
+//        int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+//        if (getRequestedOrientation() != orientation) {
+//            setRequestedOrientation(orientation);
+//        }
         //NO_TITLE
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //输出当前activity
@@ -91,7 +91,13 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
             createWSStatusListener();
             initWebSocket();
         }
-        //发送生命周期时间
+
+        //发送生命周期
+        mLifecycleRegistry = (LifecycleRegistry) getLifecycle();
+        //订阅presenter
+        getLifecycle().addObserver(getPresenter());
+
+        mLifecycleRegistry.markState(Lifecycle.State.CREATED);
         lifecycleSubject.onNext(Lifecycle.State.CREATED);
     }
 
@@ -131,7 +137,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
      */
     private void subscribeViewModel() {
         mViewModel = createViewModel();
-        performSubscribe(mViewModel);
+        performViewModelSubscribe(mViewModel);
     }
 
     /**
@@ -143,9 +149,10 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
 
     /**
      * 执行ViewModel订阅
+     *
      * @param viewModel
      */
-    protected abstract void performSubscribe(Model viewModel);
+    protected abstract void performViewModelSubscribe(Model viewModel);
 
     /**
      * 抽象方法 是否采用mvp模式
@@ -153,6 +160,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
      * @return true or false
      */
     protected abstract boolean isMVP();
+
 
 
     /**
@@ -282,6 +290,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         MobclickAgent.onResume(this);
         mRootView = findViewById(android.R.id.content);
         //发送生命周期时间
+        mLifecycleRegistry.markState(Lifecycle.State.RESUMED);
         lifecycleSubject.onNext(Lifecycle.State.RESUMED);
     }
 
@@ -304,6 +313,7 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
             EventBusUtil.unRegister(this);
         }
         //发送生命周期时间
+        mLifecycleRegistry.markState(Lifecycle.State.DESTROYED);
         lifecycleSubject.onNext(Lifecycle.State.DESTROYED);
     }
 

@@ -20,10 +20,10 @@ import io.reactivex.ObservableTransformer;
 
 
 /**
- * @desc data 为JsonArray时的转换器
  * @param <R>
+ * @desc data 为JsonArray时的转换器
  */
-public class RxCommResultArrayTransform<R> implements ObservableTransformer<JSONObject, TestCommResponse<R>> {
+public class RxCommResultArrayTransform<R> implements ObservableTransformer<JSONObject, TestCommResponse<List<R>>> {
     Class mClazz;
 
     public RxCommResultArrayTransform(Class clazz) {
@@ -32,7 +32,7 @@ public class RxCommResultArrayTransform<R> implements ObservableTransformer<JSON
 
     @SuppressLint("CheckResult")
     @Override
-    public ObservableSource<TestCommResponse<R>> apply(Observable<JSONObject> oldObservable) {
+    public ObservableSource<TestCommResponse<List<R>>> apply(Observable<JSONObject> oldObservable) {
         return oldObservable
                 .map(result -> {
                     Type type = TypeBuilder
@@ -42,7 +42,7 @@ public class RxCommResultArrayTransform<R> implements ObservableTransformer<JSON
                             .endSubType()
                             .build();
 
-                    TestCommResponse<R> commonResult = null;
+                    TestCommResponse<List<R>> commonResult = null;
                     if (result != null) {
                         try {
                             commonResult = new Gson().fromJson(result.toString(), type);

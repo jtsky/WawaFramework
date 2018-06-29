@@ -1,5 +1,6 @@
 package com.duiba.component_user.home.view;
 
+import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
@@ -18,6 +19,7 @@ import com.duiba.component_base.component.BaseFragmentationActivity;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
+import com.duiba.component_user.bean.GankBean;
 import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
 import com.duiba.component_user.home.presenter.HomePresenter;
@@ -51,11 +53,12 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_home);
         ButterKnife.bind(this);
-//        FragmentManager manager = getSupportFragmentManager();
-//        FragmentTransaction transaction = manager.beginTransaction();
-//        transaction.replace(R.id.fl, new UserHomeFragment());
-//        transaction.commit();
-        loadRootFragment(R.id.fl, new UserHomeFragment());
+
+        if (findFragment(UserHomeFragment.class) == null) {
+            // 加载根Fragment
+            loadRootFragment(R.id.fl, new UserHomeFragment());
+        }
+
         RxView.clicks(mBtn).subscribe(aVoid -> {
             getPresenter().login();
         });
@@ -69,9 +72,12 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
 
 
     @Override
-    protected void performSubscribe(UserViewModel viewModel) {
+    protected void performViewModelSubscribe(UserViewModel viewModel) {
         Observer<String> nameObserver = s -> mTv.setText(s);
+        Observer<GankBean> gankObserver = gank -> mTvResponse.setText(gank.toString());
+
         viewModel.getName().observe(this, nameObserver);
+        viewModel.getGankBean().observe(this, gankObserver);
     }
 
     @Override
@@ -90,11 +96,6 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
     @Override
     public void print() {
         Toast.makeText(this, "点击", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void setResponse(String response) {
-        mTvResponse.setText(response);
     }
 
 

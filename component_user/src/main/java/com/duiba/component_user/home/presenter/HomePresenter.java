@@ -46,7 +46,10 @@ public class HomePresenter extends DuibaMvpPresenter<UserViewModel, HomeView> {
                                 .compose(bindUntilEvent(Lifecycle.State.DESTROYED)))
                 .subscribe(response -> {
                     GankBean bean = response.getData().get(0);
-                    getView().setResponse(bean.toString());
+
+                    ifViewModelAttached(viewModel -> {
+                        viewModel.getGankBean().setValue(bean);
+                    });
                 }, e -> e.printStackTrace());
 
     }
