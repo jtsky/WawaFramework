@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Jin on 2016/3/9.
  */
 public class RxResponTransform implements ObservableTransformer<String, JSONObject> {
+    private static final String TAG = "HTTP_RESPONSE";
     private ProgressDialog mProgressDialog;
 
     public RxResponTransform(ProgressDialog myProgressDialog) {
@@ -48,32 +49,39 @@ public class RxResponTransform implements ObservableTransformer<String, JSONObje
                 .doOnNext(responsObject -> {
                     if (BuildConfig.DEBUG) {
                         //日志输出
-                        Logger.i("===================================response json===================================");
-                        Logger.json(responsObject.toString());
-                        Logger.i("===================================response String===================================");
-                        Logger.i(responsObject.toString());
+                        Logger.t(TAG).i("===================================response json===================================");
+                        Logger.t(TAG).json(responsObject.toString());
+                        Logger.t(TAG).i("===================================response String===================================");
+                        Logger.t(TAG).i(responsObject.toString());
                     }
 
                     //隐藏进度条
-                    if (mProgressDialog != null && mProgressDialog.isShowing())
+                    if (mProgressDialog != null && mProgressDialog.isShowing()) {
                         mProgressDialog.dismiss();
+                    }
 
                 })
                 .doOnSubscribe(value -> {
-                    if (mProgressDialog != null)
+                    if (mProgressDialog != null) {
                         mProgressDialog.show();
+                    }
                 })
                 .doOnError(e -> {
-                    if (mProgressDialog != null && mProgressDialog.isShowing())
+                    if (mProgressDialog != null && mProgressDialog.isShowing()) {
                         mProgressDialog.dismiss();
+                    }
 
-                    if (mProgressDialog != null && e instanceof UnknownHostException)
+                    if (mProgressDialog != null && e instanceof UnknownHostException) {
                         Toast.makeText(mProgressDialog.getContext(), "请检查网络是否连接", Toast.LENGTH_SHORT).show();
-                    Logger.e(e.getMessage());
+                    }
+                    if (BuildConfig.DEBUG) {
+                        Logger.e(e.getMessage());
+                    }
                 })
                 .doOnComplete(() -> {
-                    if (mProgressDialog != null && mProgressDialog.isShowing())
+                    if (mProgressDialog != null && mProgressDialog.isShowing()) {
                         mProgressDialog.dismiss();
+                    }
                 }).doFinally(() -> {
                     if (BuildConfig.DEBUG) {
                         //Logger.v("============doFinally============");
