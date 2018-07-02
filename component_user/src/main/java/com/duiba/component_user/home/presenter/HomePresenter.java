@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModel;
 
+import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.component.DuibaMvpPresenter;
 import com.duiba.component_base.component.DuibaMvpView;
+import com.duiba.component_base.vm.GlobalViewModel;
 import com.duiba.component_user.bean.GankBean;
 import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
@@ -36,8 +38,10 @@ public class HomePresenter extends DuibaMvpPresenter<UserViewModel, HomeView> {
 
         //获取viewModel一定要这样调用
         ifViewModelAttached(viewModel -> {
-            viewModel.getName().setValue("来自Activity的更新");
+            //viewModel.getName().setValue("来自Activity的更新");
         });
+        GlobalViewModel globalViewModel = (GlobalViewModel) BaseApplication.getApplication().getGlobalViewModel(GlobalViewModel.class.getSimpleName());
+        globalViewModel.getValue().setValue("来自Activity的更新");
 
         //延迟3s请求接口
         Observable.timer(3, TimeUnit.SECONDS)

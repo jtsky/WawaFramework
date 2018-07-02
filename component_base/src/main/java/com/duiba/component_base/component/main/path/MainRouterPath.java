@@ -35,6 +35,8 @@ public class MainRouterPath {
 
     public static final String MAIN_ACTIVITY_OTHER = MAIN_ROOT + "other_activity";
 
+    public static final String MAIN_ACTIVITY_WEBP = MAIN_ROOT + "webp_activity";
+
     /**
      * 用户组件资源服务
      */

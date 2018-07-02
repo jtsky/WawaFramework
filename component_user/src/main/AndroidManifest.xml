@@ -9,6 +9,7 @@
 
     <application android:allowBackup="false">
         <activity android:name=".home.view.UserHomeActivity" />
+        <activity android:name=".home.view.UserOtherActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"

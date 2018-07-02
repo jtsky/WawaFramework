@@ -58,6 +58,7 @@ public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> 
         ifViewModelAttached(false, action);
     }
 
+
     @Deprecated
     protected final void ifViewModelAttached(boolean exceptionIfViewNotAttached, ViewModelAction<Model> action) {
         ifViewAttached(view -> {

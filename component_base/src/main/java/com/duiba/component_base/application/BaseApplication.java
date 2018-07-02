@@ -1,6 +1,9 @@
 package com.duiba.component_base.application;
 
 import android.app.Application;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelStore;
+import android.arch.lifecycle.ViewModelStoreOwner;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
@@ -10,6 +13,8 @@ import com.blankj.utilcode.util.Utils;
 import com.duiba.component_base.BuildConfig;
 import com.duiba.component_base.StethoUtil;
 import com.duiba.component_base.config.AppDefine;
+import com.duiba.component_base.util.GlobalViewModelProviders;
+import com.duiba.component_base.vm.GlobalViewModel;
 import com.duiba.library_network.util.ApplicationUtil;
 import com.duiba.rxnetwork.RxNetwork;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -28,6 +33,8 @@ import com.duiba.wsmanager.WsManagerFactory;
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author: jintai
@@ -35,7 +42,7 @@ import java.io.IOException;
  * @Email: jintai@duiba.com.cn
  * @desc:BaseApplication
  */
-public class BaseApplication extends Application {
+public class BaseApplication extends Application implements ViewModelStoreOwner {
     /**
      * 微信api
      */
@@ -43,6 +50,24 @@ public class BaseApplication extends Application {
     private static BaseApplication application;
     private static final String TAG = "BaseApplication";
     Disposable mNetWorkChangeDisposable;
+    Map<String, ViewModel> mViewModelMap = new HashMap<>();
+    /**
+     * Application ViewModelStore
+     */
+    private ViewModelStore mViewModelStore;
+
+    @Override
+    @NonNull
+    public ViewModelStore getViewModelStore() {
+        if (mViewModelStore == null) {
+            mViewModelStore = new ViewModelStore();
+        }
+        return mViewModelStore;
+    }
+
+    private void initGlobalVewModel() {
+        mViewModelMap.put(GlobalViewModel.class.getSimpleName(), GlobalViewModelProviders.of(this).get(GlobalViewModel.class));
+    }
 
     @Override
     public void onCreate() {
@@ -59,6 +84,7 @@ public class BaseApplication extends Application {
         initWechatLogin();
         initNetworkStatusChangeObservable();
         initFragmentation();
+        initGlobalVewModel();
     }
 
     /**
@@ -138,5 +164,11 @@ public class BaseApplication extends Application {
         return application;
     }
 
+    public ViewModel getGlobalViewModel(String key) {
+        if (!mViewModelMap.containsKey(key)) {
+            throw new NullPointerException("不存在全局的" + key + "类型的ViewModel");
+        }
+        return mViewModelMap.get(key);
+    }
 
 }

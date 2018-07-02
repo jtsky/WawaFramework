@@ -1,6 +1,7 @@
 package com.duiba.component_main.activity;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -87,7 +88,8 @@ public class MainActivity extends BaseActivity {
     Button mBtnLottie;
     @BindView(R2.id.btn_transition)
     Button mBtnTransition;
-
+    @BindView(R2.id.btn_webp)
+    Button mBtnWebp;
     /**
      * 倒计时Disposable
      */
@@ -184,6 +186,10 @@ public class MainActivity extends BaseActivity {
         RxView.clicks(mBtnLottie).subscribe(aVoid -> {
             ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_LOTTIE).navigation();
         });
+        RxView.clicks(mBtnWebp).subscribe(aVoid -> {
+            ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_WEBP).navigation();
+        });
+
         RxView.clicks(mBtnTransition).subscribe(aVoid -> {
             // ARouter.getInstance().build(MainRouterPath.MAIN_ACTIVITY_LOTTIE).navigation();
             //animatedStartActivity();
@@ -221,6 +227,16 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected ViewModel createViewModel() {
+        return null;
+    }
+
+    @Override
+    protected void performViewModelSubscribe(ViewModel viewModel) {
+
     }
 
 

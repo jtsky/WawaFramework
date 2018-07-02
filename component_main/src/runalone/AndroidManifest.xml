@@ -23,6 +23,7 @@
         <activity android:name=".AnimActivity" />
         <activity android:name=".IOActivity" />
         <activity android:name=".LottieActivity" />
+        <activity android:name=".WebpActivity" />
         <activity android:name=".TransitionActivity"
             android:label="TransitionActivity"
             />

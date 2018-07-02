@@ -1,9 +1,9 @@
 package com.duiba.component_base.component;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModel;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import android.support.annotation.CheckResult;
@@ -61,10 +61,13 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //竖向
-//        int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-//        if (getRequestedOrientation() != orientation) {
-//            setRequestedOrientation(orientation);
-//        }
+        if (isLockedPortrait()) {
+            int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            if (getRequestedOrientation() != orientation) {
+                setRequestedOrientation(orientation);
+            }
+        }
+
         //NO_TITLE
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //输出当前activity
@@ -116,6 +119,15 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         wsManager.startConnect();
     }
 
+    /**
+     * 是否竖屏锁定
+     *
+     * @return
+     */
+    public boolean isLockedPortrait() {
+        return false;
+    }
+
 
     /**
      * 是否启用webSocket并自动打开webSocket 默认返回false
@@ -140,6 +152,8 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         performViewModelSubscribe(mViewModel);
     }
 
+
+
     /**
      * 抽象方法 创建ViewModel
      *
@@ -160,7 +174,6 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
      * @return true or false
      */
     protected abstract boolean isMVP();
-
 
 
     /**

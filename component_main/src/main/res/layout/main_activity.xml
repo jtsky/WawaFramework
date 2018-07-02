@@ -78,6 +78,13 @@
             android:text="Activity切换" />
 
         <Button
+            android:id="@+id/btn_webp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:filterTouchesWhenObscured="true"
+            android:text="webp" />
+
+        <Button
             android:id="@+id/btn_countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.duiba.component_main;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModel;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -107,6 +108,16 @@ public class AnimActivity extends BaseActivity {
             mWawaScore.setProgressWithAnim(mWawaScore.getProgress() + 10);
         });
 
+
+    }
+
+    @Override
+    protected ViewModel createViewModel() {
+        return null;
+    }
+
+    @Override
+    protected void performViewModelSubscribe(ViewModel viewModel) {
 
     }
 

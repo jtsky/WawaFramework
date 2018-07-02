@@ -1,6 +1,7 @@
 package com.duiba.component_main;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -78,6 +79,16 @@ public class LottieActivity extends BaseActivity {
 
             }
         });
+
+    }
+
+    @Override
+    protected ViewModel createViewModel() {
+        return null;
+    }
+
+    @Override
+    protected void performViewModelSubscribe(ViewModel viewModel) {
 
     }
 

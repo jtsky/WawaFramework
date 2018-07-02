@@ -1,22 +1,20 @@
 package com.duiba.component_user.home.view;
 
-import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.duiba.component_base.component.BaseActivity;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.component.BaseFragmentationActivity;
 import com.duiba.component_base.component.user.path.UserRouterPath;
+import com.duiba.component_base.vm.GlobalViewModel;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
 import com.duiba.component_user.bean.GankBean;
@@ -44,6 +42,8 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
     TextView mTv;
     @BindView(R2.id.btn)
     Button mBtn;
+    @BindView(R2.id.btn1)
+    Button mBtn1;
     @BindView(R2.id.tv_response)
     TextView mTvResponse;
 
@@ -62,12 +62,18 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
         RxView.clicks(mBtn).subscribe(aVoid -> {
             getPresenter().login();
         });
+
+        RxView.clicks(mBtn1).subscribe(aVoid -> {
+            ARouter.getInstance().build(UserRouterPath.USER_ACTIVITY_OTHER).navigation();
+            //finish();
+        });
     }
 
 
     @Override
     protected UserViewModel createViewModel() {
         return ViewModelProviders.of(this).get(UserViewModel.class);
+        //ViewModelUtil.put(UserViewModel.class.getSimpleName(), viewModel);
     }
 
 
@@ -76,7 +82,10 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
         Observer<String> nameObserver = s -> mTv.setText(s);
         Observer<GankBean> gankObserver = gank -> mTvResponse.setText(gank.toString());
 
-        viewModel.getName().observe(this, nameObserver);
+        //viewModel.getValue().observe(this, nameObserver);
+        GlobalViewModel globalViewModel = (GlobalViewModel) BaseApplication.getApplication().getGlobalViewModel(GlobalViewModel.class.getSimpleName());
+        globalViewModel.getValue().observe(this, nameObserver);
+
         viewModel.getGankBean().observe(this, gankObserver);
     }
 

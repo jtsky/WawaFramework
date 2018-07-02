@@ -1,6 +1,7 @@
 package com.duiba.component_main;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModel;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,6 +67,16 @@ public class IOActivity extends BaseActivity {
 
         });
 
+
+    }
+
+    @Override
+    protected ViewModel createViewModel() {
+        return null;
+    }
+
+    @Override
+    protected void performViewModelSubscribe(ViewModel viewModel) {
 
     }
 
