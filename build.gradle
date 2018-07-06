@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath BUILD_VERSION_V31
+        classpath BUILD_VERSION_V32
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         //butterknife 8.8.1还不支持AS3.0
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'

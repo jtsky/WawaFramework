@@ -83,7 +83,7 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
         Observer<GankBean> gankObserver = gank -> mTvResponse.setText(gank.toString());
 
         //viewModel.getValue().observe(this, nameObserver);
-        GlobalViewModel globalViewModel = (GlobalViewModel) BaseApplication.getApplication().getGlobalViewModel(GlobalViewModel.class.getSimpleName());
+        GlobalViewModel globalViewModel = (GlobalViewModel) getGlobalViewModel(GlobalViewModel.class.getSimpleName());
         globalViewModel.getValue().observe(this, nameObserver);
 
         viewModel.getGankBean().observe(this, gankObserver);
@@ -173,6 +173,7 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
             public void onNetOpen() {
                 super.onNetOpen();
                 Log.d(TAG, "WsManager-----onNetOpen");
+                showSnackBar("网络已连接", R.color.base_common_white, R.color.base_common_red);
             }
 
         };

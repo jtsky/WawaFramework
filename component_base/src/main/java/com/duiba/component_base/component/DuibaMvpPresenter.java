@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
+import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.component.BaseActivity;
 import com.duiba.component_base.lifecycle.LifecycleTransformer;
 import com.duiba.component_base.lifecycle.RxLifecycle;
@@ -89,6 +90,15 @@ public class DuibaMvpPresenter<Model extends ViewModel, V extends DuibaMvpView> 
         lifecycleSubject.onNext(Lifecycle.State.DESTROYED);
     }
 
+    /**
+     * 获取全局的ViewModel
+     *
+     * @param key
+     * @return
+     */
+    public ViewModel getGlobalViewModel(String key) {
+        return BaseApplication.getApplication().getGlobalViewModel(key);
+    }
 
     private final BehaviorSubject<Lifecycle.State> lifecycleSubject = BehaviorSubject.create();
 

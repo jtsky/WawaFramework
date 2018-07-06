@@ -2,7 +2,6 @@ package com.duiba.component_main.activity;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModel;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.component.user.rpc.IUserFunService;
 import com.duiba.component_base.component.user.rpc.IUserResService;
 import com.duiba.component_base.interfaces.OnWawaSeekBarChangeListener;
-import com.duiba.component_base.util.ActivitySwitcher;
 import com.duiba.component_base.widget.WawaSeekBar;
 import com.duiba.component_main.R;
 import com.duiba.component_main.R2;
@@ -248,8 +246,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        ActivitySwitcher.animationIn(findViewById(R.id.container),
-                getWindowManager());
+
         super.onResume();
     }
 

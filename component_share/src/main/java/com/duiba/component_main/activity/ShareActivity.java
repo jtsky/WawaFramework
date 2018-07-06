@@ -1,5 +1,6 @@
 package com.duiba.component_main.activity;
 
+import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
@@ -52,6 +53,15 @@ public class ShareActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected ViewModel createViewModel() {
+        return null;
+    }
+
+    @Override
+    protected void performViewModelSubscribe(ViewModel viewModel) {
+
+    }
 
 
     @Override

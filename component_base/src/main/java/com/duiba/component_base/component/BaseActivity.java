@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.androidadvance.topsnackbar.TSnackbar;
 import com.duiba.component_base.BuildConfig;
+import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.lifecycle.LifecycleTransformer;
 import com.duiba.component_base.lifecycle.RxLifecycle;
 import com.duiba.component_base.util.EventBusUtil;
@@ -104,6 +105,10 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         lifecycleSubject.onNext(Lifecycle.State.CREATED);
     }
 
+    public ViewModel getGlobalViewModel(String key) {
+        return BaseApplication.getApplication().getGlobalViewModel(key);
+    }
+
     /**
      * 初始化WebSocket
      */
@@ -151,7 +156,6 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
         mViewModel = createViewModel();
         performViewModelSubscribe(mViewModel);
     }
-
 
 
     /**

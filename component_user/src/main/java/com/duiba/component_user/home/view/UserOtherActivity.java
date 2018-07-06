@@ -4,21 +4,17 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.component.BaseFragmentationActivity;
 import com.duiba.component_base.component.user.path.UserRouterPath;
-import com.duiba.component_base.util.ViewModelUtil;
 import com.duiba.component_base.vm.GlobalViewModel;
 import com.duiba.component_user.R;
 import com.duiba.component_user.R2;
-import com.duiba.component_user.bean.GankBean;
 import com.duiba.component_user.home.listener.HomeView;
 import com.duiba.component_user.home.model.UserViewModel;
 import com.duiba.component_user.home.presenter.HomePresenter;
@@ -54,7 +50,7 @@ public class UserOtherActivity extends BaseFragmentationActivity<UserViewModel, 
 
         RxView.clicks(mBtn).subscribe(aVoid -> {
             // getViewModel().getName().setValue("我来自UserOtherActivity");
-            GlobalViewModel globalViewModel = (GlobalViewModel) BaseApplication.getApplication().getGlobalViewModel(GlobalViewModel.class.getSimpleName());
+            GlobalViewModel globalViewModel = (GlobalViewModel) getGlobalViewModel(GlobalViewModel.class.getSimpleName());
             globalViewModel.getValue().setValue("我来自UserOtherActivity");
         });
     }
@@ -70,7 +66,7 @@ public class UserOtherActivity extends BaseFragmentationActivity<UserViewModel, 
     protected void performViewModelSubscribe(UserViewModel viewModel) {
 
         Observer<String> nameObserver = s -> mTv.setText(s);
-        GlobalViewModel globalViewModel = (GlobalViewModel) BaseApplication.getApplication().getGlobalViewModel(GlobalViewModel.class.getSimpleName());
+        GlobalViewModel globalViewModel = (GlobalViewModel) getGlobalViewModel(GlobalViewModel.class.getSimpleName());
         globalViewModel.getValue().observe(this, nameObserver);
         //viewModel.getName().observe(this, nameObserver);
     }
@@ -99,8 +95,69 @@ public class UserOtherActivity extends BaseFragmentationActivity<UserViewModel, 
      */
     @Override
     public boolean isOpenWebSocket() {
-        return false;
+        return true;
     }
 
+    @Override
+    public void createWSStatusListener() {
+        super.createWSStatusListener();
+        mWsAbstractStatusListener = new AbstractWsStatusListener() {
+            @Override
+            public void onOpen(Response response) {
+                super.onOpen(response);
+                Log.d(TAG, "WsManager-----onOpen");
+            }
 
+            @Override
+            public void onMessage(String text) {
+                super.onMessage(text);
+                Log.d(TAG, "WsManager-----onMessage");
+            }
+
+            @Override
+            public void onMessage(ByteString bytes) {
+                super.onMessage(bytes);
+                Log.d(TAG, "WsManager-----onMessage");
+            }
+
+            @Override
+            public void onReconnect() {
+                super.onReconnect();
+                Log.d(TAG, "WsManager-----onReconnect");
+            }
+
+            @Override
+            public void onClosing(int code, String reason) {
+                super.onClosing(code, reason);
+                Log.d(TAG, "WsManager-----onClosing");
+            }
+
+            @Override
+            public void onClosed(int code, String reason) {
+                super.onClosed(code, reason);
+                Log.d(TAG, "WsManager-----onClosed");
+            }
+
+            @Override
+            public void onFailure(Throwable t, Response response) {
+                super.onFailure(t, response);
+                Log.d(TAG, "WsManager-----onFailure");
+            }
+
+            @Override
+            public void onNetClosed() {
+                super.onNetClosed();
+                Log.d(TAG, "WsManager-----onNetClosed");
+                showSnackBar("网络已断开", R.color.base_common_white, R.color.base_common_red);
+            }
+
+            @Override
+            public void onNetOpen() {
+                super.onNetOpen();
+                Log.d(TAG, "WsManager-----onNetOpen");
+                showSnackBar("网络已连接", R.color.base_common_white, R.color.base_common_red);
+            }
+
+        };
+    }
 }

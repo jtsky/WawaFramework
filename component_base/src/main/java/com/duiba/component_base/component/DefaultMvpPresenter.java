@@ -8,6 +8,6 @@ import android.arch.lifecycle.LifecycleObserver;
  * @Email: jintai@qccr.com
  * @desc: 不建议被继承 如有需要请继承DuibaMvpPresenter
  */
-public class DefaultMvpPresenter extends DuibaMvpPresenter<DefaultViewModel, DefaultMvpView> implements LifecycleObserver {
+public class DefaultMvpPresenter extends DuibaMvpPresenter<DefaultViewModel, DefaultMvpView>{
 
 }

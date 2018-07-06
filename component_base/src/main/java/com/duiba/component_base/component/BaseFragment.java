@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.duiba.component_base.BuildConfig;
+import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.lifecycle.LifecycleTransformer;
 import com.duiba.component_base.lifecycle.RxLifecycle;
 import com.duiba.component_base.util.EventBusUtil;
@@ -164,6 +165,10 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
      */
     public void createWSStatusListener() {
 
+    }
+
+    public ViewModel getGlobalViewModel(String key) {
+        return BaseApplication.getApplication().getGlobalViewModel(key);
     }
 
     /**
