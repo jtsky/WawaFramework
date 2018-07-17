@@ -4,11 +4,9 @@ import com.duiba.library_network.bean.TestCommResponse;
 import com.duiba.library_network.bean.NetCode;
 
 import io.reactivex.functions.Consumer;
-
 /**
  * Created by wlw-97 on 2016/11/3.
  */
-
 public abstract class WebSuccessAction<T> implements Consumer<TestCommResponse<T>> {
 
 

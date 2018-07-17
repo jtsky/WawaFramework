@@ -22,8 +22,6 @@ public class Json2BeanFunc<O> implements Function<Object, Observable<TestCommRes
     @Override
     public Observable<TestCommResponse<O>> apply(Object result) throws Exception {
 
-        Thread.sleep(5000);
-
         if (result != null) {
             return Observable.just(GsonUtil.json2Object(result.toString(), mClass));
         }

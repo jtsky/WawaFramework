@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,6 +20,7 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+
 import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 /**
@@ -36,15 +39,18 @@ public class WsManager implements IWsManager {
     private int mCurrentStatus = WsStatus.DISCONNECTED;     //websocket连接状态
     private boolean isNeedReconnect;          //是否需要断线自动重连
     private boolean isManualClose = false;         //是否为手动关闭websocket连接
-    private AbstractWsStatusListener mWsStatusListener;
+    //持有所有的AbstractWsStatusListener
+    private List<AbstractWsStatusListener> mWsStatusListeners;
     private Lock mLock;
     private Handler wsMainHandler = new Handler(Looper.getMainLooper());
     private int reconnectCount = 0;   //重连次数
     private Runnable reconnectRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mWsStatusListener != null) {
-                mWsStatusListener.onReconnect();
+            if (mWsStatusListeners != null) {
+                for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                    wsStatusListener.onReconnect();
+                }
             }
             buildConnect();
         }
@@ -56,80 +62,102 @@ public class WsManager implements IWsManager {
             mWebSocket = webSocket;
             setCurrentStatus(WsStatus.CONNECTED);
             connected();
-            if (mWsStatusListener != null) {
+
+            if (mWsStatusListeners != null) {
                 if (Looper.myLooper() != Looper.getMainLooper()) {
                     wsMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mWsStatusListener.onOpen(response);
+                            for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                                wsStatusListener.onOpen(response);
+                            }
                         }
                     });
                 } else {
-                    mWsStatusListener.onOpen(response);
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onOpen(response);
+                    }
                 }
             }
+
         }
 
         @Override
         public void onMessage(WebSocket webSocket, final ByteString bytes) {
-            if (mWsStatusListener != null) {
+            if (mWsStatusListeners != null) {
                 if (Looper.myLooper() != Looper.getMainLooper()) {
                     wsMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mWsStatusListener.onMessage(bytes);
+                            for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                                wsStatusListener.onMessage(bytes);
+                            }
                         }
                     });
                 } else {
-                    mWsStatusListener.onMessage(bytes);
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onMessage(bytes);
+                    }
                 }
             }
         }
 
         @Override
         public void onMessage(WebSocket webSocket, final String text) {
-            if (mWsStatusListener != null) {
+            if (mWsStatusListeners != null) {
                 if (Looper.myLooper() != Looper.getMainLooper()) {
                     wsMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mWsStatusListener.onMessage(text);
+                            for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                                wsStatusListener.onMessage(text);
+                            }
                         }
                     });
                 } else {
-                    mWsStatusListener.onMessage(text);
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onMessage(text);
+                    }
                 }
             }
         }
 
         @Override
         public void onClosing(WebSocket webSocket, final int code, final String reason) {
-            if (mWsStatusListener != null) {
+            if (mWsStatusListeners != null) {
                 if (Looper.myLooper() != Looper.getMainLooper()) {
                     wsMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mWsStatusListener.onClosing(code, reason);
+                            for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                                wsStatusListener.onClosing(code, reason);
+                            }
                         }
                     });
                 } else {
-                    mWsStatusListener.onClosing(code, reason);
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onClosing(code, reason);
+                    }
                 }
             }
         }
 
         @Override
         public void onClosed(WebSocket webSocket, final int code, final String reason) {
-            if (mWsStatusListener != null) {
+            if (mWsStatusListeners != null) {
                 if (Looper.myLooper() != Looper.getMainLooper()) {
                     wsMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mWsStatusListener.onClosed(code, reason);
+                            for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                                wsStatusListener.onClosed(code, reason);
+                            }
                         }
                     });
                 } else {
-                    mWsStatusListener.onClosed(code, reason);
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onClosed(code, reason);
+                    }
                 }
             }
         }
@@ -137,22 +165,27 @@ public class WsManager implements IWsManager {
         @Override
         public void onFailure(WebSocket webSocket, final Throwable t, final Response response) {
             tryReconnect();
-            if (mWsStatusListener != null) {
+            if (mWsStatusListeners != null) {
                 if (Looper.myLooper() != Looper.getMainLooper()) {
                     wsMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mWsStatusListener.onFailure(t, response);
+                            for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                                wsStatusListener.onFailure(t, response);
+                            }
                         }
                     });
                 } else {
-                    mWsStatusListener.onFailure(t, response);
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onFailure(t, response);
+                    }
                 }
             }
         }
     };
 
     public WsManager(Builder builder) {
+        mWsStatusListeners = new ArrayList<>();
         mContext = builder.mContext;
         wsUrl = builder.wsUrl;
         isNeedReconnect = builder.needReconnect;
@@ -189,17 +222,42 @@ public class WsManager implements IWsManager {
     }
 
 
-    public void setWsStatusListener(AbstractWsStatusListener wsStatusListener) {
-        this.mWsStatusListener = wsStatusListener;
+//    public void setWsStatusListener(AbstractWsStatusListener wsStatusListener) {
+//        this.mWsStatusListener = wsStatusListener;
+//    }
+
+    public void addWsStatusListener(AbstractWsStatusListener wsStatusListener) {
+        if (mWsStatusListeners == null) {
+            Toast.makeText(mContext, "mWsStatusListeners 未初始化", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (wsStatusListener == null) {
+            Toast.makeText(mContext, "wsStatusListener 为null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mWsStatusListeners.add(wsStatusListener);
     }
 
+    public void removeWsStatusListener(AbstractWsStatusListener wsStatusListener) {
+        if (mWsStatusListeners == null) {
+            Toast.makeText(mContext, "mWsStatusListeners 未初始化", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (wsStatusListener == null) {
+            Toast.makeText(mContext, "wsStatusListener 为null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mWsStatusListeners.remove(wsStatusListener);
+    }
+
+
     @Nullable
-    public AbstractWsStatusListener getWsStatusListener() {
-        if (mWsStatusListener == null) {
-            Toast.makeText(mContext, "mWsStatusListener == null", Toast.LENGTH_SHORT).show();
+    public List<AbstractWsStatusListener> getWsStatusListeners() {
+        if (mWsStatusListeners == null) {
+            Toast.makeText(mContext, "mWsStatusListeners == null", Toast.LENGTH_SHORT).show();
             return null;
         }
-        return mWsStatusListener;
+        return mWsStatusListeners;
     }
 
 
@@ -269,8 +327,10 @@ public class WsManager implements IWsManager {
             boolean isClosed = mWebSocket.close(WsStatus.CODE.NORMAL_CLOSE, WsStatus.TIP.NORMAL_CLOSE);
             //非正常关闭连接
             if (!isClosed) {
-                if (mWsStatusListener != null) {
-                    mWsStatusListener.onClosed(WsStatus.CODE.ABNORMAL_CLOSE, WsStatus.TIP.ABNORMAL_CLOSE);
+                if (mWsStatusListeners != null) {
+                    for (AbstractWsStatusListener wsStatusListener : mWsStatusListeners) {
+                        wsStatusListener.onClosed(WsStatus.CODE.ABNORMAL_CLOSE, WsStatus.TIP.ABNORMAL_CLOSE);
+                    }
                 }
             }
         }

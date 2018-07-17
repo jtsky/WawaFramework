@@ -126,7 +126,7 @@ public abstract class BaseFragment<Model extends ViewModel, V extends DuibaMvpVi
             throw new NullPointerException("请在子Fragemnt中重写createWSStatusListener方法并为mWsAbstractStatusListener赋值");
         }
         WsManager wsManager = WsManagerFactory.createWsManager(getActivity().getApplicationContext(), WEBSOCKET_URL);
-        wsManager.setWsStatusListener(mWsAbstractStatusListener);
+        wsManager.addWsStatusListener(mWsAbstractStatusListener);
         wsManager.startConnect();
     }
 

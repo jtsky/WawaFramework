@@ -112,16 +112,18 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     /**
      * 初始化WebSocket
      */
-    public static final String WEBSOCKET_URL = "ws://echo.websocket.org";
+    //public static final String WEBSOCKET_URL = "ws://echo.websocket.org";
+    public static final String WEBSOCKET_URL = "ws://116.62.21.231:7878";
     protected AbstractWsStatusListener mWsAbstractStatusListener;
+    private WsManager mWsManager;
 
     private void initWebSocket() {
         if (mWsAbstractStatusListener == null) {
             throw new NullPointerException("请在子Activity中重写createWSStatusListener方法并为mWsAbstractStatusListener赋值");
         }
-        WsManager wsManager = WsManagerFactory.createWsManager(getApplicationContext(), WEBSOCKET_URL);
-        wsManager.setWsStatusListener(mWsAbstractStatusListener);
-        wsManager.startConnect();
+        mWsManager = WsManagerFactory.createWsManager(getApplicationContext(), WEBSOCKET_URL);
+        mWsManager.addWsStatusListener(mWsAbstractStatusListener);
+        mWsManager.startConnect();
     }
 
     /**
@@ -326,6 +328,9 @@ public abstract class BaseActivity<Model extends ViewModel, V extends DuibaMvpVi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mWsManager != null) {
+            mWsManager.removeWsStatusListener(mWsAbstractStatusListener);
+        }
         if (isRegisterEventBus()) {
             EventBusUtil.unRegister(this);
         }

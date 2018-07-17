@@ -73,7 +73,6 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
     @Override
     protected UserViewModel createViewModel() {
         return ViewModelProviders.of(this).get(UserViewModel.class);
-        //ViewModelUtil.put(UserViewModel.class.getSimpleName(), viewModel);
     }
 
 

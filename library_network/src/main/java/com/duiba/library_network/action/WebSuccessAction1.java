@@ -1,15 +1,11 @@
 package com.duiba.library_network.action;
 
-
 import com.duiba.library_network.bean.TestCommResponse;
 import io.reactivex.functions.Consumer;
-
 /**
- * Created by wlw-97 on 2016/11/3.
+ * gank 接口专用
  */
-
 public abstract class WebSuccessAction1<T> implements Consumer<TestCommResponse<T>> {
-
 
     @Override
     public void accept(TestCommResponse<T> response) throws Exception {
@@ -17,7 +13,7 @@ public abstract class WebSuccessAction1<T> implements Consumer<TestCommResponse<
             onFailed(response.getCode(), response.getMsg());
         }
 
-        onSuccess((T) response.getData());
+        onSuccess(response.getData());
     }
 
     /**

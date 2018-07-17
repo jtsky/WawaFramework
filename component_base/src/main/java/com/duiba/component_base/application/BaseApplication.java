@@ -34,6 +34,7 @@ import com.duiba.wsmanager.listener.AbstractWsStatusListener;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,6 +66,7 @@ public class BaseApplication extends Application implements ViewModelStoreOwner 
         return mViewModelStore;
     }
 
+    //https://stackoverflow.com/questions/44148966/androidviewmodel-vs-viewmodel
     private void initGlobalVewModel() {
         mViewModelMap.put(GlobalViewModel.class.getSimpleName(), GlobalViewModelProviders.of(this).get(GlobalViewModel.class));
     }
@@ -126,15 +128,19 @@ public class BaseApplication extends Application implements ViewModelStoreOwner 
                     if (wsManager == null) {
                         return;
                     }
-                    AbstractWsStatusListener wsStatusListener = wsManager.getWsStatusListener();
-                    if (wsStatusListener == null) {
+                    List<AbstractWsStatusListener> wsStatusListeners = wsManager.getWsStatusListeners();
+                    if (wsStatusListeners == null) {
                         return;
                     }
 
                     if (hasNetWork) {
-                        wsStatusListener.onNetOpen();
+                        for (AbstractWsStatusListener abstractWsStatusListener : wsStatusListeners) {
+                            abstractWsStatusListener.onNetOpen();
+                        }
                     } else {
-                        wsStatusListener.onNetClosed();
+                        for (AbstractWsStatusListener abstractWsStatusListener : wsStatusListeners) {
+                            abstractWsStatusListener.onNetClosed();
+                        }
                     }
 
                 });
