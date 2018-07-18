@@ -8,18 +8,15 @@ ext {
     android = [compileSdkVersion : 27,
                suppotrSdkVersion : "27.1.1",
                buildToolsVersion : "27.0.3",
-               //            compileSdkVersion: 22,
-               //            suppotrSdkVersion: "22+",
-               //            buildToolsVersion: "22.0.1",
                applicationId     : "com.tm.prizeclaw",
                minSdkVersion     : 16,
-               targetSdkVersion  : 26,
+               targetSdkVersion  : 22,
                versionCode       : 201,
                versionName       : "2.0.1",
                retrofitSdkVersion: "2.4.0",]
 
     dependencies = [// ###### android library  start ######
-                    "multidex"                   : "com.android.support:multidex:1.0.2",
+                    "multidex"                   : "com.android.support:multidex:1.0.3",
                     "annotations"                : "com.android.support:support-annotations:${android["suppotrSdkVersion"]}",
                     "support-v4"                 : "com.android.support:support-v4:${android["suppotrSdkVersion"]}",
                     "appcompat-v7"               : "com.android.support:appcompat-v7:${android["suppotrSdkVersion"]}",
@@ -183,6 +180,8 @@ ext {
                     "SmartRefreshHeader"         : "com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-3",
                     //https://github.com/loopeer/shadow  边框阴影
                     "shadow"                     : "com.loopeer.lib:shadow:0.0.4-beta3",
+                    //https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+                    "brvah"                      : "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30",
 
                     //socket
                     "socket-mina-core"           : "org.apache.mina:mina-core:2.0.16",

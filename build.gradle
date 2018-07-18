@@ -42,3 +42,20 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+subprojects {
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.android.support') {
+                switch (details.requested.name) {
+                    case 'multidex':
+                        details.useVersion "1.0.3"
+                        break
+                    default:
+                        break
+                }
+            }
+        }
+    }
+}

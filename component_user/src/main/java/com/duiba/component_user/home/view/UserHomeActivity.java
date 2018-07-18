@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.duiba.component_base.application.BaseApplication;
 import com.duiba.component_base.component.BaseFragmentationActivity;
 import com.duiba.component_base.component.user.path.UserRouterPath;
 import com.duiba.component_base.vm.GlobalViewModel;
@@ -67,6 +66,8 @@ public class UserHomeActivity extends BaseFragmentationActivity<UserViewModel, H
             ARouter.getInstance().build(UserRouterPath.USER_ACTIVITY_OTHER).navigation();
             //finish();
         });
+
+
     }
 
 
